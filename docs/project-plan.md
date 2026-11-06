@@ -12,7 +12,7 @@
 | 封面 | Git 中的 public/covers/ |
 | EPUB | Cloudflare R2，通过独立域名下载 |
 | 部署 | Pages Direct Upload；本地构建后由 Wrangler CLI 上传 |
-| 维护 | TypeScript 编写的 book、r2、pages 三组工具 |
+| 维护 | TypeScript 编写的 book、r2、baidu、pages 四组工具 |
 | 验收与只读状态 | verify 统一本地检查；maintenance health / cleanup-preview 用于独立只读诊断 |
 
 站点没有业务数据库或阅读器。翻译、转录和元数据刮削在本项目之外完成。GitHub 保存可重建网页的源码和正式书目，推送不会自动部署。
@@ -62,7 +62,7 @@ tests/                     解析、搜索、快照和发布逻辑测试
 | edition.kind | ai-translation 或 transcription |
 | edition.model | 维护者给出的模型名称；转录本为 null |
 | file | EPUB 的 SHA-256、字节数和原文件名 |
-| downloads | R2 对象键、公开 URL，以及当前为 null 的 baidu 占位字段 |
+| downloads | R2 对象键和公开 URL；`baidu` 保存当前分享记录，可选包含 RAR 归档信息 |
 | publishedAt、updatedAt | 发布时间与更新时间，ISO 8601 UTC；页面按 Asia/Shanghai 展示 |
 
 转录本单独标注来源。新版本沿用书籍 ID；不同作者的同名书使用不同 ID。当前每本书只链接一个版本。
@@ -89,8 +89,8 @@ EPUB 对象键为 books/ID/SHA256.epub。内容变化产生新地址，避免同
 
 ## 已知边界
 
-- 百度备用下载未实现；Windows 原生候选已完成只读调研，上传和分享仍待明确授权后验证，详见 [百度备用下载调研](baidu-downloads.md)。utterances 已在本地页面通过 GitHub OAuth、发表评论、自动建 Issue 和刷新后稳定映射验证，尚未 push/deploy；详见 [评论区配置与管理](comments.md)。
-- R2 有本地桶级锁和逐本检查点；Pages 有项目锁、远端查重、status 与 verify 恢复入口，但跨三组工具的统一自动发布入口尚未提供。
+- 65 本原始 EPUB 上传、永久分享创建与完整 SHA-256 回读均已完成；正式书目当前版本的 65 个百度入口全部通过匿名访问检查（64 个 EPUB + 1 个加密 RAR）。R2 主下载保持原样；本地站点改动尚未 push/deploy。CLI、RAR 验证、异常处理和版本更新限制见 [百度备用下载调研](baidu-downloads.md)。utterances 已在本地页面通过 GitHub OAuth、发表评论、自动建 Issue 和刷新后稳定映射验证，尚未 push/deploy；详见 [评论区配置与管理](comments.md)。
+- R2 有本地桶级锁和逐本检查点；Pages 有项目锁、远端查重、status 与 verify 恢复入口，但跨四组工具的统一自动发布入口尚未提供。
 - release.json schemaVersion=2：books 统计全站，changedBooks 统计本批；完整书目摘要、全站索引摘要及全部详情页参与验证。
 - 新发布快照附 Git 提交、脏状态、冻结站点输入 SHA-256 与来源字段。部署要求 clean Git 提交；旧线上 schema2 marker 可由独立体检读取，但会标注缺少溯源信息，旧本地快照必须重新 prepare。源码修改后尚未部署时，线上 marker 不包含新字段。
 - maintenance health 从正式 Git 书目检查线上页面与资源，无需原始 EPUB 或云凭据；HEAD 响应用于轻量检查，完整 GET 才校验 EPUB 内容 SHA-256。cleanup-preview 只报告本地对象状态，不执行删除；R2/旧 EPUB 清理仍需单独流程。

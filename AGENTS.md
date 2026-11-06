@@ -19,7 +19,7 @@
 - Pages 项目：`yuuko-library`，Direct Upload，生产分支参数 `main`。Git push 不触发网站部署。
 - 正式书目位于 `catalog/books/`，封面位于 `public/covers/`。数量以目录和实际线上结果为准。
 - 原始主题标签保存在 `subjects`，独立分类保存在 `categories`；每本 1–2 类，六个分类 ID 统一定义于 `src/lib/categories.ts`。首次迁移对照见 `docs/category-migration.md`。
-- 百度网盘未接入；评论区已在本地接入 utterances，尚未部署。不得把 `--baidu optional` 当作已实现自动分享。
+- 百度备用分享 CLI 和详情页备用链接已在本地实现；65 条当前分享已写入书目且匿名提取码检查 65/65 通过（64 EPUB + 1 RAR），线上网站尚未部署。评论区已在本地接入 utterances，尚未部署。旧 `--baidu optional` 仍只是计划字段，不代表分享已完成。
 
 ## 工具与环境
 
@@ -50,10 +50,11 @@ npm test
 npm run build
 npm run book -- --help
 npm run r2 -- --help
+npm run baidu -- --help
 npm run pages -- --help
 ```
 
-操作详情分别见 [本地维护指南](docs/local-development.md)、[命令参考](docs/publishing-cli.md) 和 [部署指南](docs/pages-deployment.md)。目前使用 book / r2 / pages 三组独立命令；统一的 `book publish`、`resume`、`bundle` 尚未实现，不要推荐执行。
+操作详情分别见 [本地维护指南](docs/local-development.md)、[命令参考](docs/publishing-cli.md) 和 [部署指南](docs/pages-deployment.md)。目前使用 book / r2 / baidu / pages 四组独立命令；统一的 `book publish`、`resume`、`bundle` 尚未实现，不要推荐执行。
 
 ## 内容规则
 
@@ -106,7 +107,7 @@ npm run pages -- --help
 
 ### 维护能力
 
-- [x] **整理上架与恢复步骤（本地实现）。** 现有三组命令的检查点见部署指南；Pages 支持项目锁、远端查重、status 与 verify 恢复，未知结果停止。跨三组工具的统一自动发布命令仍未实现。
+- [x] **整理上架与恢复步骤（本地实现）。** 现有四组命令的检查点见部署指南；Pages 支持项目锁、远端查重、status 与 verify 恢复，未知结果停止。跨四组工具的统一自动发布命令仍未实现。
 - [x] **区分书籍更新与站点部署时间（本地实现）。** 内容变化才刷新 updatedAt；prepare --site-only 保留全部书籍时间，部署快照时间为 createdAt。
 - [x] **统一本地验收与发布溯源（本地实现）。** npm run verify 顺序运行检查、测试、构建及 Git 空白检查，支持文档模式；固定快照记录 Git 提交、dirty 状态、来源和冻结站点输入摘要，快照源或 build 期间变化时停止，部署要求 clean 提交。新来源标记需下一次 Pages 发布后才在线可见。
 - [x] **增加独立线上体检（本地实现）。** 可在任意克隆仓库机器只读检查正式书目对应的完整索引、详情、封面和下载；默认 HEAD 与完整 GET/SHA 校验区分，样本结果不冒称全站通过。
@@ -115,9 +116,11 @@ npm run pages -- --help
 
 ### 百度备用下载
 
-- [x] 调研 Windows 原生工具和 API，排除 WSL。候选 BaiduPCS-Go v4.0.2 Windows x64 已下载并校验 SHA-256；CLI 登录、quota、`ls /ebook` 和 `share list` 只读检查通过。证据、凭据边界和已知限制见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
-- [ ] 等待本次对单本上传和 7 天分享的明确授权；上传、新分享、重新下载哈希校验、登录续期和费用条件尚未验证。未授权前不上传、不创建分享。
-- [ ] 单本验证通过并另行批准接入后，再实现备用下载与失败降级；R2 主下载可以独立运行。
+- [x] 调研 Windows 原生工具和 API，排除 WSL。候选 BaiduPCS-Go v4.0.2 Windows x64 已下载并校验 SHA-256；CLI 登录及只读检查通过。凭据边界和证据见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
+- [x] 获授权完成 `endnotes-2` 单本试传：独立 SHA 目录上传、`meta` 核对大小与 fsId、密码保护的永久分享、PCS 回读完整 SHA-256 均通过。永久分享不保证永不失效。
+- [x] 全部 65 本原始 EPUB 均已上传、创建永久密码分享并回读验证完整 SHA-256，总计 108772188 字节；64 条普通分享通过匿名提取码检查。
+- [x] 唯一异常书的维护者指定 RAR 包已独立加密验证、上传/回读并导入正式书目；异常原始分享和失败记录保留。详情弹窗展示已验证，最终 65/65 当前百度入口匿名提取码检查通过（64 EPUB + 1 RAR）。生产页面尚未部署。详情见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
+- [ ] 同书新版的百度 journal 跨 SHA 自动迁移尚未实现：更新准备会清空旧分享字段，`publish` 检测到旧 journal SHA 后会停止。保留旧 journal 和分享记录，人工核对后恢复；不要删除 journal 绕过保护。新增书可在正式书目与本地匹配 EPUB 准备完成后单独 `publish --id ID`。R2 独立运行。
 
 ### 图书评论区
 

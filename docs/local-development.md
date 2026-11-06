@@ -118,4 +118,4 @@ npm run r2 -- verify --plan PLAN
 
 verify 只读复核，不执行上传。上传与校验报告保存在 .local/uploads/，同一有效计划重跑 upload 可复用已存在的正确对象。不要在进程仍运行时清除锁；异常锁需先确认 PID 对应的任务已停止。
 
-文件成功上传后，使用 [部署指南](pages-deployment.md) 中的独立 pages 命令发布网页。上传不会同步正式书目，也不会部署网站。百度参数目前只记录意图，不执行上传或创建分享；后续方案须能在 Windows 原生环境运行，不使用 WSL。
+R2 文件成功上传后，使用 [部署指南](pages-deployment.md) 中的独立 pages 命令发布网页。上传不会同步正式书目，也不会部署网站。百度备用分享使用独立 `npm run baidu` 流程，详情见[发布命令参考](publishing-cli.md#baidu-备用下载)；不会使用 WSL，也不影响 R2。异常书只有维护者指定 RAR 文件名后，才可用 `prepare-archive` 本地加密/核验，再用 `publish-archive --manifest FILE`：已有分享记录时复核并复用；没有既有记录时上传、回读并创建永久分享后导入书目。更新 EPUB SHA 或 RAR 版本后，若 journal 记录旧版本，百度发布命令会停止，须保留旧记录并人工核对后恢复，不要删除 journal 绕过检查。

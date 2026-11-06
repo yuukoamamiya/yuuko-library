@@ -39,6 +39,27 @@ upload 缺失对象时写入，一致对象复用，冲突对象不覆盖。veri
 
 结果为 JSON，进度写 stderr；脚本可用 npm run --silent r2。上传和 verify 使用独立报告，保存在 .local/uploads/。检查 status=verified、verified=expected 且 failures 为空后才能报告全部通过。
 
+## baidu 备用下载
+
+| 命令 | 作用 |
+| --- | --- |
+| `npm run baidu -- status [--id ID|--all]` | 本地只读查看书目、SHA 匹配的源 EPUB 和 journal 状态 |
+| `npm run baidu -- prepare [--id ID|--all]` | 本地核验源 EPUB 的完整 SHA-256 和字节数，不写云端 |
+| `npm run baidu -- publish --id ID` | 显式发布单本百度分享并更新该书正式书目 |
+| `npm run baidu -- publish --all` | 显式批量发布当前全馆并更新书目 |
+| `npm run baidu -- prepare-archive --id ID --name FILE.rar [--archive-password CODE]` | 根据当前正式 EPUB 在本机生成、验证隐藏文件名的单文件 RAR，并写 manifest |
+| `npm run baidu -- publish-archive --manifest FILE` | 显式核对/上传归档并将确认的分享记录导入该书目 |
+
+status / prepare 默认覆盖全部正式书目；可传 `--id` 或 `--all` 明确选择。publish 必须明确指定 `--id` 或 `--all`。执行前需要在 `.local/plans/` 有与书目 EPUB 完整 SHA-256 和大小匹配的源文件。
+
+publish 在 `.local/baidu/journal.json` 记逐书检查点并使用互斥锁。每本创建 ID/SHA 独立目录，按 skip 策略上传，回读 `meta`，PCS 下载到本地并重新校验完整 SHA-256，创建 `--period 0` 密码分享，再通过 `share list` 核对分享记录后更新该书 `downloads.baidu`。`--period 0` 表示永久设置，不保证链接永不失效。提取码保存在本机 journal 和公开书目，站点访客可以看到并使用；账号凭据只留在仓库外的本机配置中。
+
+新增书籍在完成正式书目准备并放入匹配 EPUB 后可用 `publish --id ID`。更新同一书籍若 SHA 变化，当前 journal 会阻止自动跨版本迁移；不要删除 journal 绕过保护。保留旧 journal/分享记录，人工核对远端与正式书目后恢复。旧版本链接不得作为当前版本链接。R2 上传和下载地址完全独立。当前全馆批量运行状态及完成计数见 [百度调研与运行记录](baidu-downloads.md)。
+
+`prepare-archive` 是本地操作，需要 WinRAR `Rar.exe` 和与当前书目 SHA 匹配的 `.local/plans` EPUB。维护者必须给定 `--name FILE.rar`；工具仅将当前正式 EPUB 放入压缩包，使用 WinRAR `-hp` 隐藏文件名，并检查无密码无法列名、RAR 自身哈希以及解包后的 EPUB 完整 SHA。当前指定包名为 `普兰查斯著作01.rar`，默认解压密码为 `114514`，也可用 `--archive-password CODE` 指定。密码写入公开书目供详情弹窗展示，不是私密凭据。
+
+`publish-archive` 接受本地 manifest。若 manifest 带有已准备的分享记录，工具会核对本地 RAR/内部 EPUB、远端 meta、完整回读 SHA 和 `share list`，再将记录导入 `downloads.baidu.archive`。已有已验证分享时只复核并复用；没有既有记录时会上传、回读并创建永久分享。已发布 RAR 禁止由 `prepare-archive` 重制，应复用原 manifest；若无原 manifest，先人工核对版本记录再处理。命令成功不替代匿名 URL/提取码可访问检查。
+
 ## pages：正式发布
 
 | 命令 | 作用 |
