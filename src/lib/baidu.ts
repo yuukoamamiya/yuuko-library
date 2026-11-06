@@ -1,4 +1,4 @@
-import type { BaiduDownload } from './books';
+import type { BaiduDownload } from './book';
 
 const sha256Pattern = /^[a-f\d]{64}$/iu;
 const numericIdPattern = /^\d+$/u;

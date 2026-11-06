@@ -6,7 +6,7 @@ import type { Book } from '../src/lib/books.ts';
 import { digest, recoverUnknownShare, runPublish, type Runner } from '../tools/baidu/transfer.ts';
 
 const bytes = Buffer.from('sample epub payload'); const sha = digest(bytes);
-function book(id = 'sample'): Book { return { schemaVersion: 1, id, title: '书', authors: ['作者'], description: '', subjects: [], categories: ['fiction'], cover: null,
+function book(id = 'sample'): Book { return { schemaVersion: 1, id, title: '书', authors: ['作者'], description: '', subjects: [], categories: ['history'], cover: null,
   edition: { kind: 'transcription', model: null }, file: { sha256: sha, bytes: bytes.length, filename: '书.epub' },
   downloads: { r2Key: `books/${id}/${sha}.epub`, r2Url: 'https://download.example/file.epub', baidu: null }, publishedAt: '2020-01-01', updatedAt: '2024-01-01' }; }
 async function setup(id = 'sample') {

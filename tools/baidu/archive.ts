@@ -4,9 +4,11 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { constants as fsConstants } from 'node:fs';
-import type { BaiduDownload, Book } from '../../src/lib/books.ts';
+import type { BaiduDownload, Book } from '../../src/lib/book.ts';
 import { validateBaiduDownload } from '../../src/lib/baidu.ts';
-import { replaceFileAtomically } from './atomic.ts';
+import { readCatalogBook, writeCatalogBook } from '../catalog.ts';
+import { replaceFileAtomically } from '../atomic.ts';
+import { acquireJournalLocks, persistSchema1Migration, saveJournalJson } from './journal.ts';
 import { call, confirmShareList, ensureRemoteDirectory, locateInputs, parseMeta, parseShare, probeRemoteFile,
   type Runner, BaiduError } from './transfer.ts';
 
@@ -96,21 +98,8 @@ export async function loadArchiveJournal(file: string): Promise<ArchiveJournal> 
     throw new BaiduError('archive journal 格式无效');
   }
 }
-async function saveArchiveJournal(file: string, journal: ArchiveJournal) {
-  journal.schemaVersion = 2; journal.updatedAt = new Date().toISOString(); await saveJson(file, journal);
-}
-async function persistArchiveJournalMigration(file: string, journal: ArchiveJournal) {
-  let raw: { schemaVersion?: number };
-  try { raw = JSON.parse(await readFile(file, 'utf8')) as typeof raw; } catch { return; }
-  if (raw.schemaVersion !== 1) return;
-  const backup = `${file}.schema1.bak`;
-  try { await copyFile(file, backup, fsConstants.COPYFILE_EXCL); }
-  catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error; }
-  journal.schemaVersion = 2; await saveArchiveJournal(file, journal);
-  await writeFile(`${file}.migration.json`, JSON.stringify({ from: 1, to: 2, backup, migratedAt: new Date().toISOString() }, null, 2) + '\n', { flag: 'wx', mode: 0o600 }).catch(error => {
-    if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-  });
-}
+async function saveArchiveJournal(file: string, journal: ArchiveJournal) { await saveJournalJson(file, journal); }
+async function persistArchiveJournalMigration(file: string, journal: ArchiveJournal) { return persistSchema1Migration(file, journal, saveArchiveJournal); }
 function checkArchivePassword(value: string) {
   if (!value || value.length > 256 || /[\u0000-\u001f\u007f]/u.test(value)) throw new BaiduError('RAR 密码无效');
 }
@@ -200,18 +189,12 @@ export async function publishArchive(root: string, books: Book[], manifestPath: 
   const remotePath = validateManifest(manifest, book);
   // The manifest-bound archive itself is fully verified below; an EPUB cache is not needed to reuse it.
   await verifyArchive(manifest.localArchive, manifest.archive, book.file.sha256, book.file.filename, rarRun);
-  const target = path.join(root, 'catalog/books', `${book.id}.json`);
-  const initialCatalogBytes = await readFile(target); const current = JSON.parse(initialCatalogBytes.toString('utf8')) as Book;
-  const beforeHash = archiveDigest(initialCatalogBytes);
+  const initialCatalog = await readCatalogBook(root, book.id); if (!initialCatalog) throw new BaiduError('catalog 书目不存在');
+  const current = initialCatalog.book; const beforeHash = initialCatalog.hash;
   if (current.file.sha256 !== manifest.sourceSha256 || current.file.bytes !== book.file.bytes) throw new BaiduError('catalog 原 EPUB 已变化');
   const journalFile = options.journalPath ?? path.join(root, '.local/baidu/archive-journal.json');
-  const lockPath = `${journalFile}.lock`; const projectLockPath = path.join(root, '.local/baidu/project.lock');
+  const releaseLocks = await acquireJournalLocks(root, journalFile, 'archive');
   await mkdir(path.dirname(journalFile), { recursive: true });
-  let projectLock; let lock;
-  try { projectLock = await open(projectLockPath, 'wx'); } catch { throw new BaiduError('Baidu 项目操作锁已存在，暂停归档发布'); }
-  try { lock = await open(lockPath, 'wx'); } catch {
-    await projectLock.close(); await rm(projectLockPath, { force: true }); throw new BaiduError('archive journal 锁已存在');
-  }
   try {
     const journal = await loadArchiveJournal(journalFile); await persistArchiveJournalMigration(journalFile, journal);
     const key = archiveVersionKey(book.id, book.file.sha256, manifest.archive.sha256, manifest.archive.filename);
@@ -309,19 +292,13 @@ export async function publishArchive(root: string, books: Book[], manifestPath: 
       const listed = await call(run, ['share', 'list']); confirmShareList(listed, record.baidu); record.state = 'shared';
     }
     if (!record.baidu) throw new BaiduError('归档分享未确认，状态暂停');
-    if (archiveDigest(await readFile(target)) !== beforeHash) throw new BaiduError('catalog 在归档校验期间变化，拒绝覆盖');
-    const beforeBaudu = JSON.stringify(current.downloads.baidu);
-    if (beforeBaudu !== JSON.stringify(record.baidu)) {
-      current.downloads.baidu = record.baidu;
-      const tmp = `${target}.${process.pid}.${randomUUID()}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n'); await replaceFileAtomically(tmp, target);
-    }
-    record.catalogHash = archiveDigest(await readFile(target)); record.catalogGuard = { file: current.file, downloads: current.downloads };
+    current.downloads.baidu = record.baidu;
+    record.catalogHash = await writeCatalogBook(root, current, beforeHash); record.catalogGuard = { file: current.file, downloads: current.downloads };
     record.state = 'complete'; journal.entries[key] = record;
     await saveArchiveJournal(journalFile, journal);
     return { id: book.id, status: 'complete', reused: Boolean(manifest.baidu || reusedVerifiedRecord), remotePath };
   } finally {
-    await lock?.close(); await rm(lockPath, { force: true });
-    await projectLock?.close(); await rm(projectLockPath, { force: true });
+    await releaseLocks();
   }
 }
 
@@ -336,10 +313,8 @@ export async function recoverUnknownArchiveShare(root: string, books: Book[], ma
   }
   const remotePath = archiveRemotePath(book.id, manifest.sourceSha256, manifest.archive);
   const journalFile = options.journalPath ?? path.join(root, '.local/baidu/archive-journal.json');
-  const lockPath = `${journalFile}.lock`; const projectLockPath = path.join(root, '.local/baidu/project.lock');
-  await mkdir(path.dirname(journalFile), { recursive: true }); let projectLock; let lock;
-  try { projectLock = await open(projectLockPath, 'wx'); } catch { throw new BaiduError('Baidu 项目操作锁已存在'); }
-  try { lock = await open(lockPath, 'wx'); } catch { await projectLock.close(); await rm(projectLockPath, { force: true }); throw new BaiduError('archive journal 锁已存在'); }
+  const releaseLocks = await acquireJournalLocks(root, journalFile, 'archive');
+  await mkdir(path.dirname(journalFile), { recursive: true });
   try {
     const journal = await loadArchiveJournal(journalFile); await persistArchiveJournalMigration(journalFile, journal);
     const key = archiveVersionKey(book.id, manifest.sourceSha256, manifest.archive.sha256, manifest.archive.filename);
@@ -362,19 +337,17 @@ export async function recoverUnknownArchiveShare(root: string, books: Book[], ma
       expiresAt: null, verifiedAt: (options.now?.() ?? new Date()).toISOString(), archive: manifest.archive };
     validateBaiduDownload(baidu, manifest.sourceSha256); confirmShareList(listing, baidu);
     record.fsId = meta.fsId; record.baidu = baidu; record.state = 'shared'; journal.entries[key] = record; await saveArchiveJournal(journalFile, journal);
-    const target = path.join(root, 'catalog/books', `${book.id}.json`); const original = await readFile(target);
-    const current = JSON.parse(original.toString('utf8')) as Book;
+    const loaded = await readCatalogBook(root, book.id); if (!loaded) throw new BaiduError('RAR 恢复书目不存在');
+    const current = loaded.book; const originalHash = loaded.hash;
     if (current.file.sha256 === manifest.sourceSha256) {
       if (current.downloads.baidu && JSON.stringify(current.downloads.baidu) !== JSON.stringify(baidu)) throw new BaiduError('当前版本已有另一百度分享；历史恢复 checkpoint 已保留，拒绝覆盖');
-      if (archiveDigest(await readFile(target)) !== archiveDigest(original)) throw new BaiduError('RAR 恢复期间 catalog 发生竞态变化');
-      current.downloads.baidu = baidu; const tmp = `${target}.${process.pid}.${randomUUID()}.tmp`;
-      await writeFile(tmp, JSON.stringify(current, null, 2) + '\n', { mode: 0o600 }); await replaceFileAtomically(tmp, target);
-      record.catalogHash = archiveDigest(await readFile(target)); record.catalogGuard = { file: current.file, downloads: current.downloads };
+      current.downloads.baidu = baidu;
+      record.catalogHash = await writeCatalogBook(root, current, originalHash).catch(() => { throw new BaiduError('RAR 恢复期间 catalog 发生竞态变化'); }); record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveArchiveJournal(journalFile, journal);
       return { status: 'recovered', id: book.id, sourceSha256: manifest.sourceSha256, archiveSha256: manifest.archive.sha256 };
     }
     return { status: 'historical-share-resolved', id: book.id, sourceSha256: manifest.sourceSha256, archiveSha256: manifest.archive.sha256 };
   } finally {
-    await lock?.close(); await rm(lockPath, { force: true }); await projectLock?.close(); await rm(projectLockPath, { force: true });
+    await releaseLocks();
   }
 }

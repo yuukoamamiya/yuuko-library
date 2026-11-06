@@ -1,11 +1,12 @@
 import { createHash, randomInt, randomUUID } from 'node:crypto';
-import { readFile, readdir, stat, mkdir, writeFile, open, copyFile } from 'node:fs/promises';
+import { readFile, readdir, stat, mkdir, copyFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { constants as fsConstants } from 'node:fs';
-import type { Book, BaiduDownload } from '../../src/lib/books.ts';
+import type { Book, BaiduDownload } from '../../src/lib/book.ts';
 import { validateBaiduDownload } from '../../src/lib/baidu.ts';
-import { replaceFileAtomically } from './atomic.ts';
+import { readCatalogBook, writeCatalogBook } from '../catalog.ts';
+import { acquireJournalLocks, persistSchema1Migration, saveJournalJson } from './journal.ts';
 
 export type Runner = (args: string[]) => Promise<{ code: number; stdout: string; stderr: string }>;
 export type JournalEntry = { id: string; sha256: string; bytes: number; source: string; catalogHash: string; remotePath: string;
@@ -108,27 +109,11 @@ export async function loadJournal(file: string): Promise<Journal> {
     return value;
   } catch (e) { if ((e as NodeJS.ErrnoException).code === 'ENOENT') return { schemaVersion: 2, updatedAt: new Date().toISOString(), entries: {} }; throw new BaiduError('journal 格式无效'); }
 }
-async function persistJournalMigration(file: string, journal: Journal) {
-  let raw: { schemaVersion?: number };
-  try { raw = JSON.parse(await readFile(file, 'utf8')) as typeof raw; } catch { return; }
-  if (raw.schemaVersion !== 1) return;
-  const backup = `${file}.schema1.bak`;
-  try { await copyFile(file, backup, fsConstants.COPYFILE_EXCL); }
-  catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error; }
-  journal.schemaVersion = 2; await saveJournal(file, journal);
-  await writeFile(`${file}.migration.json`, JSON.stringify({ from: 1, to: 2, backup, migratedAt: new Date().toISOString() }, null, 2) + '\n', { flag: 'wx', mode: 0o600 }).catch(error => {
-    if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-  });
-}
-async function saveJournal(file: string, journal: Journal) {
-  await mkdir(path.dirname(file), { recursive: true }); journal.schemaVersion = 2; journal.updatedAt = new Date().toISOString();
-  const tmp = `${file}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(journal, null, 2) + '\n', { mode: 0o600 }); await replaceFileAtomically(tmp, file);
-}
+async function persistJournalMigration(file: string, journal: Journal) { return persistSchema1Migration(file, journal, saveJournal); }
+async function saveJournal(file: string, journal: Journal) { await saveJournalJson(file, journal); }
 export function getJournalEntry(journal: Journal, id: string, sha256: string) {
   return journal.entries[versionKey(id, sha256)] ?? Object.values(journal.entries).find(entry => entry.id === id && entry.sha256 === sha256) ?? null;
 }
-async function readBook(file: string): Promise<Book> { return JSON.parse(await readFile(file, 'utf8')) as Book; }
-async function catalogHash(file: string) { return digest(await readFile(file)); }
 async function archiveJournalConfirms(root: string, book: Book, current: Book, currentCatalogHash: string) {
   const download = current.downloads.baidu;
   if (!download?.archive) return false;
@@ -151,7 +136,7 @@ export async function importPilot(root: string, runner: Runner) {
   const file = path.join(root, '.local/baidu/pilot-verified.json');
   let pilot: { bookId: string; bytes: number; baidu: BaiduDownload };
   try { pilot = JSON.parse(await readFile(file, 'utf8')) as typeof pilot; } catch { return false; }
-  const target = path.join(root, 'catalog/books', `${pilot.bookId}.json`); const book = await readBook(target);
+  const loaded = await readCatalogBook(root, pilot.bookId); if (!loaded) throw new BaiduError('pilot 书目不存在'); const book = loaded.book;
   if (pilot.bookId !== 'endnotes-2' || pilot.baidu.fileSha256 !== book.file.sha256) return false;
   validateBaiduDownload(pilot.baidu, book.file.sha256);
   if (pilot.bytes !== book.file.bytes) throw new BaiduError('pilot bytes 与正式书目不符');
@@ -163,11 +148,8 @@ export async function importPilot(root: string, runner: Runner) {
 }
 export async function runPublish(root: string, selected: Book[], run: Runner, options: { password?: string; journalPath?: string; roundtripRoot?: string; now?: () => Date } = {}) {
   const journalFile = options.journalPath ?? path.join(root, '.local/baidu/journal.json');
-  const lockFile = `${journalFile}.lock`; const projectLockFile = path.join(root, '.local/baidu/project.lock');
+  const releaseLocks = await acquireJournalLocks(root, journalFile);
   await mkdir(path.dirname(journalFile), { recursive: true });
-  let lock; let projectLock;
-  try { projectLock = await open(projectLockFile, 'wx'); } catch { throw new BaiduError('Baidu 项目操作锁已存在；确认没有活动进程后再检查锁'); }
-  try { lock = await open(lockFile, 'wx'); } catch { await projectLock.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true })); throw new BaiduError('Baidu journal 锁已存在；确认没有活动进程后再检查锁'); }
   try {
     const journal = await loadJournal(journalFile); await persistJournalMigration(journalFile, journal); const inputs = new Map<string, { file: string; bytes: number }>();
     let pilot: Awaited<ReturnType<typeof importPilot>> = false;
@@ -177,7 +159,8 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
     let completed = 0; const unavailable: { id: string; error: string }[] = [];
     for (const book of selected) {
       console.error(`baidu: ${book.id} (${book.file.bytes} bytes) starting/resuming`);
-      const target = path.join(root, 'catalog/books', `${book.id}.json`), beforeHash = await catalogHash(target), current = await readBook(target);
+      const loaded = await readCatalogBook(root, book.id); if (!loaded) throw new BaiduError(`${book.id}: 书目文件不存在`);
+      const beforeHash = loaded.hash, current = loaded.book;
       if (current.file.sha256 !== book.file.sha256 || current.file.bytes !== book.file.bytes) throw new BaiduError(`${book.id}: 书目文件已变化`);
       const key = versionKey(book.id, book.file.sha256);
       const previous = getJournalEntry(journal, book.id, book.file.sha256);
@@ -313,17 +296,14 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       }
       if (!['complete', 'shared'].includes(record.state) || !record.baidu) throw new BaiduError(`${book.id}: 状态 ${record.state} 需要人工恢复`);
       validateBaiduDownload(record.baidu, book.file.sha256);
-      if (await catalogHash(target) !== beforeHash) throw new BaiduError(`${book.id}: catalog 在流程中变化，拒绝覆盖`);
       current.downloads.baidu = record.baidu;
-      const tmp = `${target}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n'); await replaceFileAtomically(tmp, target);
-      record.catalogHash = await catalogHash(target); record.catalogGuard = { file: current.file, downloads: current.downloads };
+      record.catalogHash = await writeCatalogBook(root, current, beforeHash).catch(() => { throw new BaiduError(`${book.id}: catalog 在流程中变化，拒绝覆盖`); }); record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);
       completed++;
     }
     return { selected: selected.length, completed, unavailable, unavailableCount: unavailable.length, journalFile };
   } finally {
-    await lock?.close(); await import('node:fs/promises').then(fs => fs.rm(lockFile, { force: true }));
-    await projectLock?.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true }));
+    await releaseLocks();
   }
 }
 
@@ -331,11 +311,8 @@ export async function recoverUnknownShare(root: string, book: Book, run: Runner,
   options: { journalPath?: string; roundtripRoot?: string; now?: () => Date; sourceSha256?: string } = {}) {
   if (!/^\d+$/u.test(shareId) || !/^[a-z\d]{4}$/iu.test(code)) throw new BaiduError('恢复需要精确的 share ID 和 4 位提取码');
   const journalFile = options.journalPath ?? path.join(root, '.local/baidu/journal.json');
-  const lockFile = `${journalFile}.lock`; const projectLockFile = path.join(root, '.local/baidu/project.lock');
+  const releaseLocks = await acquireJournalLocks(root, journalFile);
   await mkdir(path.dirname(journalFile), { recursive: true });
-  let projectLock; let lock;
-  try { projectLock = await open(projectLockFile, 'wx'); } catch { throw new BaiduError('Baidu 项目操作锁已存在'); }
-  try { lock = await open(lockFile, 'wx'); } catch { await projectLock.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true })); throw new BaiduError('Baidu journal 锁已存在'); }
   try {
     const sourceSha256 = options.sourceSha256 ?? book.file.sha256;
     if (!/^[a-f\d]{64}$/iu.test(sourceSha256)) throw new BaiduError('source SHA-256 格式无效');
@@ -344,8 +321,8 @@ export async function recoverUnknownShare(root: string, book: Book, run: Runner,
     if (!record || record.state !== 'uncertain') throw new BaiduError('当前版本没有待恢复的未知分享记录');
     const filename = record.remotePath.split('/').at(-1)!;
     if (record.remotePath !== `/yuuko-library/books/${book.id}/${sourceSha256}/${filename}` || record.bytes <= 0) throw new BaiduError('journal 远端路径与历史书目版本不符');
-    const target = path.join(root, 'catalog/books', `${book.id}.json`); const catalogBytes = await readFile(target);
-    const current = JSON.parse(catalogBytes.toString('utf8')) as Book;
+    const loaded = await readCatalogBook(root, book.id); if (!loaded) throw new BaiduError('待恢复书目不存在');
+    const current = loaded.book; const catalogHashBefore = loaded.hash;
     const activeVersion = current.file.sha256 === sourceSha256;
     if (activeVersion && (current.file.bytes !== record.bytes || current.file.filename !== filename || current.downloads.baidu !== null)) throw new BaiduError('当前书目已变化或已有百度记录，拒绝恢复覆盖');
     const meta = parseMeta(await call(run, ['meta', record.remotePath]), record.remotePath);
@@ -369,15 +346,13 @@ export async function recoverUnknownShare(root: string, book: Book, run: Runner,
     confirmShareList(listing, baidu);
     record.fsId = meta.fsId; record.shareId = shareId; record.baidu = baidu; record.state = 'shared'; journal.entries[key] = record; await saveJournal(journalFile, journal);
     if (activeVersion) {
-      if (await catalogHash(target) !== digest(catalogBytes)) throw new BaiduError('恢复期间 catalog 发生竞态变化；已保存分享恢复 checkpoint，可安全续跑');
       current.downloads.baidu = baidu;
-      const tmp = `${target}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n', { mode: 0o600 }); await replaceFileAtomically(tmp, target);
-      record.catalogHash = await catalogHash(target); record.catalogGuard = { file: current.file, downloads: current.downloads };
+      record.catalogHash = await writeCatalogBook(root, current, catalogHashBefore).catch(() => { throw new BaiduError('恢复期间 catalog 发生竞态变化；已保存分享恢复 checkpoint，可安全续跑'); });
+      record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);
     }
     return { status: activeVersion ? 'recovered' : 'historical-share-resolved', id: book.id, sha256: sourceSha256, shareId };
   } finally {
-    await lock?.close(); await import('node:fs/promises').then(fs => fs.rm(lockFile, { force: true }));
-    await projectLock?.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true }));
+    await releaseLocks();
   }
 }

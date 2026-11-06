@@ -7,7 +7,7 @@ import { archiveVersionKey, prepareArchive, publishArchive, recoverUnknownArchiv
 import { digest, runPublish, type Runner } from '../tools/baidu/transfer.ts';
 
 const epub = Buffer.from('source epub bytes'); const epubSha = digest(epub); const rarBytes = Buffer.from('mock encrypted rar bytes');
-function book(id = 'sample'): Book { return { schemaVersion: 1, id, title: '书', authors: [], description: '', subjects: [], categories: ['fiction'], cover: null,
+function book(id = 'sample'): Book { return { schemaVersion: 1, id, title: '书', authors: [], description: '', subjects: [], categories: ['history'], cover: null,
   edition: { kind: 'transcription', model: null }, file: { sha256: epubSha, bytes: epub.length, filename: '书.epub' },
   downloads: { r2Key: `books/${id}/${epubSha}.epub`, r2Url: 'https://download.example/file.epub', baidu: null }, publishedAt: null, updatedAt: null }; }
 async function setup() {

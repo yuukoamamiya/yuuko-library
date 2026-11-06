@@ -2,7 +2,7 @@ import { parseArgs } from 'node:util';
 import path from 'node:path';
 import { access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { loadBooks } from '../../src/lib/books.ts';
+import { readCatalog } from '../catalog.ts';
 import { createRunner, getJournalEntry, loadJournal, locateInputs, recoverUnknownShare, runPublish, BaiduError } from './transfer.ts';
 import { createRarRunner, loadArchiveJournal, prepareArchive, publishArchive, recoverUnknownArchiveShare } from './archive.ts';
 
@@ -29,7 +29,7 @@ async function main() {
   if (positionals.length !== 1 || !['status', 'prepare', 'publish', 'recover', 'prepare-archive', 'publish-archive'].includes(command)) throw new Error('命令无效；运行 npm run baidu -- --help');
   if (command === 'prepare-archive') {
     if (!values.id || values.all || !values.name || values.manifest || values.password) throw new Error('prepare-archive 需要 --id 和 --name，不能指定 --all 或分享密码');
-    const books = await loadBooks(); const book = books.find(item => item.id === values.id);
+    const books = await readCatalog(root); const book = books.find(item => item.id === values.id);
     if (!book) throw new Error(`找不到正式书目 ID：${values.id}`);
     const rarPath = path.join(process.env.ProgramFiles ?? 'C:/Program Files', 'WinRAR/Rar.exe');
     try { await access(rarPath); } catch { throw new BaiduError(`未找到 WinRAR：${rarPath}`); }
@@ -43,7 +43,7 @@ async function main() {
     const rarPath = path.join(process.env.ProgramFiles ?? 'C:/Program Files', 'WinRAR/Rar.exe');
     try { await access(rarPath); } catch { throw new BaiduError(`未找到 WinRAR：${rarPath}`); }
     const configDir = path.join(app, 'YuukoLibrary/credentials/baidupcs-config');
-    const result = await publishArchive(root, await loadBooks(), values.manifest, createRunner(
+    const result = await publishArchive(root, await readCatalog(root), values.manifest, createRunner(
       path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe'), configDir), createRarRunner(rarPath));
     console.log(JSON.stringify(result)); return;
   }
@@ -54,13 +54,13 @@ async function main() {
     if (values.manifest) {
       if (values.id || !values['share-id'] || !values.code || values['source-sha']) throw new Error('RAR recover 需要 --manifest、--share-id 和 --code');
       const app = process.env.LOCALAPPDATA; if (!app) throw new BaiduError('LOCALAPPDATA 未设置');
-      const result = await recoverUnknownArchiveShare(root, await loadBooks(), values.manifest, createRunner(
+      const result = await recoverUnknownArchiveShare(root, await readCatalog(root), values.manifest, createRunner(
         path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe'),
         path.join(app, 'YuukoLibrary/credentials/baidupcs-config')), values['share-id'], values.code);
       console.log(JSON.stringify(result)); return;
     }
     if (!values.id) throw new Error('raw recover 需要 --id');
-    const book = (await loadBooks()).find(item => item.id === values.id);
+    const book = (await readCatalog(root)).find(item => item.id === values.id);
     if (!book) throw new Error(`找不到正式书目 ID：${values.id}`);
     const journal = await loadJournal(path.join(root, '.local/baidu/journal.json'));
     const sourceSha = values['source-sha'] ?? book.file.sha256;
@@ -81,7 +81,7 @@ async function main() {
   if (command === 'publish' && !values.id && !values.all) throw new Error('publish 必须显式指定 --id ID 或 --all');
   if (values.password && (command !== 'publish' || !/^[a-z\d]{4}$/iu.test(values.password))) throw new Error('--password 仅用于 publish，须为4位字母或数字');
   if (values.name || values['archive-password'] || values.manifest || values['share-id'] || values.code || values['source-sha']) throw new Error('archive/recover 参数仅用于对应命令');
-  const books = await loadBooks();
+  const books = await readCatalog(root);
   const selected = values.id ? books.filter(book => book.id === values.id) : (values.all || command !== 'publish' ? books : []);
   if (values.id && selected.length !== 1) throw new Error(`找不到正式书目 ID：${values.id}`);
   const journalFile = path.join(root, '.local/baidu/journal.json'); const journal = await loadJournal(journalFile);

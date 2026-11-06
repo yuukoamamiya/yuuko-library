@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile, writeFile, rm, rename } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { replaceFileAtomically } from '../tools/baidu/atomic.ts';
+import { replaceFileAtomically } from '../tools/atomic.ts';
 
 test('transient Windows rename locks retry and then replace the target', async () => {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'baidu-atomic-'));
