@@ -117,11 +117,14 @@ async function prepare(inputs: Input[]): Promise<Plan> {
         categories: input.categories ?? previous!.categories,
         cover, edition: input.kind === 'transcription' ? { kind: 'transcription', model: null }
           : { kind: 'ai-translation', model: input.model!.trim() },
-        file: { sha256: metadata.sha256, bytes: metadata.bytes, filename: path.basename(input.epub) },
-        downloads: { r2Key, r2Url: config.downloadsUrl ? new URL(r2Key, config.downloadsUrl.replace(/\/?$/u, '/')).href : null, baidu: null },
+        file: { sha256: metadata.sha256, bytes: metadata.bytes,
+          filename: previous?.file.sha256 === metadata.sha256 && previous.file.bytes === metadata.bytes
+            ? previous.file.filename : path.basename(input.epub) },
+        downloads: { r2Key, r2Url: config.downloadsUrl ? new URL(r2Key, config.downloadsUrl.replace(/\/?$/u, '/')).href : null,
+          baidu: previous?.file.sha256 === metadata.sha256 ? previous.downloads.baidu : null },
         publishedAt: previous?.publishedAt ?? null, updatedAt: previous?.updatedAt ?? null };
       const warnings = [...metadata.warnings];
-      if (previous?.downloads.baidu) warnings.push('新文件不沿用原百度分享链接');
+      if (previous?.downloads.baidu && previous.file.sha256 !== metadata.sha256) warnings.push('新文件不沿用原百度分享链接');
       changes.push({ id: book.id, operation: input.update ? 'update' : 'add', baidu: input.baidu ?? 'off', warnings });
       books.push(book);
       await jsonWrite(path.join(site, 'catalog/books', `${input.id}.json`), book);

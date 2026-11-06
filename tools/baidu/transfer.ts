@@ -9,8 +9,10 @@ import { replaceFileAtomically } from './atomic.ts';
 
 export type Runner = (args: string[]) => Promise<{ code: number; stdout: string; stderr: string }>;
 export type JournalEntry = { id: string; sha256: string; bytes: number; source: string; catalogHash: string; remotePath: string;
-  state: 'ready' | 'uploaded' | 'verified' | 'shared' | 'complete' | 'uncertain' | 'unavailable'; fsId?: string; shareId?: string; baidu?: BaiduDownload; error?: string };
-export type Journal = { schemaVersion: 1; updatedAt: string; entries: Record<string, JournalEntry> };
+  state: 'ready' | 'uploaded' | 'verified' | 'shared' | 'complete' | 'uncertain' | 'unavailable'; fsId?: string; shareId?: string; sharePassword?: string;
+  catalogGuard?: { file: Book['file']; downloads: Book['downloads'] }; baidu?: BaiduDownload; error?: string };
+export type Journal = { schemaVersion: 1 | 2; updatedAt: string; entries: Record<string, JournalEntry> };
+const versionKey = (id: string, sha256: string) => `${id}@${sha256}`;
 export const digest = (bytes: Buffer | string) => createHash('sha256').update(bytes).digest('hex');
 export class BaiduError extends Error {}
 
@@ -65,8 +67,11 @@ export function parseShare(out: string): { url: string; code: string; shareId: s
   return { url, code, shareId };
 }
 export function confirmShareList(out: string, record: { shareId: string; url: string; code: string; path: string }) {
-  const row = out.split(/\r?\n/u).find(line => line.includes(record.shareId) && line.includes(record.url));
-  if (!row || !row.includes(record.code) || !row.includes(record.path) || !/永久/iu.test(row)) {
+  const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+  const row = out.split(/\r?\n/u).find(line => line.trim().split(/\s+/u).includes(record.shareId)
+    && line.trim().split(/\s+/u).includes(record.url));
+  if (!row || !row.trim().split(/\s+/u).includes(record.code)
+    || !new RegExp(`(?:^|\\s)${escape(record.path)}(?=\\s|$)`, 'u').test(row) || !/永久/iu.test(row)) {
     throw new BaiduError('share list 未在同一记录中确认分享ID、链接、提取码、完整网盘路径与永久期限');
   }
 }
@@ -94,12 +99,33 @@ export async function locateInputs(root: string, books: Book[]) {
 }
 export async function loadJournal(file: string): Promise<Journal> {
   try { const value = JSON.parse(await readFile(file, 'utf8')) as Journal;
-    if (value.schemaVersion !== 1 || !value.entries || typeof value.entries !== 'object') throw new Error(); return value;
-  } catch (e) { if ((e as NodeJS.ErrnoException).code === 'ENOENT') return { schemaVersion: 1, updatedAt: new Date().toISOString(), entries: {} }; throw new BaiduError('journal 格式无效'); }
+    if (![1, 2].includes(value.schemaVersion) || !value.entries || typeof value.entries !== 'object') throw new Error();
+    if (value.schemaVersion === 1) {
+      const entries: Record<string, JournalEntry> = {};
+      for (const [id, entry] of Object.entries(value.entries)) entries[versionKey(id, entry.sha256)] = entry;
+      return { ...value, entries };
+    }
+    return value;
+  } catch (e) { if ((e as NodeJS.ErrnoException).code === 'ENOENT') return { schemaVersion: 2, updatedAt: new Date().toISOString(), entries: {} }; throw new BaiduError('journal 格式无效'); }
+}
+async function persistJournalMigration(file: string, journal: Journal) {
+  let raw: { schemaVersion?: number };
+  try { raw = JSON.parse(await readFile(file, 'utf8')) as typeof raw; } catch { return; }
+  if (raw.schemaVersion !== 1) return;
+  const backup = `${file}.schema1.bak`;
+  try { await copyFile(file, backup, fsConstants.COPYFILE_EXCL); }
+  catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error; }
+  journal.schemaVersion = 2; await saveJournal(file, journal);
+  await writeFile(`${file}.migration.json`, JSON.stringify({ from: 1, to: 2, backup, migratedAt: new Date().toISOString() }, null, 2) + '\n', { flag: 'wx', mode: 0o600 }).catch(error => {
+    if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+  });
 }
 async function saveJournal(file: string, journal: Journal) {
-  await mkdir(path.dirname(file), { recursive: true }); journal.updatedAt = new Date().toISOString();
+  await mkdir(path.dirname(file), { recursive: true }); journal.schemaVersion = 2; journal.updatedAt = new Date().toISOString();
   const tmp = `${file}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(journal, null, 2) + '\n', { mode: 0o600 }); await replaceFileAtomically(tmp, file);
+}
+export function getJournalEntry(journal: Journal, id: string, sha256: string) {
+  return journal.entries[versionKey(id, sha256)] ?? Object.values(journal.entries).find(entry => entry.id === id && entry.sha256 === sha256) ?? null;
 }
 async function readBook(file: string): Promise<Book> { return JSON.parse(await readFile(file, 'utf8')) as Book; }
 async function catalogHash(file: string) { return digest(await readFile(file)); }
@@ -107,19 +133,26 @@ async function archiveJournalConfirms(root: string, book: Book, current: Book, c
   const download = current.downloads.baidu;
   if (!download?.archive) return false;
   validateBaiduDownload(download, book.file.sha256);
-  let journal: { entries?: Record<string, { state?: string; sourceSha256?: string; archiveSha256?: string; remotePath?: string; catalogHash?: string; baidu?: BaiduDownload }> };
+  let journal: { entries?: Record<string, { id?: string; state?: string; sourceSha256?: string; sha256?: string; archiveSha256?: string; remotePath?: string; catalogHash?: string; catalogGuard?: { file: Book['file']; downloads: Book['downloads'] }; baidu?: BaiduDownload }> };
   try { journal = JSON.parse(await readFile(path.join(root, '.local/baidu/archive-journal.json'), 'utf8')) as typeof journal; }
   catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return false; throw new BaiduError('archive journal 无法解析'); }
-  const record = journal.entries?.[book.id];
+  const record = journal.entries?.[`${book.id}@${book.file.sha256}@${download.archive.sha256}`]
+    ?? Object.values(journal.entries ?? {}).find(entry => entry.id === book.id && entry.sourceSha256 === book.file.sha256 && entry.archiveSha256 === download.archive!.sha256);
+  const catalogMatches = record?.catalogHash === currentCatalogHash;
+  const metadataOnly = Boolean(record?.catalogGuard && current.file.sha256 === record.sourceSha256
+    && current.file.bytes === record.catalogGuard.file.bytes && current.file.filename === record.catalogGuard.file.filename
+    && current.downloads.r2Key === record.catalogGuard.downloads.r2Key && current.downloads.r2Url === record.catalogGuard.downloads.r2Url
+    && JSON.stringify(current.downloads.baidu) === JSON.stringify(record.baidu));
   return record?.state === 'complete' && record.sourceSha256 === book.file.sha256
     && record.archiveSha256 === download.archive.sha256 && record.remotePath === download.path
-    && record.catalogHash === currentCatalogHash && JSON.stringify(record.baidu) === JSON.stringify(download);
+    && (catalogMatches || metadataOnly) && JSON.stringify(record.baidu) === JSON.stringify(download);
 }
 export async function importPilot(root: string, runner: Runner) {
   const file = path.join(root, '.local/baidu/pilot-verified.json');
   let pilot: { bookId: string; bytes: number; baidu: BaiduDownload };
   try { pilot = JSON.parse(await readFile(file, 'utf8')) as typeof pilot; } catch { return false; }
   const target = path.join(root, 'catalog/books', `${pilot.bookId}.json`); const book = await readBook(target);
+  if (pilot.bookId !== 'endnotes-2' || pilot.baidu.fileSha256 !== book.file.sha256) return false;
   validateBaiduDownload(pilot.baidu, book.file.sha256);
   if (pilot.bytes !== book.file.bytes) throw new BaiduError('pilot bytes 与正式书目不符');
   const metaOut = await call(runner, ['meta', pilot.baidu.path]); const meta = parseMeta(metaOut, pilot.baidu.path);
@@ -130,19 +163,28 @@ export async function importPilot(root: string, runner: Runner) {
 }
 export async function runPublish(root: string, selected: Book[], run: Runner, options: { password?: string; journalPath?: string; roundtripRoot?: string; now?: () => Date } = {}) {
   const journalFile = options.journalPath ?? path.join(root, '.local/baidu/journal.json');
-  const lockFile = `${journalFile}.lock`; await mkdir(path.dirname(journalFile), { recursive: true });
-  let lock;
-  try { lock = await open(lockFile, 'wx'); } catch { throw new BaiduError('Baidu 操作锁已存在；确认没有活动进程后再检查锁'); }
+  const lockFile = `${journalFile}.lock`; const projectLockFile = path.join(root, '.local/baidu/project.lock');
+  await mkdir(path.dirname(journalFile), { recursive: true });
+  let lock; let projectLock;
+  try { projectLock = await open(projectLockFile, 'wx'); } catch { throw new BaiduError('Baidu 项目操作锁已存在；确认没有活动进程后再检查锁'); }
+  try { lock = await open(lockFile, 'wx'); } catch { await projectLock.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true })); throw new BaiduError('Baidu journal 锁已存在；确认没有活动进程后再检查锁'); }
   try {
-    const journal = await loadJournal(journalFile); const inputs = await locateInputs(root, selected);
-    const pilot = selected.some(book => book.id === 'endnotes-2') ? await importPilot(root, run) : false;
+    const journal = await loadJournal(journalFile); await persistJournalMigration(journalFile, journal); const inputs = new Map<string, { file: string; bytes: number }>();
+    let pilot: Awaited<ReturnType<typeof importPilot>> = false;
+    let archiveHistory: { entries?: Record<string, { id?: string; state?: string }> } = {};
+    try { archiveHistory = JSON.parse(await readFile(path.join(root, '.local/baidu/archive-journal.json'), 'utf8')) as typeof archiveHistory; }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw new BaiduError('archive journal 无法解析'); }
     let completed = 0; const unavailable: { id: string; error: string }[] = [];
     for (const book of selected) {
       console.error(`baidu: ${book.id} (${book.file.bytes} bytes) starting/resuming`);
       const target = path.join(root, 'catalog/books', `${book.id}.json`), beforeHash = await catalogHash(target), current = await readBook(target);
       if (current.file.sha256 !== book.file.sha256 || current.file.bytes !== book.file.bytes) throw new BaiduError(`${book.id}: 书目文件已变化`);
-      const previous = journal.entries[book.id];
-      if (previous && previous.sha256 !== book.file.sha256) throw new BaiduError(`${book.id}: journal 哈希变化，旧分享记录作废，须人工检查`);
+      const key = versionKey(book.id, book.file.sha256);
+      const previous = getJournalEntry(journal, book.id, book.file.sha256);
+      const otherVersions = Object.values(journal.entries).filter(entry => entry.id === book.id && entry.sha256 !== book.file.sha256);
+      if (Object.values(archiveHistory.entries ?? {}).some(entry => entry.id === book.id && entry.state === 'uncertain')) {
+        throw new BaiduError(`${book.id}: 有未确认的历史 RAR 分享结果；先通过 recover 诊断恢复，禁止新版本绕过`);
+      }
       if (current.downloads.baidu?.archive) {
         if (!await archiveJournalConfirms(root, book, current, beforeHash)) throw new BaiduError(`${book.id}: RAR 记录缺少匹配的完整 archive journal，拒绝按旧 raw 分享覆盖`);
         completed++;
@@ -155,29 +197,67 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       }
       if (previous?.state === 'complete' && previous.baidu) {
         validateBaiduDownload(previous.baidu, book.file.sha256);
-        if (JSON.stringify(current.downloads.baidu) !== JSON.stringify(previous.baidu) || beforeHash !== previous.catalogHash) {
-          throw new BaiduError(`${book.id}: 完成后的书目已变化，拒绝覆盖`);
+        if (JSON.stringify(current.downloads.baidu) !== JSON.stringify(previous.baidu)) {
+          throw new BaiduError(`${book.id}: 已验证分享字段已变化，拒绝覆盖`);
+        }
+        if (beforeHash !== previous.catalogHash) {
+          const guard = previous.catalogGuard;
+          if (current.file.sha256 !== previous.sha256 || current.file.bytes !== previous.bytes || !guard
+            || current.file.filename !== guard.file.filename || current.downloads.r2Key !== guard.downloads.r2Key
+            || current.downloads.r2Url !== guard.downloads.r2Url || current.downloads.baidu?.fileSha256 !== previous.sha256) {
+            throw new BaiduError(`${book.id}: 文件或下载字段已变化，拒绝刷新 journal fingerprint`);
+          }
+          previous.catalogHash = beforeHash; previous.catalogGuard = { file: current.file, downloads: current.downloads };
+          journal.entries[key] = previous; await saveJournal(journalFile, journal);
+        } else if (!previous.catalogGuard && JSON.stringify(current.downloads.baidu) === JSON.stringify(previous.baidu)) {
+          previous.catalogGuard = { file: current.file, downloads: current.downloads };
+          journal.entries[key] = previous; await saveJournal(journalFile, journal);
         }
         completed++;
         continue;
       }
-      const input = inputs.get(book.id)!; const remotePath = `/yuuko-library/books/${book.id}/${book.file.sha256}/${book.file.filename}`;
-      const record: JournalEntry = previous ?? { id: book.id, sha256: book.file.sha256, bytes: book.file.bytes, source: input.file,
-        catalogHash: beforeHash, remotePath, state: 'ready' };
+      const remotePath = `/yuuko-library/books/${book.id}/${book.file.sha256}/${book.file.filename}`;
+      const record: JournalEntry = previous ?? { id: book.id, sha256: book.file.sha256, bytes: book.file.bytes, source: '',
+        catalogHash: beforeHash, catalogGuard: { file: current.file, downloads: current.downloads }, remotePath, state: 'ready' };
+      if (otherVersions.some(entry => entry.state === 'uncertain')) throw new BaiduError(`${book.id}: 旧版本仍有未确认分享结果；先用 recover 诊断恢复，禁止新版本绕过`);
+      if (record.state === 'uncertain' && !record.baidu) throw new BaiduError(`${book.id}: 该版本分享结果未知；先用 recover 诊断并接续，禁止自动创建新分享`);
       if (previous && beforeHash !== previous.catalogHash) {
         if (previous.state === 'shared' && previous.baidu && JSON.stringify(current.downloads.baidu) === JSON.stringify(previous.baidu)) {
-          record.catalogHash = beforeHash; record.state = 'complete'; journal.entries[book.id] = record; await saveJournal(journalFile, journal); continue;
+          record.catalogHash = beforeHash; record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal); continue;
         }
+        if (previous.state === 'shared' && previous.baidu && current.downloads.baidu === null && previous.catalogGuard
+          && current.file.sha256 === previous.catalogGuard.file.sha256 && current.file.bytes === previous.catalogGuard.file.bytes
+          && current.file.filename === previous.catalogGuard.file.filename && current.downloads.r2Key === previous.catalogGuard.downloads.r2Key
+          && current.downloads.r2Url === previous.catalogGuard.downloads.r2Url) {
+          record.catalogHash = beforeHash; record.catalogGuard = { file: current.file, downloads: current.downloads };
+          journal.entries[key] = record; await saveJournal(journalFile, journal);
+        } else
         throw new BaiduError(`${book.id}: journal 创建后书目已变化，拒绝覆盖`);
       }
       if (pilot && pilot.book.id === book.id) { record.baidu = pilot.baidu; record.state = 'shared'; }
       if (record.state === 'ready') {
+        let input = inputs.get(book.id);
+        if (!input) {
+          if (book.id === 'endnotes-2' && !pilot) pilot = await importPilot(root, run);
+          if (pilot && pilot.book.id === book.id) { record.baidu = pilot.baidu; record.state = 'shared'; }
+          if (record.state === 'ready') {
+            try { input = (await locateInputs(root, [book])).get(book.id); }
+            catch (error) { throw new BaiduError(`${book.id}: ${error instanceof Error ? error.message : '本地 EPUB 不可用'}`); }
+            if (!input) throw new BaiduError(`${book.id}: 缺少当前版本源 EPUB`);
+            inputs.set(book.id, input);
+            record.source = input.file;
+          }
+        }
+        if (record.state !== 'ready') {
+          // A verified local pilot share has no upload phase.
+        } else {
         await ensureRemoteDirectory(run, path.posix.dirname(remotePath));
         const existing = await probeRemoteFile(run, remotePath);
         if (existing) {
           if (existing.bytes !== book.file.bytes) throw new BaiduError(`${book.id}: 已存在远端文件 bytes 不匹配`);
           record.fsId = existing.fsId;
         } else {
+          if (!input) throw new BaiduError(`${book.id}: 上传前未找到当前版本 EPUB`);
           if (digest(await readFile(input.file)) !== book.file.sha256) throw new BaiduError(`${book.id}: 上传前源 EPUB SHA-256 已变化`);
           if (path.basename(book.file.filename) !== book.file.filename || /[\\/\0]/u.test(book.file.filename)) throw new BaiduError(`${book.id}: catalog 文件名不是安全的单级文件名`);
           const staging = path.join(root, '.local/baidu/staging', book.id, book.file.sha256, book.file.filename);
@@ -192,7 +272,8 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
           if (!uploaded || uploaded.bytes !== book.file.bytes) throw new BaiduError(`${book.id}: 上传后远端 meta 核对失败`);
           record.fsId = uploaded.fsId;
         }
-        record.state = 'uploaded'; journal.entries[book.id] = record; await saveJournal(journalFile, journal);
+        record.state = 'uploaded'; journal.entries[key] = record; await saveJournal(journalFile, journal);
+        }
       }
       if (record.state === 'uploaded') {
         const meta = parseMeta(await call(run, ['meta', remotePath]), remotePath);
@@ -211,11 +292,11 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
         }
         const downloaded = cached;
         if (downloaded.length !== book.file.bytes || digest(downloaded) !== book.file.sha256) throw new BaiduError(`${book.id}: 完整回读 SHA-256 校验失败`);
-        record.state = 'verified'; journal.entries[book.id] = record; await saveJournal(journalFile, journal);
+        record.state = 'verified'; journal.entries[key] = record; await saveJournal(journalFile, journal);
       }
       if (record.state === 'verified') {
         const password = options.password ?? Array.from({ length: 4 }, () => 'abcdefghijklmnopqrstuvwxyz0123456789'[randomInt(36)]).join('');
-        record.state = 'uncertain'; journal.entries[book.id] = record; await saveJournal(journalFile, journal);
+        record.state = 'uncertain'; record.sharePassword = password; journal.entries[key] = record; await saveJournal(journalFile, journal);
         const out = await call(run, ['share', 'set', '-p', password, '--period', '0', remotePath]);
         const share = parseShare(out);
         if (share.code !== password) throw new BaiduError(`${book.id}: share set 提取码与所设密码不符，分享状态未知`);
@@ -223,21 +304,80 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
         record.baidu = { url: share.url, code: share.code, fileSha256: book.file.sha256, fsId: record.fsId!, shareId: share.shareId,
           path: remotePath, expiresAt: null, verifiedAt: (options.now?.() ?? new Date()).toISOString() };
         validateBaiduDownload(record.baidu, book.file.sha256);
-        journal.entries[book.id] = record; await saveJournal(journalFile, journal);
+        journal.entries[key] = record; await saveJournal(journalFile, journal);
       }
       if (record.state === 'uncertain' && record.baidu) {
         const check = await call(run, ['share', 'list']);
         confirmShareList(check, record.baidu);
-        record.state = 'shared'; journal.entries[book.id] = record; await saveJournal(journalFile, journal);
+        record.state = 'shared'; journal.entries[key] = record; await saveJournal(journalFile, journal);
       }
       if (!['complete', 'shared'].includes(record.state) || !record.baidu) throw new BaiduError(`${book.id}: 状态 ${record.state} 需要人工恢复`);
       validateBaiduDownload(record.baidu, book.file.sha256);
       if (await catalogHash(target) !== beforeHash) throw new BaiduError(`${book.id}: catalog 在流程中变化，拒绝覆盖`);
       current.downloads.baidu = record.baidu;
       const tmp = `${target}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n'); await replaceFileAtomically(tmp, target);
-      record.catalogHash = await catalogHash(target); record.state = 'complete'; journal.entries[book.id] = record; await saveJournal(journalFile, journal);
+      record.catalogHash = await catalogHash(target); record.catalogGuard = { file: current.file, downloads: current.downloads };
+      record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);
       completed++;
     }
     return { selected: selected.length, completed, unavailable, unavailableCount: unavailable.length, journalFile };
-  } finally { await lock?.close(); await import('node:fs/promises').then(fs => fs.rm(lockFile, { force: true })); }
+  } finally {
+    await lock?.close(); await import('node:fs/promises').then(fs => fs.rm(lockFile, { force: true }));
+    await projectLock?.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true }));
+  }
+}
+
+export async function recoverUnknownShare(root: string, book: Book, run: Runner, shareId: string, code: string,
+  options: { journalPath?: string; roundtripRoot?: string; now?: () => Date; sourceSha256?: string } = {}) {
+  if (!/^\d+$/u.test(shareId) || !/^[a-z\d]{4}$/iu.test(code)) throw new BaiduError('恢复需要精确的 share ID 和 4 位提取码');
+  const journalFile = options.journalPath ?? path.join(root, '.local/baidu/journal.json');
+  const lockFile = `${journalFile}.lock`; const projectLockFile = path.join(root, '.local/baidu/project.lock');
+  await mkdir(path.dirname(journalFile), { recursive: true });
+  let projectLock; let lock;
+  try { projectLock = await open(projectLockFile, 'wx'); } catch { throw new BaiduError('Baidu 项目操作锁已存在'); }
+  try { lock = await open(lockFile, 'wx'); } catch { await projectLock.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true })); throw new BaiduError('Baidu journal 锁已存在'); }
+  try {
+    const sourceSha256 = options.sourceSha256 ?? book.file.sha256;
+    if (!/^[a-f\d]{64}$/iu.test(sourceSha256)) throw new BaiduError('source SHA-256 格式无效');
+    const journal = await loadJournal(journalFile); await persistJournalMigration(journalFile, journal);
+    const key = versionKey(book.id, sourceSha256); const record = journal.entries[key];
+    if (!record || record.state !== 'uncertain') throw new BaiduError('当前版本没有待恢复的未知分享记录');
+    const filename = record.remotePath.split('/').at(-1)!;
+    if (record.remotePath !== `/yuuko-library/books/${book.id}/${sourceSha256}/${filename}` || record.bytes <= 0) throw new BaiduError('journal 远端路径与历史书目版本不符');
+    const target = path.join(root, 'catalog/books', `${book.id}.json`); const catalogBytes = await readFile(target);
+    const current = JSON.parse(catalogBytes.toString('utf8')) as Book;
+    const activeVersion = current.file.sha256 === sourceSha256;
+    if (activeVersion && (current.file.bytes !== record.bytes || current.file.filename !== filename || current.downloads.baidu !== null)) throw new BaiduError('当前书目已变化或已有百度记录，拒绝恢复覆盖');
+    const meta = parseMeta(await call(run, ['meta', record.remotePath]), record.remotePath);
+    if (meta.bytes !== record.bytes || (record.fsId && meta.fsId !== record.fsId)) throw new BaiduError('远端文件 meta 与未知分享 journal 不匹配');
+    const roundtripDir = path.join(options.roundtripRoot ?? path.join(root, '.local/baidu/recovery'), `${book.id}-${sourceSha256}-${randomUUID()}`);
+    await mkdir(roundtripDir, { recursive: true });
+    await call(run, ['download', '--saveto', roundtripDir, '--mode', 'pcs', '--retry', '0', '-p', '1', record.remotePath],
+      out => /下载完成|下载成功|成功下载|download(?:ed)? successfully/iu.test(out));
+    const downloaded = await readFile(path.join(roundtripDir, filename));
+    if (downloaded.length !== record.bytes || digest(downloaded) !== sourceSha256) throw new BaiduError('恢复前完整远端 SHA-256 不匹配');
+    const listing = await call(run, ['share', 'list']);
+    const row = listing.split(/\r?\n/u).find(line => line.trim().split(/\s+/u).includes(shareId) && line.includes(record.remotePath));
+    const url = row?.match(/https:\/\/pan\.baidu\.com\/s\/[A-Za-z\d_-]+/u)?.[0];
+    if (!row || !url || !row.includes(code) || !/永久/iu.test(row)) throw new BaiduError('share list 未唯一确认指定分享 ID、提取码、路径与永久期限');
+    if (record.baidu && (record.baidu.shareId !== shareId || record.baidu.code !== code || record.baidu.url !== url)) {
+      throw new BaiduError('传入恢复分享与 journal 已知分享记录不一致');
+    }
+    const baidu: BaiduDownload = { url, code, fileSha256: sourceSha256, fsId: meta.fsId, shareId,
+      path: record.remotePath, expiresAt: null, verifiedAt: (options.now?.() ?? new Date()).toISOString() };
+    validateBaiduDownload(baidu, sourceSha256);
+    confirmShareList(listing, baidu);
+    record.fsId = meta.fsId; record.shareId = shareId; record.baidu = baidu; record.state = 'shared'; journal.entries[key] = record; await saveJournal(journalFile, journal);
+    if (activeVersion) {
+      if (await catalogHash(target) !== digest(catalogBytes)) throw new BaiduError('恢复期间 catalog 发生竞态变化；已保存分享恢复 checkpoint，可安全续跑');
+      current.downloads.baidu = baidu;
+      const tmp = `${target}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n', { mode: 0o600 }); await replaceFileAtomically(tmp, target);
+      record.catalogHash = await catalogHash(target); record.catalogGuard = { file: current.file, downloads: current.downloads };
+      record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);
+    }
+    return { status: activeVersion ? 'recovered' : 'historical-share-resolved', id: book.id, sha256: sourceSha256, shareId };
+  } finally {
+    await lock?.close(); await import('node:fs/promises').then(fs => fs.rm(lockFile, { force: true }));
+    await projectLock?.close(); await import('node:fs/promises').then(fs => fs.rm(projectLockFile, { force: true }));
+  }
 }
