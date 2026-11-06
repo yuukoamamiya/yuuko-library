@@ -131,7 +131,7 @@ npm run maintenance -- backup-verify --backup 'D:/LibraryBackups/book-share'
 npm run maintenance -- restore --backup 'D:/LibraryBackups/book-share' --target 'D:/Restore/book-share'
 ```
 
-备份结果中的 `complete` 必须为 true 才能用于恢复或清理。备份清单记录缺失、未知或不支持文件；凭据、EPUB 以外的非允许类型和敏感文件不会被纳入。若正式书目所需 EPUB、百度 journal 或已发布 RAR 缺失，备份不完整。manifest sidecar 与每个对象均使用 SHA-256 校验，验证器也拒绝未登记文件、符号链接和路径冲突。默认恢复只做 dry-run；确认输出目标路径是新目录后才加 `--apply`。恢复保留文件路径并输出 RAR manifest 的 `.json.restored` 副本；原备份不会修改。
+备份结果中的 `complete` 必须为 true 才能用于恢复或清理。备份清单记录缺失、未知或不支持文件；凭据、EPUB 以外的非允许类型和敏感文件不会被纳入。若正式书目所需 EPUB、百度 journal 或已发布 RAR 缺失，备份不完整。manifest sidecar 与每个对象均使用 SHA-256 校验，验证器也拒绝未登记文件、符号链接和路径冲突。默认恢复只做 dry-run；确认输出目标路径是新目录后才加 `--apply`。恢复保留文件路径并输出 RAR manifest 的 `.json.restored.json` 副本；原备份不会修改。备份保存维护数据，不包含 Git 源码、依赖目录或登录凭据。恢复目录不是可直接运行的完整仓库：先从 Git clone 目标版本并运行 `npm ci`，再核对备份来源版本与文件清单，将需要的维护数据导入该新 clone；凭据须从仓库外的凭据管理位置单独配置。
 
 生成清理计划前确保备份完整有效：
 
