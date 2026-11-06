@@ -1,10 +1,11 @@
 import { createHash, randomInt, randomUUID } from 'node:crypto';
-import { readFile, readdir, stat, mkdir, writeFile, rename, open, copyFile } from 'node:fs/promises';
+import { readFile, readdir, stat, mkdir, writeFile, open, copyFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { constants as fsConstants } from 'node:fs';
 import type { Book, BaiduDownload } from '../../src/lib/books.ts';
 import { validateBaiduDownload } from '../../src/lib/baidu.ts';
+import { replaceFileAtomically } from './atomic.ts';
 
 export type Runner = (args: string[]) => Promise<{ code: number; stdout: string; stderr: string }>;
 export type JournalEntry = { id: string; sha256: string; bytes: number; source: string; catalogHash: string; remotePath: string;
@@ -98,7 +99,7 @@ export async function loadJournal(file: string): Promise<Journal> {
 }
 async function saveJournal(file: string, journal: Journal) {
   await mkdir(path.dirname(file), { recursive: true }); journal.updatedAt = new Date().toISOString();
-  const tmp = `${file}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(journal, null, 2) + '\n', { mode: 0o600 }); await rename(tmp, file);
+  const tmp = `${file}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(journal, null, 2) + '\n', { mode: 0o600 }); await replaceFileAtomically(tmp, file);
 }
 async function readBook(file: string): Promise<Book> { return JSON.parse(await readFile(file, 'utf8')) as Book; }
 async function catalogHash(file: string) { return digest(await readFile(file)); }
@@ -209,7 +210,7 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       validateBaiduDownload(record.baidu, book.file.sha256);
       if (await catalogHash(target) !== beforeHash) throw new BaiduError(`${book.id}: catalog 在流程中变化，拒绝覆盖`);
       current.downloads.baidu = record.baidu;
-      const tmp = `${target}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n'); await rename(tmp, target);
+      const tmp = `${target}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n'); await replaceFileAtomically(tmp, target);
       record.catalogHash = await catalogHash(target); record.state = 'complete'; journal.entries[book.id] = record; await saveJournal(journalFile, journal);
     }
     return { completed: selected.length, journalFile };
