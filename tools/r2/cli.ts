@@ -3,14 +3,14 @@ import { loadEnvFile } from 'node:process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { spawnSync } from 'node:child_process';
 import { HeadBucketCommand, HeadObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { r2Settings } from './config.ts';
-import { downloadOrigin, transferBook, TransferError, type ObjectStore, type Verification } from './transfer.ts';
+import { downloadOrigin, transferBook, TransferError, type ObjectStore } from './transfer.ts';
 import type { Book } from '../../src/lib/books.ts';
+import { requireCurrentPlan, planDir } from '../book/plan.ts';
+import type { UploadReport } from './report.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const PLAN_ID = /^p-[a-f0-9-]{36}$/u;
 function safeMessage(error: unknown): string {
   if (error instanceof TransferError) return error.message;
   const status = (error as { $metadata?: { httpStatusCode?: number } })?.$metadata?.httpStatusCode;
@@ -48,15 +48,12 @@ function objectStore(client: S3Client, bucket: string): ObjectStore {
   };
 }
 async function loadPlan(id: string) {
-  if (!PLAN_ID.test(id)) throw new TransferError('计划编号格式无效');
-  const status = spawnSync(process.execPath, ['--import', 'tsx', 'tools/book/cli.ts', 'status', '--plan', id, '--json'],
-    { cwd: root, encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
-  if (status.status !== 0) throw new TransferError('审核计划过期或内容被修改，请重新 prepare');
-  const dir = path.join(root, '.local/plans', id);
-  const plan: { id: string; reviewHash: string; books: Book[] } = JSON.parse(await readFile(path.join(dir, 'plan.json'), 'utf8'));
-  if (plan.id !== id || !plan.books.length || plan.books.length > 200) throw new TransferError('计划内容无效');
+  let plan; try { plan = await requireCurrentPlan(root, id); } catch { throw new TransferError('审核计划过期或内容被修改，请重新 prepare'); }
+  const dir = planDir(root, id);
+  if (!plan.books.length || plan.books.length > 200) throw new TransferError('计划内容无效');
   return { plan, dir };
 }
+
 async function execute(command: string, planId?: string, bookId?: string) {
   const { config, settings, client } = await connection();
   try {
@@ -80,8 +77,7 @@ async function execute(command: string, planId?: string, bookId?: string) {
     let lock;
     try { lock = await open(lockPath, 'wx'); } catch { throw new TransferError('此桶已有上传或验证进程；先检查锁文件和正在运行的进程'); }
     const reportPath = path.join(reportDir, `${planId}${bookId ? `-${pilot.id}` : ''}-${command}.json`);
-    const report: { schemaVersion: number; command: string; planId: string; reviewHash: string; bucket: string; origin: string;
-      startedAt: string; finishedAt: string | null; status: string; expected: number; verified: Verification[]; failures: { id: string; message: string }[] } = {
+    const report: UploadReport = {
       schemaVersion: 1, command, planId, reviewHash: plan.reviewHash, bucket: settings.bucket, origin,
       startedAt: new Date().toISOString(), finishedAt: null, status: 'running', expected: books.length, verified: [], failures: [] };
     let queue = Promise.resolve();
