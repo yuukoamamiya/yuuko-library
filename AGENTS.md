@@ -111,7 +111,7 @@ npm run pages -- --help
 - [x] **区分书籍更新与站点部署时间（本地实现）。** 内容变化才刷新 updatedAt；prepare --site-only 保留全部书籍时间，部署快照时间为 createdAt。
 - [x] **统一本地验收与发布溯源（本地实现）。** npm run verify 顺序运行检查、测试、构建及 Git 空白检查，支持文档模式；固定快照记录 Git 提交、dirty 状态、来源和冻结站点输入摘要，快照源或 build 期间变化时停止，部署要求 clean 提交。新来源标记需下一次 Pages 发布后才在线可见。
 - [x] **增加独立线上体检（本地实现）。** 可在任意克隆仓库机器只读检查正式书目对应的完整索引、详情、封面和下载；默认 HEAD 与完整 GET/SHA 校验区分，样本结果不冒称全站通过。
-- [ ] **完善本地维护数据备份与清理流程（实现待主代理验收）。** `maintenance backup` 创建 SHA-256 内容寻址去重备份，`backup-verify` 校验 manifest、对象和路径；完整备份可 dry-run / 显式恢复到新目录。`cleanup-plan` 要求同工作区完整备份并核对候选逐文件哈希；`cleanup-apply` 需精确 digest，只将候选移入工作区外 quarantine，`cleanup-undo` 校验哈希后恢复。隔离区永久删除仍须另行精确核对并取得本次授权；旧 EPUB 与远端 R2 对象不在本地清理范围。预览仍保护近期快照、活跃/不确定状态、依赖闭包和最近两份成功发布，未知状态保守阻断。
+- [x] **完善本地维护数据备份与清理工具（主代理本机验收）。** SHA-256 CAS 备份 `complete=true`、`missing=[]`；5155 个逻辑文件共 1,553,412,143 字节，去重为 1178 个 CAS 对象、137,887,900 字节。完整备份校验及新目录恢复演练通过；主代理独立逐文件核对 5155 个路径的 SHA-256 和大小全部一致，恢复的 RAR manifest 路径/密码/内部 EPUB SHA 也通过 WinRAR 验证。真实 cleanup preview 有 29 项：28 protected、1 unknown，候选字节为 0；7 条 unknown（旧 plan/release 元数据缺失及 markdown 摘要/remote inventory 未知）按工具规则 cleanup-plan 预期因 unknown 阻断，主代理正在做最终只读确认；未执行 quarantine 或删除；未知旧快照需人工梳理。隔离区永久删除仍需另行精确核对并取得本次授权；旧 EPUB 与远端 R2 对象仍不在此本地清理范围。
 
 ### 百度备用下载
 
@@ -119,7 +119,7 @@ npm run pages -- --help
 - [x] 获授权完成 `endnotes-2` 单本试传：独立 SHA 目录上传、`meta` 核对大小与 fsId、密码保护的永久分享、PCS 回读完整 SHA-256 均通过。永久分享不保证永不失效。
 - [x] 全部 65 本原始 EPUB 均已上传、创建永久密码分享并回读验证完整 SHA-256，总计 108772188 字节；64 条普通分享通过匿名提取码检查。
 - [x] 唯一异常书的维护者指定 RAR 包已独立加密验证、上传/回读并导入正式书目；异常原始分享和失败记录保留。详情弹窗展示已验证，最终 65/65 当前百度入口匿名提取码检查通过（64 EPUB + 1 RAR）；生产站点已部署，HTTP 与真实浏览器验证通过。详情见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
-- [ ] 同书新版百度 EPUB/RAR 版本历史与恢复（实现待主代理验收）：journal 以书籍 ID + 内容 SHA 记录多个版本；新版使用独立路径和分享记录，旧记录保留。可续跑已验证的上传/回读检查点；分享结果未知时必须 `recover` 精确核对远端 meta、完整 SHA 与 share list，不盲目重复创建。相同字节仅元数据变化时复用原分享并校验书目字段守卫。RAR 以源 SHA、RAR SHA 和文件名区分历史，独立 manifest；详见 [百度备用下载说明](docs/baidu-downloads.md)。
+- [x] 同书新版百度 EPUB/RAR 版本历史与恢复（主代理本机迁移验收）：journal 以书籍 ID + 内容 SHA 记录多个版本；新版使用独立路径和分享记录，旧记录保留。可续跑已验证的上传/回读检查点；分享结果未知时必须 `recover` 精确核对远端 meta、完整 SHA 与 share list，不盲目重复创建。相同字节仅元数据变化时复用原分享并校验书目字段守卫。raw schema 1→2 迁移实测 65 条旧记录复用，0 云调用、书目不变且 64 个 raw guard 通过；RAR schema 1→2 通过原生 meta、下载、share list、完整 RAR SHA 和 inner EPUB SHA 校验，无上传或新分享，旧 schema1 备份保留。RAR 以源 SHA、RAR SHA 和文件名区分历史，独立 manifest；详见 [百度备用下载说明](docs/baidu-downloads.md)。
 
 ### 图书评论区
 

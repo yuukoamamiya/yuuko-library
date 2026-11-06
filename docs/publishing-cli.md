@@ -51,9 +51,9 @@ upload 缺失对象时写入，一致对象复用，冲突对象不覆盖。veri
 | `npm run maintenance -- cleanup-apply --plan FILE --confirm DIGEST --quarantine DIR` | 校验计划摘要、备份、清单和文件哈希后移入独立隔离目录 |
 | `npm run maintenance -- cleanup-undo --quarantine DIR` | 校验隔离内容后恢复原路径 |
 
-`health` 默认对当前正式书目逐条匿名访问百度分享并验证提取码；`--skip-baidu` 仅跳过百度检查。默认下载检查为 HEAD 响应头，`--full-download` 才执行完整 GET 与 SHA-256；指定 `--book` 的结果是样本，不能称全馆通过。匿名检查证明提取码挑战可通过，不保证百度平台后续持续可用。
+`health` 默认对当前正式书目逐条匿名访问百度分享并验证提取码；`--skip-baidu` 仅跳过百度检查。默认下载检查为 HEAD 响应头，`--full-download` 才执行完整 GET 与 SHA-256；指定 `--book` 的结果是样本，不能称全馆通过。匿名检查调用百度 PCS 匿名提取码 challenge endpoint，验证 URL+code 可通过挑战；它不下载文件，也不证明完整内容 SHA 或平台后续持续可用。
 
-备份只收录工具允许的站点/维护文件和匹配源 EPUB；按 SHA-256 内容对象去重，并生成 manifest 校验摘要。未知/敏感/不支持文件会列为缺失，`complete=false` 的备份不能用于恢复或清理。执行恢复前先运行 `backup-verify`；恢复目标必须是新目录。该备份保存维护数据，不包含 Git 源码、依赖目录或登录凭据，也不是可直接运行的完整仓库。恢复应在 Git clone 目标版本并运行 `npm ci` 后，核对来源版本与清单，再把所需数据导入新 clone；凭据从仓库外单独配置。备份目录需由维护者另行保管。
+备份只收录工具允许的站点/维护文件和匹配源 EPUB；按 SHA-256 内容对象去重，并生成 manifest 校验摘要。未知/敏感/不支持文件会列为缺失，`complete=false` 的备份不能用于恢复或清理。执行恢复前先运行 `backup-verify`；恢复目标必须是新目录。该备份保存维护数据，不包含 Git 源码、依赖目录或登录凭据，也不是可直接运行的完整仓库。恢复应在 Git clone 目标版本并运行 `npm ci` 后，核对来源版本与清单，再把所需数据导入新 clone；凭据从仓库外单独配置。备份目录需由维护者另行保管。主代理 2026-11-06 的真实演练得到 `complete=true`、`missing=[]`，逻辑文件 5155 个/1,553,412,143 字节，去重为 1178 个 CAS 对象/137,887,900 字节；完整校验与新目录恢复通过，独立逐文件 SHA-256 和大小比较全部一致。
 
 清理计划只覆盖识别的 `.local/plans`、`.local/releases`、`.local/uploads` 候选，并要求备份来源工作区一致、每个候选文件都在完整备份中且哈希相同。apply 的 digest 是精确确认值；操作仅将候选 rename 到工作区之外的 quarantine，不永久删除。需要清除 quarantine 时须先人工核对具体路径和内容，并在本次会话取得明确授权；不得把预览或计划当作删除授权。具体恢复、限制和示例见 [本地维护指南](local-development.md#维护数据备份与清理)。百度 journal、RAR/manifest 与归档文件是受保护依赖，不在清理候选中。
 
@@ -110,7 +110,7 @@ npm run maintenance -- cleanup-preview
 
 `health` 仅从正式书目与 site.config.json 读取期望值，以只读 HTTP 检查首页、全量索引、详情页、封面和公开下载；不需要 .local、EPUB 原件或云凭据，也不修改书目。`--book` 限定样本，结果明确标记为 sample。默认 HEAD 只核对下载状态和响应头，不能证明文件内容正确；`--full-download` 流式 GET 并校验完整字节数及 SHA-256。进度写 stderr，结果 JSON 写 stdout，任一失败返回非零。
 
-`cleanup-preview` 仅生成本地清单，报告路径、类型、大小、时间、保护理由、候选和未知项；命令没有 apply/delete。需要实际清理时使用上文的 backup、cleanup-plan、cleanup-apply 和 cleanup-undo 流程，apply 仅隔离不永久删除。30 天内快照、prepared / active / submitting / submitted / uncertain 状态、沿 release/plan/report 的依赖关系和最近两份成功发布会保留；线上状态、符号链接边界或报告格式未知时保守保护。候选仍需人工逐项确认并另行明确授权。此命令不清理旧 EPUB 或 R2 对象。
+`cleanup-preview` 仅生成本地清单，报告路径、类型、大小、时间、保护理由、候选和未知项；命令没有 apply/delete。需要实际清理时使用上文的 backup、cleanup-plan、cleanup-apply 和 cleanup-undo 流程，apply 仅隔离不永久删除。30 天内快照、prepared / active / submitting / submitted / uncertain 状态、沿 release/plan/report 的依赖关系和最近两份成功发布会保留；线上状态、符号链接边界或报告格式未知时保守保护。候选仍需人工逐项确认并另行明确授权。此命令不清理旧 EPUB 或 R2 对象。2026-11-06 本机 preview 为 29 项（28 protected、1 unknown），候选字节数为 0；7 条 unknown 按工具规则应使 cleanup-plan 阻断；主代理尚未执行该命令，也没有 quarantine 或删除。旧快照未知证据待人工梳理后再生成新计划。
 
 ## Cloudflare 域名工具
 

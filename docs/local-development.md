@@ -146,6 +146,8 @@ npm run maintenance -- cleanup-apply --plan '.local/cleanup-plan.json' --confirm
 npm run maintenance -- cleanup-undo --quarantine 'D:/LibraryBackups/quarantine-2026-11-06'
 ```
 
-`cleanup-apply` 会重新核对计划、备份、候选集合和当前内容，确认隔离目录位于工作区外，再将目录移入隔离区；它不会永久删除。若要撤销，使用 `cleanup-undo`，且原路径必须空缺、隔离内容哈希必须吻合。隔离目录的最终删除属于独立文件清理，需先核对具体目标并取得本次明确授权。线上或本地状态未知、依赖关系不明及百度 journal、RAR manifest/对象均不作为清理候选。
+`cleanup-apply` 会重新核对计划、备份、候选集合和当前内容，确认隔离目录位于工作区外，再将目录移入隔离区；它不会永久删除。2026-11-06 本机实际 preview 共 29 项（28 protected、1 unknown），候选字节数为 0；7 条 unknown 原因包括旧 plan/release 缺元数据及 markdown 摘要/remote inventory 状态未知，cleanup-plan 按工具规则预期因未知状态阻断，尚未实际执行该命令。没有执行 quarantine 或删除；需先人工整理未知快照并重跑预览。若要撤销，使用 `cleanup-undo`，且原路径必须空缺、隔离内容哈希必须吻合。隔离目录的最终删除属于独立文件清理，需先核对具体目标并取得本次明确授权。线上或本地状态未知、依赖关系不明及百度 journal、RAR manifest/对象均不作为清理候选。
 
-`health` 默认对全馆逐条执行百度匿名提取码检查。`--skip-baidu` 可只查站点/R2；默认下载检查为 HEAD，`--full-download` 才读取全文件并核对 SHA-256。使用 `--book ID` 仅检查样本，报告须标为 sample。
+`health` 默认对全馆逐条调用百度匿名提取码 challenge endpoint，验证分享 URL 与提取码能通过挑战；这不是文件完整下载/SHA 检查。`--skip-baidu` 可只查站点/R2；默认下载检查为 HEAD，`--full-download` 才读取全文件并核对 SHA-256。使用 `--book ID` 仅检查样本，报告须标为 sample。
+
+主代理于 2026-11-06 完成本机备份演练：备份 `D:/Documents/book-share-backups/maintenance-20261106-2055` 为 `complete=true`、`missing=[]`，包含 5155 个逻辑文件（1,553,412,143 字节），CAS 去重后为 1178 个对象（137,887,900 字节）。`backup-verify` 与新目录 `restore-drill-20261106-2055` 恢复通过；主代理用独立 Python 对恢复的 5155 个文件逐一比较 SHA-256 和大小，全部匹配。恢复的 `archive-prepared.json.restored.json` 路径指向新目录内已发布 RAR；WinRAR 无密码列名为 11 项、正确密码测试/解包通过，内部 EPUB SHA 与源文件匹配。该演练不证明真实 quarantine/delete 已执行。
