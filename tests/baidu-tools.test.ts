@@ -139,3 +139,19 @@ test('existing checkpointed complete record is reused without a second share', a
     assert.equal(shareSets, 0);
   } finally { await t.cleanup(); }
 });
+test('unavailable record with unchanged catalog is skipped and excluded from completed count', async () => {
+  const t = await setup();
+  try {
+    const catalog = path.join(t.root, 'catalog/books/sample.json'); const source = path.join(t.root, '.local/plans/p1/inputs/sample.epub');
+    const journalPath = path.join(t.root, '.local/baidu/journal.json'); await mkdir(path.dirname(journalPath), { recursive: true });
+    await writeFile(journalPath, JSON.stringify({ schemaVersion: 1, updatedAt: new Date().toISOString(), entries: {
+      sample: { id: 'sample', sha256: sha, bytes: bytes.length, source, catalogHash: digest(await readFile(catalog)),
+        remotePath: `/yuuko-library/books/sample/${sha}/书.epub`, state: 'unavailable', error: '匿名访问返回链接不存在' },
+    } }));
+    let calls = 0;
+    const result = await runPublish(t.root, [t.b], async () => { calls++; throw new Error('unavailable must not call BaiduPCS-Go'); });
+    assert.equal(calls, 0); assert.equal(result.selected, 1); assert.equal(result.completed, 0);
+    assert.equal(result.unavailableCount, 1); assert.equal(result.unavailable[0].id, 'sample');
+    assert.equal(JSON.parse(await readFile(catalog, 'utf8')).downloads.baidu, null);
+  } finally { await t.cleanup(); }
+});

@@ -9,7 +9,7 @@ import { replaceFileAtomically } from './atomic.ts';
 
 export type Runner = (args: string[]) => Promise<{ code: number; stdout: string; stderr: string }>;
 export type JournalEntry = { id: string; sha256: string; bytes: number; source: string; catalogHash: string; remotePath: string;
-  state: 'ready' | 'uploaded' | 'verified' | 'shared' | 'complete' | 'uncertain'; fsId?: string; shareId?: string; baidu?: BaiduDownload; error?: string };
+  state: 'ready' | 'uploaded' | 'verified' | 'shared' | 'complete' | 'uncertain' | 'unavailable'; fsId?: string; shareId?: string; baidu?: BaiduDownload; error?: string };
 export type Journal = { schemaVersion: 1; updatedAt: string; entries: Record<string, JournalEntry> };
 export const digest = (bytes: Buffer | string) => createHash('sha256').update(bytes).digest('hex');
 export class BaiduError extends Error {}
@@ -124,17 +124,24 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
   try {
     const journal = await loadJournal(journalFile); const inputs = await locateInputs(root, selected);
     const pilot = selected.some(book => book.id === 'endnotes-2') ? await importPilot(root, run) : false;
+    let completed = 0; const unavailable: { id: string; error: string }[] = [];
     for (const book of selected) {
       console.error(`baidu: ${book.id} (${book.file.bytes} bytes) starting/resuming`);
       const target = path.join(root, 'catalog/books', `${book.id}.json`), beforeHash = await catalogHash(target), current = await readBook(target);
       if (current.file.sha256 !== book.file.sha256 || current.file.bytes !== book.file.bytes) throw new BaiduError(`${book.id}: 书目文件已变化`);
       const previous = journal.entries[book.id];
       if (previous && previous.sha256 !== book.file.sha256) throw new BaiduError(`${book.id}: journal 哈希变化，旧分享记录作废，须人工检查`);
+      if (previous?.state === 'unavailable') {
+        if (current.downloads.baidu !== null || beforeHash !== previous.catalogHash) throw new BaiduError(`${book.id}: unavailable 记录对应的书目已变化，拒绝覆盖`);
+        unavailable.push({ id: book.id, error: previous.error ?? '百度分享经人工核查不可用' });
+        continue;
+      }
       if (previous?.state === 'complete' && previous.baidu) {
         validateBaiduDownload(previous.baidu, book.file.sha256);
         if (JSON.stringify(current.downloads.baidu) !== JSON.stringify(previous.baidu) || beforeHash !== previous.catalogHash) {
           throw new BaiduError(`${book.id}: 完成后的书目已变化，拒绝覆盖`);
         }
+        completed++;
         continue;
       }
       const input = inputs.get(book.id)!; const remotePath = `/yuuko-library/books/${book.id}/${book.file.sha256}/${book.file.filename}`;
@@ -212,7 +219,8 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       current.downloads.baidu = record.baidu;
       const tmp = `${target}.${process.pid}.tmp`; await writeFile(tmp, JSON.stringify(current, null, 2) + '\n'); await replaceFileAtomically(tmp, target);
       record.catalogHash = await catalogHash(target); record.state = 'complete'; journal.entries[book.id] = record; await saveJournal(journalFile, journal);
+      completed++;
     }
-    return { completed: selected.length, journalFile };
+    return { selected: selected.length, completed, unavailable, unavailableCount: unavailable.length, journalFile };
   } finally { await lock?.close(); await import('node:fs/promises').then(fs => fs.rm(lockFile, { force: true })); }
 }

@@ -41,6 +41,6 @@ async function main() {
   const exe = path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe');
   const configDir = path.join(app, 'YuukoLibrary/credentials/baidupcs-config');
   const result = await runPublish(root, selected, createRunner(exe, configDir), { password: values.password });
-  console.log(JSON.stringify({ status: 'complete', ...result }));
+  console.log(JSON.stringify({ status: result.unavailableCount ? 'partial' : 'complete', ...result }));
 }
 main().catch(error => { console.error((error as Error).message); process.exitCode = 1; });
