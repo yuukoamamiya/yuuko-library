@@ -32,7 +32,7 @@
 
 日常维护以命令行为主。主代理检查并明确方案后，由固定 GPT-6 Luna Codex 子代理实施、自测并选择性提交；主代理随后独立验收。只有主代理在用户明确要求 push 时才推送。若待推送改动影响前端，push 同时授权构建、生产部署和验证网站；R2 上传、分享、清理等仍按各自授权边界执行。细则见 [AGENTS.md](AGENTS.md#codex-维护流程)。
 
-截至 2026-11-06，生产站点已发布百度备用下载和按需评论区。release `r-26a96f39-d704-4c26-98a8-956f8eec2094` 于 20:03（Asia/Shanghai）验证通过，来源为 clean commit `c9fdfcb`；全站 65 本、`changedBooks=0`。线上完整索引、65 个详情页及当前 65 个百度入口均已检查；真实浏览器确认直链下载、RAR 解压密码复制和评论按需加载，评论映射至既有 Issue #1。原始 EPUB 均独立保留，R2 主下载不变。细节见[评论区说明](docs/comments.md)与[百度备用下载调研](docs/baidu-downloads.md)。
+截至 2026-11-06，生产站点已发布百度备用下载和按需评论区。最近一次维护 health 为 263 项 passed，其中 65 条百度分享匿名检查通过；下载检查为 HEAD 模式，不含完整下载哈希验证。release `r-26a96f39-d704-4c26-98a8-956f8eec2094` 于 20:03（Asia/Shanghai）验证通过，来源为 clean commit `c9fdfcb`；全站 65 本、`changedBooks=0`。线上完整索引、65 个详情页及当前 65 个百度入口均已检查；真实浏览器确认直链下载、RAR 解压密码复制和评论按需加载，评论映射至既有 Issue #1。原始 EPUB 均独立保留，R2 主下载不变。细节见[评论区说明](docs/comments.md)与[百度备用下载调研](docs/baidu-downloads.md)。
 
 ## 本地查看
 
@@ -51,12 +51,14 @@ npm run verify -- --docs
 npm run maintenance -- health
 npm run maintenance -- health --book BOOK_ID --full-download
 npm run maintenance -- cleanup-preview
+npm run maintenance -- backup --output 'D:/LibraryBackups/book-share'
+npm run maintenance -- backup-verify --backup 'D:/LibraryBackups/book-share'
 npm run check
 npm test
 npm run build
 ```
 
-`verify` 顺序运行检查、测试、构建和 Git 空白检查；`--docs` 只检查文档本地链接与空白。`health` 可在仅克隆仓库的机器上只读检查线上站点，默认以 HEAD 检查下载响应头；`--full-download` 才会核对完整文件哈希。`cleanup-preview` 仅列出本地快照和报告状态，不执行删除。详见 [维护命令说明](docs/publishing-cli.md)。
+`verify` 顺序运行检查、测试、构建和 Git 空白检查；`--docs` 只检查文档本地链接与空白。`health` 可在仅克隆仓库的机器上只读检查线上站点，默认以 HEAD 检查下载响应头；`--full-download` 才会核对完整文件哈希。`cleanup-preview` 仅列出本地快照和报告状态；备份可校验并恢复到新目录，清理则先核对精确计划并移入可撤销隔离区。百度 health 默认做匿名提取码检查，`--skip-baidu` 可跳过。详见 [维护命令说明](docs/publishing-cli.md) 与 [本地维护指南](docs/local-development.md#维护数据备份与清理)。
 
 新增或替换电子书时才需要本地 EPUB，具体步骤见 [本地维护指南](docs/local-development.md)。
 
@@ -64,7 +66,7 @@ npm run build
 
 页面已精简重复文案；分类与标签现已独立：六个稳定分类用于导航，EPUB 原始主题词作为标签保留，可与关键词组合筛选。首次迁移详见 [分类迁移对照](docs/category-migration.md)。
 
-发布工具已区分本批变更与全站数量，支持仅更新站点的本地快照，并提供部署锁、查重与状态恢复检查；上述版本已随本次发布上线。百度新版 journal 跨 SHA 自动迁移和文件清理仍未实现，详见 [AGENTS.md](AGENTS.md#待办清单)。
+发布工具已区分本批变更与全站数量，支持仅更新站点的本地快照，并提供部署锁、查重与状态恢复检查；上述版本已随本次发布上线。百度 EPUB/RAR journal 现保留跨 SHA 版本历史并支持精确恢复；维护工具支持校验备份与可撤销本地清理隔离。远端 R2 清理仍需独立人工方案与明确授权，详见 [AGENTS.md](AGENTS.md#待办清单)。
 
 完整待办及完成标准见 [AGENTS.md](AGENTS.md#待办清单)。
 
@@ -78,5 +80,5 @@ npm run build
 | [本地维护指南](docs/local-development.md) | 开发、EPUB 导入、预览和文件校验 |
 | [命令参考](docs/publishing-cli.md) | 已实现命令、参数、输出和失败处理 |
 | [部署指南](docs/pages-deployment.md) | Cloudflare 授权、代理、部署和域名检查 |
-| [百度备用下载调研](docs/baidu-downloads.md) | Windows 原生候选、凭据边界和单本验证门槛 |
+| [百度备用下载说明](docs/baidu-downloads.md) | Windows 原生候选、凭据边界、版本历史与恢复 |
 | [架构与数据说明](docs/project-plan.md) | 数据流、目录、存储方式和实现边界 |

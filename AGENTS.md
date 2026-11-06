@@ -19,7 +19,7 @@
 - Pages 项目：`yuuko-library`，Direct Upload，生产分支参数 `main`。Git push 不触发网站部署。
 - 正式书目位于 `catalog/books/`，封面位于 `public/covers/`。数量以目录和实际线上结果为准。
 - 原始主题标签保存在 `subjects`，独立分类保存在 `categories`；每本 1–2 类，六个分类 ID 统一定义于 `src/lib/categories.ts`。首次迁移对照见 `docs/category-migration.md`。
-- 百度备用分享、详情页备用入口及 utterances 评论区已随正式站点发布并通过生产验证。2026-11-06 20:03（Asia/Shanghai）发布 release `r-26a96f39-d704-4c26-98a8-956f8eec2094`；固定快照来源为 clean commit `c9fdfcb`，全站 65 本、`changedBooks=0`，线上完整索引和 65 个详情页通过验证，正式书目已同步。生产 HTTP 检查确认 65/65 页面含当前直链、百度入口与稳定评论 term；RAR 文件名和解压密码正确。真实浏览器确认主下载直链、RAR 密码复制及按需评论加载，评论映射到既有 Issue #1。旧 `--baidu optional` 仍只是计划字段，不代表分享已完成。
+- 百度备用分享、详情页备用入口及 utterances 评论区已随正式站点发布并通过生产验证。2026-11-06 20:03（Asia/Shanghai）发布 release `r-26a96f39-d704-4c26-98a8-956f8eec2094`；固定快照来源为 clean commit `c9fdfcb`，全站 65 本、`changedBooks=0`，线上完整索引和 65 个详情页通过验证，正式书目已同步。最新 maintenance health 全馆检查为 263 checks passed、65/65 百度分享通过；`fullDownload=false`，HEAD 不代表完整文件哈希校验。生产 HTTP 检查确认 65/65 页面含当前直链、百度入口与稳定评论 term；RAR 文件名和解压密码正确。真实浏览器确认主下载直链、RAR 密码复制及按需评论加载，评论映射到既有 Issue #1。
 
 ## 工具与环境
 
@@ -54,7 +54,7 @@ npm run baidu -- --help
 npm run pages -- --help
 ```
 
-操作详情分别见 [本地维护指南](docs/local-development.md)、[命令参考](docs/publishing-cli.md) 和 [部署指南](docs/pages-deployment.md)。目前使用 book / r2 / baidu / pages 四组独立命令；统一的 `book publish`、`resume`、`bundle` 尚未实现，不要推荐执行。
+操作详情分别见 [本地维护指南](docs/local-development.md)、[命令参考](docs/publishing-cli.md) 和 [部署指南](docs/pages-deployment.md)。目前使用 book / r2 / baidu / pages / maintenance 独立命令；统一的 `book publish`、`resume`、`bundle` 尚未实现，不要推荐执行。
 
 ## 内容规则
 
@@ -111,8 +111,7 @@ npm run pages -- --help
 - [x] **区分书籍更新与站点部署时间（本地实现）。** 内容变化才刷新 updatedAt；prepare --site-only 保留全部书籍时间，部署快照时间为 createdAt。
 - [x] **统一本地验收与发布溯源（本地实现）。** npm run verify 顺序运行检查、测试、构建及 Git 空白检查，支持文档模式；固定快照记录 Git 提交、dirty 状态、来源和冻结站点输入摘要，快照源或 build 期间变化时停止，部署要求 clean 提交。新来源标记需下一次 Pages 发布后才在线可见。
 - [x] **增加独立线上体检（本地实现）。** 可在任意克隆仓库机器只读检查正式书目对应的完整索引、详情、封面和下载；默认 HEAD 与完整 GET/SHA 校验区分，样本结果不冒称全站通过。
-- [ ] **完善文件清理流程。** 旧 EPUB 与失败/旧 R2 对象尚无清理工具或保留策略；实际清理需列出目标并获得本次授权，不默认自动删除。
-  - [x] 本地 `.local` 快照只读预览：`npm run maintenance -- cleanup-preview` 扫描 plans / releases / uploads；30 天内快照、prepared / active / submitted / uncertain 状态、依赖闭包以及最近两份成功发布均保护；线上或本地状态未知时保守保护。预览不删除任何内容，候选仍须人工核对并另获授权。
+- [ ] **完善本地维护数据备份与清理流程（实现待主代理验收）。** `maintenance backup` 创建 SHA-256 内容寻址去重备份，`backup-verify` 校验 manifest、对象和路径；完整备份可 dry-run / 显式恢复到新目录。`cleanup-plan` 要求同工作区完整备份并核对候选逐文件哈希；`cleanup-apply` 需精确 digest，只将候选移入工作区外 quarantine，`cleanup-undo` 校验哈希后恢复。隔离区永久删除仍须另行精确核对并取得本次授权；旧 EPUB 与远端 R2 对象不在本地清理范围。预览仍保护近期快照、活跃/不确定状态、依赖闭包和最近两份成功发布，未知状态保守阻断。
 
 ### 百度备用下载
 
@@ -120,7 +119,7 @@ npm run pages -- --help
 - [x] 获授权完成 `endnotes-2` 单本试传：独立 SHA 目录上传、`meta` 核对大小与 fsId、密码保护的永久分享、PCS 回读完整 SHA-256 均通过。永久分享不保证永不失效。
 - [x] 全部 65 本原始 EPUB 均已上传、创建永久密码分享并回读验证完整 SHA-256，总计 108772188 字节；64 条普通分享通过匿名提取码检查。
 - [x] 唯一异常书的维护者指定 RAR 包已独立加密验证、上传/回读并导入正式书目；异常原始分享和失败记录保留。详情弹窗展示已验证，最终 65/65 当前百度入口匿名提取码检查通过（64 EPUB + 1 RAR）；生产站点已部署，HTTP 与真实浏览器验证通过。详情见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
-- [ ] 同书新版的百度 journal 跨 SHA 自动迁移尚未实现：更新准备会清空旧分享字段，`publish` 检测到旧 journal SHA 后会停止。保留旧 journal 和分享记录，人工核对后恢复；不要删除 journal 绕过保护。新增书可在正式书目与本地匹配 EPUB 准备完成后单独 `publish --id ID`。R2 独立运行。
+- [ ] 同书新版百度 EPUB/RAR 版本历史与恢复（实现待主代理验收）：journal 以书籍 ID + 内容 SHA 记录多个版本；新版使用独立路径和分享记录，旧记录保留。可续跑已验证的上传/回读检查点；分享结果未知时必须 `recover` 精确核对远端 meta、完整 SHA 与 share list，不盲目重复创建。相同字节仅元数据变化时复用原分享并校验书目字段守卫。RAR 以源 SHA、RAR SHA 和文件名区分历史，独立 manifest；详见 [百度备用下载说明](docs/baidu-downloads.md)。
 
 ### 图书评论区
 

@@ -99,7 +99,7 @@ status 只读查询匹配发布编号与生产分支的远端记录，不上传�
 
 线上验证核对 schemaVersion=2 发布标记、提交号与源码摘要、全站书目数量与摘要、完整索引 ID 集合与字节摘要、所有书籍详情和下载链接。全站 books 与 changedBooks 分开记录。旧 schemaVersion=1 快照或缺少源码溯源字段的本地快照需重新准备，不能交给新版部署流程绕过校验。线上独立体检可兼容旧 schema2 marker，并单独报告它缺少溯源字段。
 
-无需本机 .local 快照、EPUB 或云凭据的只读检查：`npm run maintenance -- health` 检查正式书目对应网页、索引、详情、封面及下载响应头；它默认对 EPUB 使用 HEAD，不等于文件内容已完整验证。`npm run maintenance -- health --full-download` 流式下载并比较字节数与 SHA-256。可用 `--book ID` 做样本检查，样本结果不代表全站通过。`npm run maintenance -- cleanup-preview` 只列本地文件的保护状态与候选，不删除文件；任何实际清理均须列出目标并另行明确授权。
+无需本机 .local 快照、EPUB 或云凭据的只读检查：`npm run maintenance -- health` 检查正式书目对应网页、索引、详情、封面及下载响应头，并默认逐条匿名检查百度分享提取码；`--skip-baidu` 可跳过百度检查。它默认对 EPUB 使用 HEAD，不等于文件内容已完整验证。`npm run maintenance -- health --full-download` 流式下载并比较字节数与 SHA-256。可用 `--book ID` 做样本检查，样本结果不代表全站通过。`npm run maintenance -- cleanup-preview` 只列本地文件的保护状态与候选，不删除文件；任何实际清理均须列出目标并另行明确授权。
 
 ## 域名
 

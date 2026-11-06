@@ -39,6 +39,24 @@ upload 缺失对象时写入，一致对象复用，冲突对象不覆盖。veri
 
 结果为 JSON，进度写 stderr；脚本可用 npm run --silent r2。上传和 verify 使用独立报告，保存在 .local/uploads/。检查 status=verified、verified=expected 且 failures 为空后才能报告全部通过。
 
+## maintenance：线上体检、备份与本地清理
+
+| 命令 | 作用 |
+| --- | --- |
+| `npm run maintenance -- health [--book ID] [--full-download] [--skip-baidu]` | 只读检查生产站点、索引、详情、封面、下载响应及百度匿名分享 |
+| `npm run maintenance -- backup --output DIR [--source-root DIR]` | 创建 SHA-256 内容寻址、去重的本机备份 |
+| `npm run maintenance -- backup-verify --backup DIR` | 校验 manifest sidecar、备份对象哈希、路径及未登记文件 |
+| `npm run maintenance -- restore --backup DIR --target NEW_DIR [--apply]` | 默认 dry-run；加 `--apply` 才恢复到不存在的新目录 |
+| `npm run maintenance -- cleanup-plan --backup DIR --output FILE` | 用完整备份与当前清理预览生成固定候选计划 |
+| `npm run maintenance -- cleanup-apply --plan FILE --confirm DIGEST --quarantine DIR` | 校验计划摘要、备份、清单和文件哈希后移入独立隔离目录 |
+| `npm run maintenance -- cleanup-undo --quarantine DIR` | 校验隔离内容后恢复原路径 |
+
+`health` 默认对当前正式书目逐条匿名访问百度分享并验证提取码；`--skip-baidu` 仅跳过百度检查。默认下载检查为 HEAD 响应头，`--full-download` 才执行完整 GET 与 SHA-256；指定 `--book` 的结果是样本，不能称全馆通过。匿名检查证明提取码挑战可通过，不保证百度平台后续持续可用。
+
+备份只收录工具允许的站点/维护文件和匹配源 EPUB；按 SHA-256 内容对象去重，并生成 manifest 校验摘要。未知/敏感/不支持文件会列为缺失，`complete=false` 的备份不能用于恢复或清理。执行恢复前先运行 `backup-verify`；恢复目标必须是新目录。完整备份不是云端副本，需由维护者另行保管备份目录。
+
+清理计划只覆盖识别的 `.local/plans`、`.local/releases`、`.local/uploads` 候选，并要求备份来源工作区一致、每个候选文件都在完整备份中且哈希相同。apply 的 digest 是精确确认值；操作仅将候选 rename 到工作区之外的 quarantine，不永久删除。需要清除 quarantine 时须先人工核对具体路径和内容，并在本次会话取得明确授权；不得把预览或计划当作删除授权。具体恢复、限制和示例见 [本地维护指南](local-development.md#维护数据备份与清理)。百度 journal、RAR/manifest 与归档文件是受保护依赖，不在清理候选中。
+
 ## baidu 备用下载
 
 | 命令 | 作用 |
@@ -49,12 +67,14 @@ upload 缺失对象时写入，一致对象复用，冲突对象不覆盖。veri
 | `npm run baidu -- publish --all` | 显式批量发布当前全馆并更新书目 |
 | `npm run baidu -- prepare-archive --id ID --name FILE.rar [--archive-password CODE]` | 根据当前正式 EPUB 在本机生成、验证隐藏文件名的单文件 RAR，并写 manifest |
 | `npm run baidu -- publish-archive --manifest FILE` | 显式核对/上传归档并将确认的分享记录导入该书目 |
+| `npm run baidu -- recover --id ID [--source-sha SHA] [--share-id ID --code CODE]` | 诊断或认领指定 EPUB 版本的未知分享，不重复创建分享 |
+| `npm run baidu -- recover --manifest FILE --share-id ID --code CODE` | 精确恢复 manifest 对应 RAR 版本的未知分享 |
 
 status / prepare 默认覆盖全部正式书目；可传 `--id` 或 `--all` 明确选择。publish 必须明确指定 `--id` 或 `--all`。执行前需要在 `.local/plans/` 有与书目 EPUB 完整 SHA-256 和大小匹配的源文件。
 
 publish 在 `.local/baidu/journal.json` 记逐书检查点并使用互斥锁。每本创建 ID/SHA 独立目录，按 skip 策略上传，回读 `meta`，PCS 下载到本地并重新校验完整 SHA-256，创建 `--period 0` 密码分享，再通过 `share list` 核对分享记录后更新该书 `downloads.baidu`。`--period 0` 表示永久设置，不保证链接永不失效。提取码保存在本机 journal 和公开书目，站点访客可以看到并使用；账号凭据只留在仓库外的本机配置中。
 
-新增书籍在完成正式书目准备并放入匹配 EPUB 后可用 `publish --id ID`。更新同一书籍若 SHA 变化，当前 journal 会阻止自动跨版本迁移；不要删除 journal 绕过保护。保留旧 journal/分享记录，人工核对远端与正式书目后恢复。旧版本链接不得作为当前版本链接。R2 上传和下载地址完全独立。当前全馆批量运行状态及完成计数见 [百度调研与运行记录](baidu-downloads.md)。
+新增书籍在完成正式书目准备并放入匹配 EPUB 后可用 `publish --id ID`。更新同一书籍若 SHA 变化，journal 按书籍 ID 与 EPUB SHA 保存版本历史；SHA 改变时新版本独立执行上传、回读与分享，旧版记录保留。若某次分享结果未知，先用 `recover --id ID` 查看待核对版本；人工核对百度 `share list` 后，使用 `recover --id ID --source-sha SHA --share-id SHARE_ID --code CODE` 精确认领既有分享，不会再次创建分享。仅同一文件字节未变、书目元数据变化时可复用该版本已验证分享；仍会检查书目变更守卫。RAR 使用独立 archive journal 按源 EPUB SHA、RAR SHA 和文件名记录历史；新版本需新的 manifest。RAR 未知分享用 `recover --manifest FILE --share-id SHARE_ID --code CODE` 精确恢复。恢复只在完整核对远端对象、回读 SHA 与分享列表后认领记录，不会重复创建分享；历史 RAR 不会自动覆盖当前书目。状态查询保持只读，并显示当前与历史版本及 migration pending。journal schema 1 会在首次写入时先备份原文件再迁移；请勿手工删除备份或 migration 记录。恢复时保留 journal，不手工删除或改写。旧版分享不得作为当前版本链接。R2 上传和下载地址完全独立。当前全馆批量运行状态及完成计数见 [百度调研与运行记录](baidu-downloads.md)。
 
 `prepare-archive` 是本地操作，需要 WinRAR `Rar.exe` 和与当前书目 SHA 匹配的 `.local/plans` EPUB。维护者必须给定 `--name FILE.rar`；工具仅将当前正式 EPUB 放入压缩包，使用 WinRAR `-hp` 隐藏文件名，并检查无密码无法列名、RAR 自身哈希以及解包后的 EPUB 完整 SHA。当前指定包名为 `普兰查斯著作01.rar`，默认解压密码为 `114514`，也可用 `--archive-password CODE` 指定。密码写入公开书目供详情弹窗展示，不是私密凭据。
 
@@ -90,7 +110,7 @@ npm run maintenance -- cleanup-preview
 
 `health` 仅从正式书目与 site.config.json 读取期望值，以只读 HTTP 检查首页、全量索引、详情页、封面和公开下载；不需要 .local、EPUB 原件或云凭据，也不修改书目。`--book` 限定样本，结果明确标记为 sample。默认 HEAD 只核对下载状态和响应头，不能证明文件内容正确；`--full-download` 流式 GET 并校验完整字节数及 SHA-256。进度写 stderr，结果 JSON 写 stdout，任一失败返回非零。
 
-`cleanup-preview` 仅生成本地清单，报告路径、类型、大小、时间、保护理由、候选和未知项；命令没有 apply/delete。30 天内快照、prepared / active / submitting / submitted / uncertain 状态、沿 release/plan/report 的依赖关系和最近两份成功发布会保留；线上状态、符号链接边界或报告格式未知时保守保护。候选仍需人工逐项确认并另行明确授权。此命令不清理旧 EPUB 或 R2 对象。
+`cleanup-preview` 仅生成本地清单，报告路径、类型、大小、时间、保护理由、候选和未知项；命令没有 apply/delete。需要实际清理时使用上文的 backup、cleanup-plan、cleanup-apply 和 cleanup-undo 流程，apply 仅隔离不永久删除。30 天内快照、prepared / active / submitting / submitted / uncertain 状态、沿 release/plan/report 的依赖关系和最近两份成功发布会保留；线上状态、符号链接边界或报告格式未知时保守保护。候选仍需人工逐项确认并另行明确授权。此命令不清理旧 EPUB 或 R2 对象。
 
 ## Cloudflare 域名工具
 
