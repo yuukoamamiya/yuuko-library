@@ -70,3 +70,80 @@ test('health full download requires exact MIME and RFC 5987 filename', async () 
     assert.ok(result.failures.some(f => f.check === 'download-mime')); assert.ok(result.failures.some(f => f.check === 'download-filename'));
   } finally { await rm(root, { recursive: true, force: true }); }
 });
+
+test('health full download passes after streaming exact bytes and hash', async () => {
+  const root = await setup(); try {
+    const a = book('full-ok', '完整验证');
+    const result = await runHealth(root, clean([a]), undefined, true, 20000, mock([a]) as any, clean([a]));
+    assert.equal(result.status, 'passed', JSON.stringify(result.failures));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('health full download rejects same-size wrong hash, truncation, and oversized streams', async () => {
+  const root = await setup(); try {
+    for (const scenario of ['wrong-hash', 'truncated', 'oversized'] as const) {
+      const a = book(`stream-${scenario}`, '流式验证'), urlPath = new URL(a.downloads.r2Url).pathname;
+      let canceled = false;
+      const override = (_url: URL, init: RequestInit) => {
+        if (init.method === 'HEAD') return response(null, 200, { 'content-length': String(a.file.bytes), 'content-type': 'application/epub+zip',
+          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent(a.file.filename)}` });
+        const bytes = scenario === 'wrong-hash' ? Buffer.alloc(a.file.bytes, 0x41)
+          : scenario === 'truncated' ? a._bytes.subarray(0, a.file.bytes - 1) : Buffer.concat([a._bytes, Buffer.from('too much')]);
+        const stream = new ReadableStream<Uint8Array>({
+          start(controller) { controller.enqueue(bytes); if (scenario !== 'oversized') controller.close(); },
+          cancel() { canceled = true; },
+        });
+        return response(stream, 200, { 'content-length': String(a.file.bytes), 'content-type': 'application/epub+zip',
+          'content-disposition': `attachment; filename*=UTF-8''${encodeURIComponent(a.file.filename)}` });
+      };
+      const result = await runHealth(root, clean([a]), undefined, true, 20000,
+        mock([a], { [urlPath]: override }) as any, clean([a]));
+      assert.equal(result.status, 'failed', scenario);
+      assert.ok(result.failures.some(f => ['download-bytes', 'download-sha256', 'download'].includes(f.check)), scenario);
+      if (scenario === 'oversized') assert.equal(canceled, true, 'oversized stream must be canceled');
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('health detects remote cover corruption even when the local cover matches its name', async () => {
+  const root = await setup(); try {
+    const a = book('cover-check', '封面校验'), local = Buffer.from('local cover'), remote = Buffer.from('corrupt cover');
+    const coverHash = hash(local), coverPath = `/covers/${a.id}/${coverHash}.jpg`;
+    a.cover = coverPath; await mkdir(path.join(root, 'public', 'covers', a.id), { recursive: true });
+    await writeFile(path.join(root, 'public', coverPath.slice(1)), local);
+    const result = await runHealth(root, clean([a]), undefined, false, 20000,
+      mock([a], { [coverPath]: () => response(remote) }) as any, clean([a]));
+    assert.equal(result.status, 'failed'); assert.ok(result.failures.some(f => f.check === 'cover-hash'));
+    assert.ok(!result.failures.some(f => f.check === 'cover-local-hash'));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('health sends redirect:error and rejects an HTTP redirect response', async () => {
+  const root = await setup(); try {
+    const a = book('redirect-check', '重定向检查'), urlPath = new URL(a.downloads.r2Url).pathname; let redirectMode: RequestRedirect | undefined;
+    const request = mock([a], { [urlPath]: (_url, init) => {
+      redirectMode = init.redirect;
+      return response(null, 302, { location: 'https://elsewhere.example/file.epub' });
+    } });
+    const result = await runHealth(root, clean([a]), undefined, false, 20000, request as any, clean([a]));
+    assert.equal(redirectMode, 'error'); assert.equal(result.status, 'failed');
+    assert.ok(result.failures.some(f => f.check === 'download' && f.reason === 'HTTP 302'));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('health rejects duplicate index IDs, metadata mismatch, and a bad homepage', async () => {
+  const root = await setup(); try {
+    const a = book('index-check', '索引检查');
+    const duplicate = mock([a], {
+      '/search-index.json': () => response(JSON.stringify([clean([a])[0], clean([a])[0]])),
+      '/': () => response('<h1>错误的站点</h1>'),
+    });
+    const result = await runHealth(root, clean([a]), undefined, false, 20000, duplicate as any, clean([a]));
+    assert.equal(result.status, 'failed');
+    assert.ok(result.failures.some(f => f.check === 'index-entry'));
+    assert.ok(result.failures.some(f => f.check === 'homepage-content'));
+    const mismatch = mock([a], { '/search-index.json': () => response(JSON.stringify([{ ...clean([a])[0], title: '错误书名' }])) });
+    const metadata = await runHealth(root, clean([a]), undefined, false, 20000, mismatch as any, clean([a]));
+    assert.ok(metadata.failures.some(f => f.check === 'metadata'));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
