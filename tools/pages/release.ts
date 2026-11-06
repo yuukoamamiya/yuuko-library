@@ -1,13 +1,13 @@
-import { createHash, randomUUID } from 'node:crypto';
-import { readFile, writeFile, mkdir, readdir, cp, unlink, rename } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+import { readFile, writeFile, mkdir, readdir, cp, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import type { Book } from '../../src/lib/books.ts';
-import { validateCategories } from '../../src/lib/categories.ts';
+import { digest, canonical, catalogDigest, readCatalog, readCatalogBook, writeCatalogBook } from '../catalog.ts';
+export { digest, canonical, sortedCatalog, catalogDigest, readCatalog } from '../catalog.ts';
 import { requireCurrentPlan } from '../book/plan.ts';
 import type { UploadReport } from '../r2/report.ts';
 
-export const digest = (bytes: Buffer | string) => createHash('sha256').update(bytes).digest('hex');
 export interface UploadRecord { id: string; sha256: string; bytes: number; key: string; url: string }
 export interface Release {
   schemaVersion: 2; id: string; planId: string | null; project: string; branch: string; createdAt: string;
@@ -16,11 +16,6 @@ export interface Release {
   baseCatalogDigest: string; previousBooks: Record<string, Book | null>;
   provenance: { commit: string | null; dirty: boolean; sourceDigest: string; source: 'repository' | 'plan-overlay' };
 }
-export const canonical = (value: unknown): string => JSON.stringify(value, (_key, item) =>
-  item && typeof item === 'object' && !Array.isArray(item)
-    ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
-export const sortedCatalog = (books: Book[]) => [...books].sort((a, b) => a.id.localeCompare(b.id, 'en'));
-export const catalogDigest = (books: Book[]) => digest(canonical(sortedCatalog(books)));
 export function contentDigest(book: Book) {
   const { publishedAt: _published, updatedAt: _updated, ...content } = book;
   return digest(canonical(content));
@@ -37,17 +32,6 @@ export function verifiedBooks(books: Book[], report: { status: string; expected:
     return { ...book, publishedAt: old?.publishedAt ?? book.publishedAt ?? timestamp,
       updatedAt: old && contentDigest(old) === contentDigest(book) ? old.updatedAt : timestamp };
   });
-}
-export async function readCatalog(site: string): Promise<Book[]> {
-  const directory = path.join(site, 'catalog/books');
-  const books: Book[] = await Promise.all((await readdir(directory)).filter(name => name.endsWith('.json'))
-    .map(async name => {
-      const book: Book = JSON.parse(await readFile(path.join(directory, name), 'utf8'));
-      if (!/^[a-z0-9][a-z0-9-]{0,79}$/u.test(book.id) || name !== `${book.id}.json`) throw new Error('书籍 ID 或文件名无效');
-      validateCategories(book.categories);
-      return book;
-    }));
-  return sortedCatalog(books);
 }
 export function assertIndex(catalog: Book[], index: { id: string }[]) {
   if (!Array.isArray(index) || index.length !== catalog.length || new Set(index.map(item => item.id)).size !== index.length
@@ -218,24 +202,38 @@ export async function assertCatalogSyncable(root: string, release: Release) {
 export async function syncCatalog(root: string, release: Release) {
   const site = path.join(releaseDir(root, release.id), 'site');
   await assertCatalogSyncable(root, release);
-  // Check every source before the first write, so a bad later book cannot cause partial replacement.
+  const writes: { book: Book; expectedHash: string | null }[] = [];
+
+  // Validate the complete release snapshot and every current row before copying covers or writing catalog files.
   for (const book of release.books) {
     const record: Book = JSON.parse(await readFile(path.join(site, 'catalog/books', `${book.id}.json`), 'utf8'));
     if (JSON.stringify(record) !== JSON.stringify(book)) throw new Error('发布书目快照不一致');
+    const previousBooks = release.previousBooks;
+    if (!previousBooks || !Object.hasOwn(previousBooks, book.id)) throw new Error(`发布缺少书目基线：${book.id}`);
+    const previous = previousBooks[book.id];
+    const current = await readCatalogBook(root, book.id);
+    const currentBook = current?.book ?? null;
+    if (canonical(currentBook) !== canonical(previous) && canonical(currentBook) !== canonical(book)) {
+      throw new Error(`本地书目已被修改，停止覆盖：${book.id}`);
+    }
+    writes.push({ book, expectedHash: current?.hash ?? null });
     if (book.cover) {
       if (!/^\/covers\/[a-z0-9-]+\/[a-f0-9]{64}\.(?:jpg|png|gif|webp)$/u.test(book.cover)) throw new Error('封面路径无效');
       const relative = `covers/${book.cover.slice('/covers/'.length)}`;
-      if (digest(await readFile(path.join(site, 'public', relative))) !== release.files[relative]) throw new Error('封面快照不一致');
+      const cover = await readFile(path.join(site, 'public', relative));
+      if (digest(cover) !== release.files[relative] || digest(cover) !== path.basename(book.cover).split('.')[0]) throw new Error('封面快照不一致');
     }
   }
-  for (const book of release.books) {
-    const target = path.join(root, 'catalog/books', `${book.id}.json`);
-    await writeFile(target + '.tmp', JSON.stringify(book, null, 2) + '\n'); await rename(target + '.tmp', target);
-    if (book.cover) {
-      if (!/^\/covers\/[a-z0-9-]+\/[a-f0-9]{64}\.(?:jpg|png|gif|webp)$/u.test(book.cover)) throw new Error('封面路径无效');
-      const destination = path.join(root, 'public', book.cover.slice(1));
-      await mkdir(path.dirname(destination), { recursive: true });
-      await cp(path.join(site, 'public', book.cover.slice(1)), destination);
-    }
+
+  // Copy and verify covers before any book can reference them.
+  for (const { book } of writes) {
+    if (!book.cover) continue;
+    const relative = book.cover.slice(1);
+    const destination = path.join(root, 'public', relative);
+    await mkdir(path.dirname(destination), { recursive: true });
+    await cp(path.join(site, 'public', relative), destination);
+    if (digest(await readFile(destination)) !== path.basename(book.cover).split('.')[0]) throw new Error('正式封面复制后校验失败');
   }
+
+  for (const { book, expectedHash } of writes) await writeCatalogBook(root, book, expectedHash);
 }

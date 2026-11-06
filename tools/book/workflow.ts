@@ -11,17 +11,39 @@ import { CliError } from './errors.ts';
 const jsonRead = async (file: string) => JSON.parse(await readFile(file, 'utf8'));
 async function jsonWrite(file: string, data: unknown) { await mkdir(path.dirname(file), { recursive: true }); await writeFile(file, JSON.stringify(data, null, 2) + '\n', 'utf8'); }
 function checkInput(input: Input) {
-  const id=/^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
-  if(!input||typeof input!=='object'||typeof input.id!=='string'||typeof input.epub!=='string'||(input.model!==undefined&&typeof input.model!=='string')||(input.update!==undefined&&typeof input.update!=='boolean')) throw new CliError('manifest 条目字段类型无效');
-  if(!input.id||input.id.length>80||!id.test(input.id)) throw new CliError('id 必须为不超过 80 字符的小写英文、数字及连字符');
-  if(!input.epub||!input.epub.toLowerCase().endsWith('.epub')) throw new CliError(`${input.id} 需要本地 EPUB 路径`);
-  if(input.kind&&!['ai-translation','transcription'].includes(input.kind)) throw new CliError('无效的版本类型');
-  if(input.kind==='transcription'?input.model!==undefined:!input.model?.trim()) throw new CliError('AI 译本必须填写 model；中文出版物转录不得填写 model');
-  if(!input.update||input.categories!==undefined){try{validateCategories(input.categories)}catch(error){throw new CliError((error as Error).message)}}
+  const idPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+  if (!input || typeof input !== 'object' || typeof input.id !== 'string' || typeof input.epub !== 'string'
+    || (input.model !== undefined && typeof input.model !== 'string')
+    || (input.update !== undefined && typeof input.update !== 'boolean')) {
+    throw new CliError('manifest 条目字段类型无效');
+  }
+  if (!input.id || input.id.length > 80 || !idPattern.test(input.id)) {
+    throw new CliError('id 必须为不超过 80 字符的小写英文、数字及连字符');
+  }
+  if (!input.epub || !input.epub.toLowerCase().endsWith('.epub')) {
+    throw new CliError(`${input.id} 需要本地 EPUB 路径`);
+  }
+  if (input.kind && !['ai-translation', 'transcription'].includes(input.kind)) {
+    throw new CliError('无效的版本类型');
+  }
+  if (input.kind === 'transcription' ? input.model !== undefined : !input.model?.trim()) {
+    throw new CliError('AI 译本必须填写 model；中文出版物转录不得填写 model');
+  }
+  if (!input.update || input.categories !== undefined) {
+    try { validateCategories(input.categories); }
+    catch (error) { throw new CliError((error as Error).message); }
+  }
 }
 function buildSite(root: string, dir: string) {
- const site=path.join(dir,'site'), result=spawnSync(process.execPath,[path.join(root,'node_modules/astro/bin/astro.mjs'),'build','--root',site],{cwd:root,env:{...process.env,BOOK_SITE_ROOT:site,ASTRO_TELEMETRY_DISABLED:'1'},stdio:['ignore',2,2]});
- if(result.error||result.status!==0)throw new CliError(`构建失败：${result.error?.message??result.status}`,4);
+  const site = path.join(dir, 'site');
+  const result = spawnSync(process.execPath, [path.join(root, 'node_modules/astro/bin/astro.mjs'), 'build', '--root', site], {
+    cwd: root,
+    env: { ...process.env, BOOK_SITE_ROOT: site, ASTRO_TELEMETRY_DISABLED: '1' },
+    stdio: ['ignore', 2, 2],
+  });
+  if (result.error || result.status !== 0) {
+    throw new CliError(`构建失败：${result.error?.message ?? result.status}`, 4);
+  }
 }
 export async function prepareBooks(root:string,inputs:Input[],onProgress:(message:string)=>void=message=>process.stderr.write(message+'\n')): Promise<Plan> {
 
@@ -29,7 +51,7 @@ export async function prepareBooks(root:string,inputs:Input[],onProgress:(messag
   inputs.forEach(checkInput);
   if (new Set(inputs.map(input => input.id)).size !== inputs.length) throw new CliError('本批包含重复 id');
   const id = `p-${randomUUID()}`;
-  const dir = planDir(root,id);
+  const dir = planDir(root, id);
   const baseFingerprint = await sourceFingerprint(root);
   const config = await jsonRead(path.join(root, 'site.config.json'));
   const changes: Plan['changes'] = []; const books: Book[] = [];
