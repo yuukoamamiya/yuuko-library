@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-93d06f6d7374/d62ff58e3a0c177afcc38b988ead697d2432d02d880f8531e71413ed1830ba1a.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-93d06f6d7374/d62ff58e3a0c177afcc38b988ead697d2432d02d880f8531e71413ed1830ba1a.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1RiZg9JMsjiZ9mkZW9So8ng",
+      "code": "aqke",
+      "fileSha256": "d62ff58e3a0c177afcc38b988ead697d2432d02d880f8531e71413ed1830ba1a",
+      "fsId": "750510019578246",
+      "shareId": "49805428087",
+      "path": "/yuuko-library/books/book-93d06f6d7374/d62ff58e3a0c177afcc38b988ead697d2432d02d880f8531e71413ed1830ba1a/黑格尔手册：生平·著作·学派 - Walter Jaeschke.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:48:49.100Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

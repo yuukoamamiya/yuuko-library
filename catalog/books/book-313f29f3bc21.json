@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-313f29f3bc21/aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-313f29f3bc21/aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/10l3EC-R8w2fviwEis7UF0Q",
+      "code": "x446",
+      "fileSha256": "aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8",
+      "fsId": "876704788843667",
+      "shareId": "11816726685",
+      "path": "/yuuko-library/books/book-313f29f3bc21/aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8/黑格尔：自由哲学家 - Klaus Vieweg.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:43:10.751Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

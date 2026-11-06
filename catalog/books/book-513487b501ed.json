@@ -26,7 +26,16 @@
   "downloads": {
     "r2Key": "books/book-513487b501ed/8bdaffd58493f812ca5efa3ba3682a9434a1d89f6568221b9042d0e8592590b3.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-513487b501ed/8bdaffd58493f812ca5efa3ba3682a9434a1d89f6568221b9042d0e8592590b3.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1jju0KmJ1GTqZjE9kJZXqmA",
+      "code": "r337",
+      "fileSha256": "8bdaffd58493f812ca5efa3ba3682a9434a1d89f6568221b9042d0e8592590b3",
+      "fsId": "927527122260582",
+      "shareId": "66245066233",
+      "path": "/yuuko-library/books/book-513487b501ed/8bdaffd58493f812ca5efa3ba3682a9434a1d89f6568221b9042d0e8592590b3/黑格尔的《逻辑科学》 - Anton Koch & Friedrike Schick.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:48:02.265Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-fe0c60808989/94182ff77332f32d3fc26ecf668070a1d10a9de57400014be0e4673afd155bb4.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-fe0c60808989/94182ff77332f32d3fc26ecf668070a1d10a9de57400014be0e4673afd155bb4.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1q6WuUovgGWqkl8YonfGgtQ",
+      "code": "pq1k",
+      "fileSha256": "94182ff77332f32d3fc26ecf668070a1d10a9de57400014be0e4673afd155bb4",
+      "fsId": "850010161881061",
+      "shareId": "33591635108",
+      "path": "/yuuko-library/books/book-fe0c60808989/94182ff77332f32d3fc26ecf668070a1d10a9de57400014be0e4673afd155bb4/罗莎·卢森堡的遗产 - Norman Geras.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:55:45.444Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

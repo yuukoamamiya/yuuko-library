@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-c7938c059828/f4cf427627dd08a3c2c463c73e77df9fdd464c5e4807265acfa61034452f71d3.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-c7938c059828/f4cf427627dd08a3c2c463c73e77df9fdd464c5e4807265acfa61034452f71d3.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1cLIAmP8VPBU46BW2rF-3oQ",
+      "code": "hafi",
+      "fileSha256": "f4cf427627dd08a3c2c463c73e77df9fdd464c5e4807265acfa61034452f71d3",
+      "fsId": "169266372442811",
+      "shareId": "11224873600",
+      "path": "/yuuko-library/books/book-c7938c059828/f4cf427627dd08a3c2c463c73e77df9fdd464c5e4807265acfa61034452f71d3/亨里克·格罗斯曼与马克思主义的复兴 - Rick Kuhn.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:49:43.795Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

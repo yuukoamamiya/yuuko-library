@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-e95eee6a2cb7/4af3e6159109bfcb227d730b9f709678095812db88f5fcf15d1ebfe10d18eae5.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-e95eee6a2cb7/4af3e6159109bfcb227d730b9f709678095812db88f5fcf15d1ebfe10d18eae5.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1nr2zpRKnQ_6tYd2rJHKvMg",
+      "code": "cy76",
+      "fileSha256": "4af3e6159109bfcb227d730b9f709678095812db88f5fcf15d1ebfe10d18eae5",
+      "fsId": "1023834760937996",
+      "shareId": "36875470791",
+      "path": "/yuuko-library/books/book-e95eee6a2cb7/4af3e6159109bfcb227d730b9f709678095812db88f5fcf15d1ebfe10d18eae5/普兰查斯读本：马克思主义、法律与国家 - Nicos Poulantzas.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:58:24.309Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

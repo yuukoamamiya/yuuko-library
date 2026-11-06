@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-e1a2f91f9bdc/974ab549151ffb6cb6743396656e940de5b7208d55057cde18cc6c356e93f48e.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-e1a2f91f9bdc/974ab549151ffb6cb6743396656e940de5b7208d55057cde18cc6c356e93f48e.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1TPn1-3JfS4laL9iszppaoQ",
+      "code": "hatg",
+      "fileSha256": "974ab549151ffb6cb6743396656e940de5b7208d55057cde18cc6c356e93f48e",
+      "fsId": "34013253818621",
+      "shareId": "20270781431",
+      "path": "/yuuko-library/books/book-e1a2f91f9bdc/974ab549151ffb6cb6743396656e940de5b7208d55057cde18cc6c356e93f48e/法西斯主义与专政 - Nicos Poulantzas.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:40:23.232Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

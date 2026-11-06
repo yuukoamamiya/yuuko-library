@@ -26,7 +26,16 @@
   "downloads": {
     "r2Key": "books/book-a47f76440942/284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-a47f76440942/284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/14uL0Y6BVpDEa_Rmv6Q098Q",
+      "code": "klf5",
+      "fileSha256": "284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5",
+      "fsId": "976587385606081",
+      "shareId": "62932229764",
+      "path": "/yuuko-library/books/book-a47f76440942/284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5/弗洛伊德手册 - Hans-Martin Lohmann & Joachim Pfeiffer.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:40:45.458Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

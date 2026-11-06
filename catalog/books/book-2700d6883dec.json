@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-2700d6883dec/641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-2700d6883dec/641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/19Mec86yDSZn92N-2uh6kgA",
+      "code": "urs9",
+      "fileSha256": "641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2",
+      "fsId": "650114997735480",
+      "shareId": "27963184714",
+      "path": "/yuuko-library/books/book-2700d6883dec/641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2/价值的科学 - Michael Heinrich.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:50:56.373Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

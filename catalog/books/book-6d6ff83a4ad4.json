@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-6d6ff83a4ad4/e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-6d6ff83a4ad4/e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1DfFdkkhLZ2u7aA5mU-DMig",
+      "code": "8dt1",
+      "fileSha256": "e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f",
+      "fsId": "372742859671394",
+      "shareId": "55916010229",
+      "path": "/yuuko-library/books/book-6d6ff83a4ad4/e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f/康德手册：生平与著作 - Gerd Irrlitz.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:54:42.525Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

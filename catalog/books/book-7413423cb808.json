@@ -25,7 +25,16 @@
   "downloads": {
     "r2Key": "books/book-7413423cb808/10f9c91d3e5068be60d5adf48e665dd09f3a5b0575f6c472c680df5db45ef745.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-7413423cb808/10f9c91d3e5068be60d5adf48e665dd09f3a5b0575f6c472c680df5db45ef745.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1BXxxrAixNjpjMytoEhFsiw",
+      "code": "27v9",
+      "fileSha256": "10f9c91d3e5068be60d5adf48e665dd09f3a5b0575f6c472c680df5db45ef745",
+      "fsId": "7389821055858",
+      "shareId": "39148932166",
+      "path": "/yuuko-library/books/book-7413423cb808/10f9c91d3e5068be60d5adf48e665dd09f3a5b0575f6c472c680df5db45ef745/撒切尔主义攻势：新普兰查斯主义分析 - Alexander Gallas.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:03:06.708Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",

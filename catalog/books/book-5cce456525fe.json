@@ -27,7 +27,16 @@
   "downloads": {
     "r2Key": "books/book-5cce456525fe/11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-5cce456525fe/11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240.epub",
-    "baidu": null
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1dedHaK_mHTsCLNMIIKVAcg",
+      "code": "flr2",
+      "fileSha256": "11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240",
+      "fsId": "1048968632962064",
+      "shareId": "10370869693",
+      "path": "/yuuko-library/books/book-5cce456525fe/11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240/人工智能时代的翻译研究 - Sanjun Sun & Kanglong Liu & Riccardo Moratto.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:00:44.483Z"
+    }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
   "updatedAt": "2026-11-06T07:26:32.749Z",
