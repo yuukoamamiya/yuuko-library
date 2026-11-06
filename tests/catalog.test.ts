@@ -16,7 +16,7 @@ function book(id = 'sample'): Book {
 async function setup() {
   const root = await mkdtemp(path.join(os.tmpdir(), 'catalog-'));
   await mkdir(path.join(root, 'catalog/books'), { recursive: true });
-  return { root, cleanup: () => rm(root, { recursive: true, force: true }) };
+  return { root, cleanup: () => rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }) };
 }
 
 test('rendering drops malformed Baidu data while raw catalog retains it', async () => {

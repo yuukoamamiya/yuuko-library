@@ -19,7 +19,7 @@ test('transient Windows rename locks retry and then replace the target', async (
     assert.equal(attempts, 3); assert.deepEqual(waits, [150, 150]);
     assert.equal(await readFile(target, 'utf8'), 'new');
     await assert.rejects(readFile(source));
-  } finally { await rm(dir, { recursive: true, force: true }); }
+  } finally { await rm(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }); }
 });
 
 test('exhausted rename retries preserve temporary data and original target', async () => {
@@ -34,5 +34,5 @@ test('exhausted rename retries preserve temporary data and original target', asy
     assert.equal(attempts, 10);
     assert.equal(await readFile(source, 'utf8'), 'new catalog');
     assert.equal(await readFile(target, 'utf8'), 'original catalog');
-  } finally { await rm(dir, { recursive: true, force: true }); }
+  } finally { await rm(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }); }
 });

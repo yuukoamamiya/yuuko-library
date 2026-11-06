@@ -15,7 +15,7 @@ async function setup(id = 'sample') {
   await mkdir(path.join(root, '.local/plans/p1/inputs'), { recursive: true });
   await writeFile(path.join(root, 'catalog/books', `${id}.json`), JSON.stringify(b));
   await writeFile(path.join(root, '.local/plans/p1/inputs', `${id}.epub`), bytes);
-  return { root, b, cleanup: () => rm(root, { recursive: true, force: true }) };
+  return { root, b, cleanup: () => rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }) };
 }
 function mock(overrides: { shareExit?: number; listExit?: number; onCall?: (args: string[]) => void; wrongMeta?: boolean; wrongRoundtrip?: boolean; existing?: boolean; directoryExists?: boolean; payload?: Buffer; fileSha?: string; filename?: string; shareCode?: string } = {}): Runner {
   const payload = overrides.payload ?? bytes; const fileSha = overrides.fileSha ?? sha; const filename = overrides.filename ?? '书.epub';

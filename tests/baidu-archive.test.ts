@@ -15,7 +15,7 @@ async function setup() {
   await mkdir(path.join(root, 'catalog/books'), { recursive: true }); await mkdir(path.join(root, '.local/plans/p1/inputs'), { recursive: true });
   await writeFile(path.join(root, 'catalog/books/sample.json'), JSON.stringify(b));
   await writeFile(path.join(root, '.local/plans/p1/inputs/sample.epub'), epub);
-  return { root, b, cleanup: () => rm(root, { recursive: true, force: true }) };
+  return { root, b, cleanup: () => rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }) };
 }
 function rarMock(listingCode = 11): { runner: RarRunner; creates: () => number } {
   let createCount = 0;
