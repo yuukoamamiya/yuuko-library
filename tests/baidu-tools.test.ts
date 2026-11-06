@@ -22,12 +22,12 @@ function mock(overrides: { shareExit?: number; listExit?: number; onCall?: (args
   return async args => {
     overrides.onCall?.(args);
     if (args[0] === 'mkdir') return overrides.directoryExists
-      ? { code: 1, stdout: '', stderr: '创建目录: 遇到错误, 远端服务器返回错误, 代码: 31061, 消息: 文件已存在' }
+      ? { code: 0, stdout: '创建目录: 遇到错误, 远端服务器返回错误, 代码: 31061, 消息: 文件已存在', stderr: '' }
       : { code: 0, stdout: '创建目录成功', stderr: '' };
     if (args[0] === 'upload') { uploaded = true; return { code: 0, stdout: '上传文件成功, 保存到网盘路径: /yuuko-library/books/sample', stderr: '' }; }
     if (args[0] === 'meta' && overrides.directoryExists && !args[1].endsWith('.epub')) return { code: 0,
       stdout: `类型      目录\n目录路径  ${args[1]}\n目录名称  ${sha}\nfs_id     654321`, stderr: '' };
-    if (args[0] === 'meta' && !uploaded) return { code: 1, stdout: '', stderr: '代码: 31066, 文件不存在' };
+    if (args[0] === 'meta' && !uploaded) return { code: 0, stdout: '遇到错误, 远端服务器返回错误, 代码: 31066, 消息: 文件或目录不存在', stderr: '' };
     if (args[0] === 'meta') return { code: 0, stdout: `类型               文件\n文件路径           ${args[1]}\n文件大小          ${overrides.wrongMeta ? 12 : bytes.length}, 0.02KB\nfs_id             123456`, stderr: '' };
     if (args[0] === 'download') { const dir = args[args.indexOf('--saveto') + 1]; await mkdir(dir, { recursive: true }); await writeFile(path.join(dir, '书.epub'), overrides.wrongRoundtrip ? Buffer.from('corrupt') : bytes); return { code: 0, stdout: '下载完成, 保存位置: 书.epub', stderr: '' }; }
     if (args[0] === 'share' && args[1] === 'set') return { code: overrides.shareExit ?? 0,
@@ -40,7 +40,7 @@ test('exit 0 with upload semantic failure is rejected', async () => {
   const t = await setup(); try {
     await assert.rejects(runPublish(t.root, [t.b], async args => args[0] === 'mkdir'
       ? { code: 0, stdout: '创建目录成功', stderr: '' } : args[0] === 'meta'
-        ? { code: 1, stdout: '', stderr: '代码: 31066, 文件不存在' }
+        ? { code: 0, stdout: '遇到错误, 远端服务器返回错误, 代码: 31066, 消息: 文件或目录不存在', stderr: '' }
         : { code: 0, stdout: '传输中断', stderr: '' }), /结果未确认/);
   } finally { await t.cleanup(); }
 });

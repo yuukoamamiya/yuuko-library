@@ -42,18 +42,18 @@ function parseMeta(out: string, filename: string) {
 }
 async function ensureRemoteDirectory(run: Runner, dir: string) {
   const result = await run(['mkdir', dir]); const out = `${result.stdout}\n${result.stderr}`;
-  if (result.code === 0 && /创建目录成功|创建目录完成|mkdir.*success/iu.test(out)) return;
-  if (result.code !== 0 && /代码\s*[:：]?\s*31061/u.test(out)) {
+  if (/代码\s*[:：]?\s*31061/u.test(out)) {
     const meta = await call(run, ['meta', dir]);
     const actualPath = meta.match(/^\s*目录路径\s+(.+?)\s*$/imu)?.[1]?.trim();
     if (/^\s*类型\s+目录\s*$/imu.test(meta) && actualPath === dir) return;
   }
+  if (result.code === 0 && /创建目录成功|创建目录完成|mkdir.*success/iu.test(out)) return;
   throw new BaiduError('远端目录状态未确认；检查 journal 与远端后人工恢复');
 }
 async function probeRemoteFile(run: Runner, remotePath: string): Promise<{ bytes: number; fsId: string } | null> {
   const result = await run(['meta', remotePath]); const out = `${result.stdout}\n${result.stderr}`;
+  if (/代码\s*[:：]?\s*31066/u.test(out) && /文件或目录不存在|文件不存在|没有这个文件/u.test(out)) return null;
   if (result.code === 0) return parseMeta(out, remotePath);
-  if (/代码\s*[:：]?\s*31066/u.test(out) && /文件不存在|没有这个文件/u.test(out)) return null;
   throw new BaiduError('远端文件 meta 状态未知，停止避免覆盖');
 }
 function parseShare(out: string): { url: string; code: string; shareId: string } {
