@@ -27,21 +27,21 @@ export function createRunner(exe: string, configDir: string): Runner {
     });
   };
 }
-async function call(run: Runner, args: string[], semantic?: (out: string) => boolean) {
+export async function call(run: Runner, args: string[], semantic?: (out: string) => boolean) {
   const result = await run(args); const out = `${result.stdout}\n${result.stderr}`;
   if (result.code !== 0 || /(?:遇到错误|远端服务器返回错误|以下文件上传失败|操作失败)/u.test(out) || (semantic && !semantic(out))) {
     throw new BaiduError(`BaiduPCS-Go ${args[0]} 结果未确认（退出码 ${result.code}）；检查远端与 journal 后恢复，禁止盲目重试`);
   }
   return out;
 }
-function parseMeta(out: string, filename: string) {
+export function parseMeta(out: string, filename: string) {
   const size = out.match(/^\s*文件大小\s+([\d,]+)(?:\s|$)/imu)?.[1]?.replaceAll(',', '');
   const fsId = out.match(/^\s*fs_id\s+(\d+)\s*$/imu)?.[1];
   const remotePath = out.match(/^\s*文件路径\s+(.+?)\s*$/imu)?.[1]?.trim();
   if (!size || !fsId || !/^\s*类型\s+文件\s*$/imu.test(out) || remotePath !== filename) throw new BaiduError('meta 输出缺少匹配完整路径、文件类型、字节数或 fs_id');
   return { bytes: Number(size), fsId };
 }
-async function ensureRemoteDirectory(run: Runner, dir: string) {
+export async function ensureRemoteDirectory(run: Runner, dir: string) {
   const result = await run(['mkdir', dir]); const out = `${result.stdout}\n${result.stderr}`;
   if (/代码\s*[:：]?\s*31061/u.test(out)) {
     const meta = await call(run, ['meta', dir]);
@@ -51,20 +51,20 @@ async function ensureRemoteDirectory(run: Runner, dir: string) {
   if (result.code === 0 && /创建目录成功|创建目录完成|mkdir.*success/iu.test(out)) return;
   throw new BaiduError('远端目录状态未确认；检查 journal 与远端后人工恢复');
 }
-async function probeRemoteFile(run: Runner, remotePath: string): Promise<{ bytes: number; fsId: string } | null> {
+export async function probeRemoteFile(run: Runner, remotePath: string): Promise<{ bytes: number; fsId: string } | null> {
   const result = await run(['meta', remotePath]); const out = `${result.stdout}\n${result.stderr}`;
   if (/代码\s*[:：]?\s*31066/u.test(out) && /文件或目录不存在|文件不存在|没有这个文件/u.test(out)) return null;
   if (result.code === 0) return parseMeta(out, remotePath);
   throw new BaiduError('远端文件 meta 状态未知，停止避免覆盖');
 }
-function parseShare(out: string): { url: string; code: string; shareId: string } {
+export function parseShare(out: string): { url: string; code: string; shareId: string } {
   const url = out.match(/https:\/\/pan\.baidu\.com\/s\/[A-Za-z\d_-]+/u)?.[0];
   const code = out.match(/(?:提取码|密码)\s*[:：]\s*([A-Za-z\d]{4})/iu)?.[1];
   const shareId = out.match(/(?:分享ID|share_id|shareId)\s*[:：]\s*(\d+)/iu)?.[1];
   if (!url || !code || !shareId) throw new BaiduError('share set 输出不完整，分享状态未知');
   return { url, code, shareId };
 }
-function confirmShareList(out: string, record: { shareId: string; url: string; code: string; path: string }) {
+export function confirmShareList(out: string, record: { shareId: string; url: string; code: string; path: string }) {
   const row = out.split(/\r?\n/u).find(line => line.includes(record.shareId) && line.includes(record.url));
   if (!row || !row.includes(record.code) || !row.includes(record.path) || !/永久/iu.test(row)) {
     throw new BaiduError('share list 未在同一记录中确认分享ID、链接、提取码、完整网盘路径与永久期限');
@@ -103,6 +103,18 @@ async function saveJournal(file: string, journal: Journal) {
 }
 async function readBook(file: string): Promise<Book> { return JSON.parse(await readFile(file, 'utf8')) as Book; }
 async function catalogHash(file: string) { return digest(await readFile(file)); }
+async function archiveJournalConfirms(root: string, book: Book, current: Book, currentCatalogHash: string) {
+  const download = current.downloads.baidu;
+  if (!download?.archive) return false;
+  validateBaiduDownload(download, book.file.sha256);
+  let journal: { entries?: Record<string, { state?: string; sourceSha256?: string; archiveSha256?: string; remotePath?: string; catalogHash?: string; baidu?: BaiduDownload }> };
+  try { journal = JSON.parse(await readFile(path.join(root, '.local/baidu/archive-journal.json'), 'utf8')) as typeof journal; }
+  catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return false; throw new BaiduError('archive journal 无法解析'); }
+  const record = journal.entries?.[book.id];
+  return record?.state === 'complete' && record.sourceSha256 === book.file.sha256
+    && record.archiveSha256 === download.archive.sha256 && record.remotePath === download.path
+    && record.catalogHash === currentCatalogHash && JSON.stringify(record.baidu) === JSON.stringify(download);
+}
 export async function importPilot(root: string, runner: Runner) {
   const file = path.join(root, '.local/baidu/pilot-verified.json');
   let pilot: { bookId: string; bytes: number; baidu: BaiduDownload };
@@ -131,6 +143,11 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       if (current.file.sha256 !== book.file.sha256 || current.file.bytes !== book.file.bytes) throw new BaiduError(`${book.id}: 书目文件已变化`);
       const previous = journal.entries[book.id];
       if (previous && previous.sha256 !== book.file.sha256) throw new BaiduError(`${book.id}: journal 哈希变化，旧分享记录作废，须人工检查`);
+      if (current.downloads.baidu?.archive) {
+        if (!await archiveJournalConfirms(root, book, current, beforeHash)) throw new BaiduError(`${book.id}: RAR 记录缺少匹配的完整 archive journal，拒绝按旧 raw 分享覆盖`);
+        completed++;
+        continue;
+      }
       if (previous?.state === 'unavailable') {
         if (current.downloads.baidu !== null || beforeHash !== previous.catalogHash) throw new BaiduError(`${book.id}: unavailable 记录对应的书目已变化，拒绝覆盖`);
         unavailable.push({ id: book.id, error: previous.error ?? '百度分享经人工核查不可用' });
