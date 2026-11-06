@@ -54,7 +54,7 @@ HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_EN
 HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 npm run pages -- verify --release RELEASE --url https://library.amamiyayuuko.com
 ```
 
-verify 检查线上发布标识、首页、索引和本次书籍的详情下载链接，成功后把正式书目和封面同步回工作区。之后按授权提交和推送 Git，以便其他环境能从源码重建当前站点。
+verify 检查线上发布标识、首页、完整索引和所有详情链接，成功后把正式书目和封面同步回工作区。若用户同时要求 push，且待推送提交包含前端变化，需先准备固定站点快照，再由主代理推送；push 成功后部署该 RELEASE 并 verify。纯文档提交不触发站点部署。完整维护与授权规则见 [AGENTS.md](../AGENTS.md#codex-维护流程)。
 
 deploy 出错或超时时先检查 project-status 与线上 release.json；不要把结果未知当作未部署。若线上已经成功而本地同步失败，可以保留快照并重跑 verify。
 
@@ -67,6 +67,12 @@ npm run pages -- prepare --site-only
 ```
 
 该命令冻结源码、封面与完整正式书目；复制前后校验一致性，保留每本书的 publishedAt / updatedAt。返回的 RELEASE 使用同样的 deploy / verify 流程。它不会验证 EPUB 的公开文件内容；需要复核文件时仍使用 r2 verify。书籍文件或书目内容更新继续使用 book prepare 和上传报告流程。
+
+## 用户要求 push 时的前端发布联动
+
+当用户明确要求主代理 push，且 fetch 后本次待推送提交中存在会影响网页产物的改动时，主代理使用 `npm run pages -- prepare --site-only` 为当前源码和正式书目准备固定 RELEASE，并检查准备结果与产物。准备失败就停止 push。确认只包含本任务已验收提交后再推送；推送成功后部署该 RELEASE 并执行 verify，核对线上 release 标记、完整索引和全部详情页，并完成正式书目同步。纯文档改动不触发部署。
+
+该联动授权不包含 R2 上传、分享创建、文件清理或 DNS 修改。若 push 结果未知，先核对远端；若 deploy 结果未知，先用 `pages status --release RELEASE` 和线上状态确认，不重复部署。push 成功而部署失败时分别记录并继续排障。EPUB 新增或更新仍须按 book/R2 流程取得验证报告。
 
 ## 中断与恢复
 
