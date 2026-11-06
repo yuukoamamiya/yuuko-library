@@ -1,6 +1,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { validateCategories } from './categories';
+import { validateBaiduDownload } from './baidu';
 
 export interface Book {
   schemaVersion: 1;
@@ -13,9 +14,20 @@ export interface Book {
   cover: string | null;
   edition: { kind: 'ai-translation'; model: string } | { kind: 'transcription'; model: null };
   file: { sha256: string; bytes: number; filename: string };
-  downloads: { r2Key: string; r2Url: string | null; baidu: null };
+  downloads: { r2Key: string; r2Url: string | null; baidu: BaiduDownload | null };
   publishedAt: string | null;
   updatedAt: string | null;
+}
+
+export interface BaiduDownload {
+  url: string;
+  code: string;
+  fileSha256: string;
+  fsId: string;
+  shareId: string;
+  path: string;
+  expiresAt: null;
+  verifiedAt: string;
 }
 
 export const editionLabel = (book: Book) => book.edition.kind === 'transcription'
@@ -32,7 +44,13 @@ export async function loadBooks(): Promise<Book[]> {
   });
   const books: Book[] = await Promise.all(entries.filter(name => name.endsWith('.json'))
     .map(async name => JSON.parse(await readFile(path.join(dir, name), 'utf8')) as Book));
-  books.forEach(book => validateCategories(book.categories));
+  books.forEach(book => {
+    validateCategories(book.categories);
+    if (book.downloads.baidu !== null) {
+      // Keep the same integrity rules for every book, including records not rendered yet.
+      validateBaiduDownload(book.downloads.baidu, book.file.sha256);
+    }
+  });
   return books.sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '')
     || a.title.localeCompare(b.title, 'zh-CN') || a.id.localeCompare(b.id));
 }
