@@ -1,76 +1,121 @@
-# Pages 命令行部署
+# Pages 部署指南
 
-## 当前部署
+当前网站为 [library.amamiyayuuko.com](https://library.amamiyayuuko.com)，默认地址为 [yuuko-library.pages.dev](https://yuuko-library.pages.dev)。Pages 项目 yuuko-library 使用 Direct Upload，生产分支参数为 main。源码 GitHub 仓库的 main 与该参数同名，但 Git push 不自动部署。
 
-- 项目：yuuko-library，Direct Upload，生产分支 main。
-- 默认站点：https://yuuko-library.pages.dev
-- 自定义网站域名：https://library.amamiyayuuko.com（DNS、域名验证及 HTTPS 已激活）。
-- 文件下载域名：https://book.amamiyayuuko.com
-- 首次发布：65 本；线上首页、搜索索引及每本书的 R2 链接均已核验。
-- 本机发布快照：`.local/releases/r-13fc57eb-fd5b-4865-aaf3-3bc2c6ac9e86/`。
+维护约束见 [AGENTS.md](../AGENTS.md)，命令语义见 [命令参考](publishing-cli.md)。
 
-源码和封面可以存 GitHub；生产文件由 Wrangler Direct Upload 发布。Git 提交或推送不会自动部署。
+## 网络与登录
 
-## 代理与授权
-
-需要 Node.js 24+，依赖随 npm ci 安装。Git Bash 下可以给单条命令设置代理，不修改 Windows 全局代理：
+使用项目锁定的 Wrangler。若网络需要本机 10809 HTTP 代理，Git Bash 下给单条命令设置环境变量：
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 npx wrangler whoami
 ```
 
-首次使用或授权过期后，执行：
+首次或授权失效后：
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 npx wrangler login --device --scopes account:read user:read pages:write zone:read
 ```
 
-按 Wrangler 显示的设备代码在浏览器完成授权。OAuth 凭据由 Wrangler 保存在用户配置目录，不写入本仓库；不在聊天或日志中输出 auth token。R2 的 S3 凭据不用于 Pages。
+按提示完成浏览器设备授权。Wrangler 保存 OAuth 凭据，不把它们写进项目或聊天。上述权限用于现有 Pages 操作；DNS 写入另需权限。只涉及 Pages 时，不必为其他 Workers 服务的缺失权限提示重复扩权。
 
-当前锁定的 Wrangler 4.158.0 会对由代理创建的新 Pages 项目尝试转交 Workers。首建本项目时使用 pages project create 的 --force 选项明确选择 Pages；本项目现已存在，后续直接 pages deploy 即可。此行为已根据安装包实现及首次执行结果核实，不代表生产页面需要 Workers。
+Node 原生 fetch 的代理命令同时需要 NODE_USE_ENV_PROXY=1；代理不可用时先检查本机服务，不修改全局网络配置。
 
-## 发布已有上传计划
+## 创建项目
 
-先使用 book prepare / validate 及 r2 upload 获得本次审核计划与已验证上传报告。正式构建会校对上传报告中的 ID、哈希、大小、对象键和下载地址，移除本地预览标记，启用下载按钮并生成 release.json。
+本项目已经创建，日常更新无需重建。切换新账号或复制为另一个项目时，先确认 site.config.json 中的目标配置，再创建新项目。
 
 ```bash
-npm run pages -- prepare --plan PLAN --report .local/uploads/PLAN-upload.json
+npx wrangler pages project create PROJECT --production-branch main
 ```
 
-记录返回的 RELEASE 发布编号。prepare 只生成本地正式产物，没有远程写入。确认本次发布内容后执行：
+锁定的 Wrangler 4.158.0 在首次创建新项目时曾尝试把 Pages 命令转交 Workers；本项目当时用 --force 显式创建 Pages。现有项目使用正常 pages deploy。将来遇到类似行为应先核对当前 CLI 帮助和实际状态，不盲目重跑或把项目迁到 Workers。
+
+## 正式构建与发布
+
+PLAN、RELEASE 和 UPLOAD_REPORT 是占位，需替换为实际本地编号和报告路径。先通过 book 准备、预览、校验，再通过 r2 上传或只读复核取得匹配的验证报告。
 
 ```bash
-HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 npm run pages -- deploy --release RELEASE
+npm run pages -- prepare --plan PLAN --report UPLOAD_REPORT
 ```
 
-deploy 只上传固定快照；上线后的书目同步由 verify 执行：
+prepare 只生成本地正式快照，返回发布编号 RELEASE。书目与报告的 ID、哈希、大小、对象键和 URL 必须一致。正式页面移除预览标记，提供真实下载入口。
+
+取得本次发布授权后：
 
 ```bash
-HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 npm run pages -- verify --release RELEASE --url https://yuuko-library.pages.dev
+HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 npm run pages -- deploy --release RELEASE
 ```
 
-verify 检查线上 release.json、首页、检索索引及本次书籍详情的下载链接，成功后才把对应 JSON 和封面同步回正式目录。部署命令出错或超时时先核对 project-status 和线上标识，不盲目重复发布；若上线已成功、仅本地同步失败，可修复后重跑 verify。
-
-本地书籍原文件、凭据、上传报告、发布日志和审核快照均不进入站点产物。部署后可以提交源码、正式书目 JSON 和封面到 GitHub；EPUB 留在 R2。
-
-## 域名和 DNS
-
-以下命令通过 Cloudflare API 完成操作，OAuth Token 在内存中从 Wrangler 获取，不回显。API 请求也使用同一 HTTP 代理：
+部署后继续验证：
 
 ```bash
-HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 node --import tsx tools/pages/cloudflare.ts project-status
-HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 node --import tsx tools/pages/cloudflare.ts domain-add
+HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 npm run pages -- verify --release RELEASE --url https://library.amamiyayuuko.com
+```
+
+verify 检查线上发布标识、首页、索引和本次书籍的详情下载链接，成功后把正式书目和封面同步回工作区。之后按授权提交和推送 Git，以便其他环境能从源码重建当前站点。
+
+deploy 出错或超时时先检查 project-status 与线上 release.json；不要把结果未知当作未部署。若线上已经成功而本地同步失败，可以保留快照并重跑 verify。
+
+## 仅更新页面或分类导航
+
+正式书目已具备下载地址时，可以跳过 EPUB 导入与 R2 上传，生成本地快照：
+
+```bash
+npm run pages -- prepare --site-only
+```
+
+该命令冻结源码、封面与完整正式书目；复制前后校验一致性，保留每本书的 publishedAt / updatedAt。返回的 RELEASE 使用同样的 deploy / verify 流程。它不会验证 EPUB 的公开文件内容；需要复核文件时仍使用 r2 verify。书籍文件或书目内容更新继续使用 book prepare 和上传报告流程。
+
+## 中断与恢复
+
+统一从本次计划、上传报告和发布编号判断下一步，不把本地 ready 当作已上线：
+
+| 中断位置 | 下一步 |
+| --- | --- |
+| 本地审核 | book status / validate；stale 时重新 prepare |
+| R2 上传中断 | 查看上传报告；重跑相同有效计划的 upload，复用已验证的一致对象 |
+| Pages 提交中断或 uncertain | pages status --release RELEASE，核对远端部署；不要重复提交 |
+| 远端已成功 | pages verify --release RELEASE --url HTTPS_URL，完成全站验证和本地同步 |
+| 远端已明确 failure / canceled | 查明原因后 pages deploy --release RELEASE --retry；仅此情况允许显式重试 |
+| 线上成功、本地同步中断 | 重跑同一 RELEASE 的 verify；已同步书籍可复用，本地新修改会阻止覆盖 |
+
+```bash
+npm run pages -- status --release RELEASE
+```
+
+status 只读查询匹配发布编号与生产分支的远端记录，不上传、不部署、不同步。Node fetch 需要代理时设置 NODE_USE_ENV_PROXY=1。deploy 同时使用 Wrangler 和 Node fetch，因此也需要此设置。
+
+每个 Pages 项目使用 .local/pages/PROJECT/publish.lock，提交前写入 active.json 和发布目录 deployment.json。进行中、未定位或未知状态均停止；新发布也不能越过另一份尚未验证完成的 active 发布。成功后 verify 清除对应 active 记录。远端成功的重复 deploy 只提示 verify，不再次提交。
+
+异常退出可能留下锁。先核对锁中 PID 的进程与任务确已终止，再人工移除指定锁；不自动按时间清锁。保留 active.json、deployment.json 和发布快照用于恢复。远端始终无法定位或确认失败的提交保持阻塞，需核对 Pages 控制台，不把“未查到”当作失败。永久失败且需重新制作快照时，核对失败记录后人工解除对应 active 状态，再准备新发布。
+
+线上验证核对 schemaVersion=2 发布标记、全站书目数量与摘要、完整索引 ID 集合与字节摘要、所有书籍详情和下载链接。全站 books 与 changedBooks 分开记录。旧 schemaVersion=1 快照需重新准备，不能交给新版部署流程绕过校验。
+
+## 域名
+
+网站域名与下载域名用途分开：
+
+| 域名 | 用途 |
+| --- | --- |
+| library.amamiyayuuko.com | Pages 网页 |
+| book.amamiyayuuko.com | R2 文件 |
+
+现有网站的 Pages 关联、CNAME 和 HTTPS 已验证。DNS 是维护者一次性手动配置的 CNAME：library → yuuko-library.pages.dev，开启代理；日常发布不需要再编辑它。
+
+查看状态：
+
+```bash
 HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 node --import tsx tools/pages/cloudflare.ts domain-status
 ```
 
-本项目域名已关联 Pages，维护者已手动配置 CNAME：library.amamiyayuuko.com → yuuko-library.pages.dev，域名与证书状态均为 active。2026-11-06 已从该域名核验发布标识、首页、索引和 65 本详情页，并通过浏览器核验搜索与 R2 下载入口。无需为此再创建 DNS Token。
+将来变更域名时，先关联 Pages，再配置 DNS，最后检查 active、HTTPS、首页与发布标识。可选 DNS Token 的权限应限制到相关 Zone，仅在需要命令行修改 DNS 时本地配置。
 
-Wrangler 的 pages:write / zone:read 不包含 DNS 读写。将来若需要由命令行设置其他域名，在本机 .env.local 填入 CLOUDFLARE_DNS_API_TOKEN，权限限制到相应 Zone 的 DNS Edit，再执行：
+## 发布资料与源码
 
-```bash
-HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 node --import tsx tools/pages/cloudflare.ts dns-add
-```
+发布快照及 deployment.json 位于 .local/releases/RELEASE/，只保存在本机；Git 保存源码、正式书目和封面，不保存输入 EPUB、密钥、上传报告或发布缓存。
 
-dns-add 会创建缺失的对应 CNAME；已有其他记录时停止，不自动覆盖。仅 DNS API 请求使用专用 DNS Token，其余 Pages 操作使用 Wrangler OAuth。也可由维护者自行在控制台添加同一 CNAME。等待域名验证及 TLS 激活后，再从自定义域名运行 verify。
+本机迁移时妥善保管所需快照与验证报告，凭据单独处理。缺少旧快照时应重新准备，不虚构旧报告。待办和实现缺口统一见 AGENTS.md。
 
-参考：[Pages Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/) · [Pages 域名 API](https://developers.cloudflare.com/api/resources/pages/subresources/projects/subresources/domains/methods/create/)
+官方参考：[Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/) · [Pages 域名 API](https://developers.cloudflare.com/api/resources/pages/subresources/projects/subresources/domains/methods/create/)

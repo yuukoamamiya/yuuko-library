@@ -14,6 +14,7 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
   await mkdir(path.join(ROOT, '.local'), { recursive: true });
   const dir = await mkdtemp(path.join(ROOT, '.local', 'test-cli-'));
   let planDir: string | undefined;
+  let updatePlanDir: string | undefined;
   try {
     const beforeCatalog = await readdir(path.join(ROOT, 'catalog/books'));
     const epub = path.join(dir, '测试.epub');
@@ -23,7 +24,7 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
     zip.addBuffer(Buffer.from('<package xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata><dc:title>同名书籍</dc:title><dc:creator>作者</dc:creator><dc:description>简介</dc:description></metadata></package>'), 'book.opf');
     zip.end(); await done; await writeFile(epub, Buffer.concat(chunks));
     const manifest = path.join(dir, 'manifest.json');
-    await writeFile(manifest, JSON.stringify([{ id: 'test-translation', epub, model: '用户指定模型' }, { id: 'test-transcription', epub, kind: 'transcription' }]));
+    await writeFile(manifest, JSON.stringify([{ id: 'test-translation', epub, model: '用户指定模型', categories: ['philosophy'] }, { id: 'test-transcription', epub, kind: 'transcription', categories: ['history'] }]));
     const prepared = run(['prepare', '--manifest', manifest]);
     assert.equal(prepared.status, 0, prepared.stderr + prepared.stdout);
     const output = JSON.parse(prepared.stdout); const id = output.planId;
@@ -31,6 +32,15 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
     const plan = JSON.parse(await readFile(path.join(planDir, 'plan.json'), 'utf8'));
     assert.equal(plan.books.length, 2);
     assert.deepEqual(plan.books[1].edition, { kind: 'transcription', model: null });
+    assert.deepEqual(plan.books[1].categories, ['history']);
+    const invalid = run(['prepare', '--id', 'test-invalid-category', '--epub', epub, '--model', '模型', '--category', 'unknown']);
+    assert.equal(invalid.status, 2);
+    const existing = JSON.parse(await readFile(path.join(ROOT, 'catalog/books', beforeCatalog.find(name => name.endsWith('.json'))!), 'utf8'));
+    const updated = run(['prepare', '--id', existing.id, '--update', '--epub', epub, '--model', '模型']);
+    assert.equal(updated.status, 0, updated.stderr + updated.stdout);
+    updatePlanDir = path.join(ROOT, '.local/plans', JSON.parse(updated.stdout).planId);
+    const updatedPlan = JSON.parse(await readFile(path.join(updatePlanDir, 'plan.json'), 'utf8'));
+    assert.deepEqual(updatedPlan.books[0].categories, existing.categories);
     assert.deepEqual(await readdir(path.join(ROOT, 'catalog/books')), beforeCatalog);
     const validation = run(['validate', '--plan', id]);
     assert.equal(validation.status, 0, validation.stderr + validation.stdout);
@@ -47,5 +57,6 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
   } finally {
     await rm(dir, { recursive: true, force: true });
     if (planDir) await rm(planDir, { recursive: true, force: true });
+    if (updatePlanDir) await rm(updatePlanDir, { recursive: true, force: true });
   }
 });

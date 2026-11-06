@@ -7,7 +7,7 @@ import type { Book } from '../src/lib/books.ts';
 const bytes = Buffer.from('sample EPUB bytes');
 const hash = createHash('sha256').update(bytes).digest('hex');
 const origin = 'https://books.example.com'; const key = `books/test-book/${hash}.epub`;
-const book: Book = { schemaVersion: 1, id: 'test-book', title: '测试书籍', authors: ['作者'], subjects: [], description: '', cover: null,
+const book: Book = { schemaVersion: 1, id: 'test-book', title: '测试书籍', authors: ['作者'], subjects: [], categories: ['philosophy'], description: '', cover: null,
   edition: { kind: 'ai-translation', model: 'test model' }, file: { sha256: hash, bytes: bytes.length, filename: '中文书 (1).epub' },
   downloads: { r2Key: key, r2Url: `${origin}/${key}`, baidu: null }, publishedAt: null, updatedAt: null };
 function setup(options: { remote?: ObjectHeaders; corruptPublic?: boolean; missingPublic?: boolean; ambiguousPut?: boolean } = {}) {

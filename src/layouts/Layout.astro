@@ -24,13 +24,12 @@ const { title = SITE_TITLE, description = SITE_NOTICE, preview = false } = Astro
         <span>{SITE_TITLE}<span class="brand-en">AMAMIYA YUUKO LIBRARY</span></span>
       </a>
       <nav aria-label="主导航"><a href="/" class="nav-library">全部书籍</a><a href="/#about">关于书架 <span aria-hidden="true">↗</span></a></nav>
-      <div class="header-note"><span class="status-dot"></span>{preview ? '本地预览 · 尚未发布' : '开放阅读，自由探索'}</div>
+      {preview && <div class="header-note"><span class="status-dot"></span>本地预览 · 尚未发布</div>}
     </header>
     <slot />
     <footer class="site-footer" id="about">
-      <div><a class="footer-brand" href="/">{SITE_TITLE}</a><p>{SITE_NOTICE}</p></div>
-      <p>AI 译本仅供参考，可能存在翻译偏差。<br />版本来源及翻译模型见各书详情。</p>
-      <span class="footer-sign">AMAMIYA YUUKO LIBRARY</span>
+      <a class="footer-brand" href="/">{SITE_TITLE}</a>
+      <p>AI 译本可能存在翻译偏差，请参照原文。</p>
     </footer>
   </body>
 </html>

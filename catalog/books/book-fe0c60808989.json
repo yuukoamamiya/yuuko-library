@@ -28,5 +28,9 @@
     "baidu": null
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
-  "updatedAt": "2026-11-06T07:26:32.749Z"
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society",
+    "history"
+  ]
 }

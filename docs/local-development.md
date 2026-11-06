@@ -1,81 +1,17 @@
-# 本地使用说明
+# 本地维护指南
 
-## 已实现范围
+先读根目录 [AGENTS.md](../AGENTS.md)。本文件说明本地开发、内容准备和 R2 操作；参数约定见 [命令参考](publishing-cli.md)，发布网页见 [部署指南](pages-deployment.md)。
 
-本阶段可提取本地 EPUB 的 metadata 和封面，生成首页和每本书的详情页，并按书名、作者、简介和 subject 检索、筛选。模型名称按输入原样展示，不查询模型服务。支持无模型的中文出版物转录。
+## 环境与启动
 
-书籍工具提供 prepare、preview、validate、status；R2 工具提供连接检查、上传及公开下载校验；独立 pages 工具提供正式构建、部署、线上核验及书目同步，详见 [Pages 命令行部署](pages-deployment.md)。`--help` 显示的命令才可执行。百度分享和统一 book publish/resume 流程尚待实现。R2 上传不会自动部署网站。
-
-## 准备环境
-
-使用 Node.js 24+；在仓库根目录执行 `npm ci`。本地预览无需任何云服务凭据。Windows 的普通终端可用 Git Bash；EPUB 参数可传 `D:/Books/example.epub`，有空格的路径需加引号。
-
-## 新增一本书
+需要 Node.js 24+。Windows 普通命令使用 Git Bash，结构化数据处理优先 Python。
 
 ```bash
-npm run book -- prepare --id example-book --epub 'D:/Books/example.epub' --model 'gemini 3.8 flash'
+npm ci
+npm run dev
 ```
 
-转录本使用显式类型，不填写 model：
-
-```bash
-npm run book -- prepare --id chinese-transcription --epub 'D:/Books/chinese.epub' --kind transcription
-```
-
-`id` 必须是最多 80 字符的小写英文、数字与连字符；选定后保持稳定。不同作者的同名书必须使用不同 ID。已存在于正式书目中的 ID 只有带 `--update` 才能准备替换；暂存计划不视为已发布书籍。
-
-## 批量准备
-
-在 `.local/import-manifest.json` 中维护 JSON 数组。所有条目一次生成一个审核计划、一次构建整站，无需逐书构建或手动 bundle。
-
-```json
-[
-  {
-    "id": "example-book",
-    "epub": "D:/Books/example.epub",
-    "model": "gemini 3.8 flash"
-  },
-  {
-    "id": "chinese-transcription",
-    "epub": "D:/Books/chinese.epub",
-    "kind": "transcription"
-  }
-]
-```
-
-```bash
-npm run book -- prepare --manifest .local/import-manifest.json
-```
-
-每条可设置 `update: true` 和 `baidu: "optional"`；后者当前只记录发布策略，不执行任何百度操作。默认 baidu 为 off。不能在 manifest 命令上混用单书字段。
-
-本机初始清单共 65 本：gemini 3.1 pro preview 为 9 本（无声的强制、尾注 1–5、阶级矩阵、国家、权力与社会主义、资本主义的起源），gemini 2.5 pro 为少于无 1 本，中文出版物转录 1 本，其余 54 本为 gemini 3.8 flash。转录本使用维护者后续提供的含完整 metadata 的新文件。
-
-书目、封面和输入 EPUB 都复制到本地计划。原文件不会被修改，不会写入 Git、正式书目或网站静态产物。清单含本机文件路径，因此置于被忽略的 `.local/`。
-
-## 预览与校验
-
-prepare 返回实际的 `p-<UUID>` 计划编号和 report.md 路径。下方用 `PLAN` 代表返回值，执行时替换为实际编号：
-
-```bash
-npm run book -- preview --plan PLAN
-npm run book -- validate --plan PLAN
-npm run book -- status --plan PLAN
-```
-
-preview 默认端口 4321，仅绑定 127.0.0.1；端口占用时明确报错，可用 `--port 4322`。终端需保持运行，Ctrl+C 停止。
-
-- 首页：`http://127.0.0.1:4321/`
-- 详情：`http://127.0.0.1:4321/books/<id>/`
-- 本地审核报告：`.local/plans/<plan-id>/report.md`
-
-预览下载区域显示“下载将在发布后开放”。预览服务器只开放生成的静态目录，不提供计划清单、EPUB 或本地输入路径。
-
-validate 重读快照中的 EPUB，检查哈希及记录，重新构建，核对索引、页面与本地链接，确保产物不包含 EPUB。源码、依赖、配置、正式书目或审核快照发生变化，旧计划会被标记 stale；重新 prepare 后使用新计划预览。原始 EPUB 路径中的文件后续改变，不会改变已复制的快照。
-
-`--json` 可用于脚本。为避免 npm 自身输出命令横幅，使用 `npm run --silent book -- status --plan PLAN --json`，或 `node --import tsx tools/book/cli.ts status --plan PLAN --json`。构建日志写 stderr，JSON 结果写 stdout。
-
-## 检查
+默认地址为 http://127.0.0.1:4321/。正式书目和封面已保存在仓库中，本地浏览不需要 EPUB 原文件或云凭据。
 
 ```bash
 npm run check
@@ -83,43 +19,99 @@ npm test
 npm run build
 ```
 
-check 包含 Astro 页面诊断和 TypeScript 检查。测试覆盖 EPUB 2/3 封面、元数据提取、DTD/越界路径拒绝、搜索语义、批量快照、转录本及快照篡改拒绝。build 只构建正式书目，尚无正式上架时为空书架；审核真实书籍请使用 plan 预览。
+check 包含 Astro 与 TypeScript 检查；test 运行现有解析、检索、快照和上传／发布测试；build 将正式书目构建到 dist/。
 
-## R2 本地连接
+## 配置与凭据
 
-`site.config.json` 的 `r2Endpoint` 为账号级 S3 HTTPS 终结点，不能包含桶名；`r2Bucket` 单独填写桶名，`downloadsUrl` 填公开下载域名。S3 API 终结点不是读者下载地址。
+[site.config.json](../site.config.json) 保存非敏感配置：站点 URL、下载域名、R2 桶及账号级 S3 终结点、Pages 项目与生产分支、Cloudflare Zone。
 
-将 `.env.example` 复制为 `.env.local`，在本机填写 `R2_ACCESS_KEY_ID` 和 `R2_SECRET_ACCESS_KEY`。此文件被 Git 忽略，不复制进审核快照。S3 SDK 不需要另外的 Cloudflare“令牌值”，不要把该令牌当成机密访问密钥。
+复制 [.env.example](../.env.example) 到本机 .env.local，填写 R2_ACCESS_KEY_ID 和 R2_SECRET_ACCESS_KEY。S3 客户端不使用另外的 Cloudflare“令牌值”，终结点中不包含桶名。
+
+Wrangler OAuth 凭据由 Wrangler 自行保管。CLOUDFLARE_DNS_API_TOKEN 仅供将来使用 API 编辑 DNS，可留空；现有域名已配置完成。
+
+不要输出、提交或复制凭据到网站产物。发现泄漏时在 Cloudflare 撤销重建，在本机替换后重新检查连接。
+
+## 新增与更新
+
+普通 AI 译本需稳定 ID、本地路径和模型名：
+
+```bash
+npm run book -- prepare --id example-book --epub 'D:/Books/example.epub' --model '模型名称' --category philosophy
+```
+
+中文出版物转录明确声明类型，不填 model：
+
+```bash
+npm run book -- prepare --id chinese-transcription --epub 'D:/Books/chinese.epub' --kind transcription --category history
+```
+
+更新正式书目中已存在的 ID：
+
+```bash
+npm run book -- prepare --id example-book --update --epub 'D:/Books/example-new.epub' --model '模型名称' --category philosophy
+```
+
+新增不能占用现有 ID，更新不能使用不存在的 ID。同名书按作者等身份区分，不根据标题自动合并。
+
+批量操作使用自己创建的本地 JSON 清单：
+
+```json
+[
+  {
+    "id": "example-book",
+    "epub": "D:/Books/example.epub",
+    "model": "模型名称",
+    "update": true
+  },
+  {
+    "id": "another-book",
+    "epub": "D:/Books/chinese.epub",
+    "kind": "transcription",
+    "categories": ["history"]
+  }
+]
+```
+
+```bash
+npm run book -- prepare --manifest .local/my-books.json
+```
+
+首批清单在原维护机器的 .local/ 中，不随 Git 分发；新环境需自行准备路径和清单。旧版清单对已经上架的 ID 再次执行时，需要 update: true。
+
+prepare 会复制 EPUB、提取资料与封面，并构建一个隔离计划。原文件不被修改，正式目录也不在这一步更新。原始主题词写入 subjects，独立分类写入 categories。新增必须提供 1–2 个有效分类 ID；单本使用可重复的 --category，批量使用 categories 数组。更新省略分类时保留原分类。分类 ID 见 src/lib/categories.ts；首次迁移对照见 [分类迁移记录](category-migration.md)。
+
+## 审核计划
+
+下方 PLAN、BOOK、RELEASE 均为占位，实际操作时替换为命令输出的编号或稳定书籍 ID。
+
+```bash
+npm run book -- preview --plan PLAN
+npm run book -- validate --plan PLAN
+npm run book -- status --plan PLAN
+```
+
+preview 仅绑定 127.0.0.1，默认端口 4321；端口占用时可设置 --port 4322。它只开放生成的网页，不提供输入 EPUB 或内部计划文件。validate 重读输入、核对快照、重新构建并检查索引和页面链接。
+
+本机报告位于 .local/plans/PLAN/report.md。工作区源码、依赖、配置、正式书目或计划快照变化时，计划可能失效，应重新准备。原始文件在复制后变化不会自动进入已冻结的计划。
+
+## 上传与公开下载核验
+
+取得本次上传授权后执行：
 
 ```bash
 npm run r2 -- check
+npm run r2 -- upload --plan PLAN --book BOOK
+npm run r2 -- upload --plan PLAN
 ```
 
-命令只执行 HeadBucket 和 ListObjectsV2（最多读取一个条目的存在性，不输出文件名），不会上传、删除文件或修改公开状态。输出能证明当前凭据的桶访问和列表读取权限，不能证明写入权限或公开下载已成功。错误输出不会打印 SDK 请求、凭据或服务端 XML。
+check 只读；单本命令用于先验证一个样本；整批命令先验证首本再最多三路并发。计划中有 mute-compulsion 时优先使用它，否则使用计划第一本。
 
-若曾在聊天或其他公开位置粘贴凭据，应在 Cloudflare 撤销重建，再用本地编辑器替换 `.env.local` 中的两个值。无需把新密钥发到聊天中。之后重新运行连接检查即可。
-
-## R2 单本与整批上传
-
-维护者明确授权上传后，可执行以下命令。PLAN 为最新 prepare 返回的有效计划编号，BOOK 为计划中书籍的稳定 ID：
+每本均核对 R2 对象及公开下载的完整哈希、大小、MIME 和中文文件名。一致对象可复用；冲突时停止该文件，不覆盖。单本失败不代表其余文件均失败，最终报告需检查 expected、verified 和 failures。
 
 ```bash
-# 单本验证；完整读取公开下载，核对 SHA-256、大小、MIME 和中文文件名
-npm run r2 -- upload --plan PLAN --book BOOK
-
-# 整批上传；首本通过公开下载校验后，才以最多 3 路并发处理其余书籍
-npm run r2 -- upload --plan PLAN
-
-# 独立只读复核整批文件，不执行上传
 npm run r2 -- verify --plan PLAN
 ```
 
-整批优先以 mute-compulsion（无声的强制）为首本；计划没有该 ID 时使用计划中的第一本。操作从计划中冻结的 EPUB 读取，不在上传时重新读取原始文件。
+verify 只读复核，不执行上传。上传与校验报告保存在 .local/uploads/，同一有效计划重跑 upload 可复用已存在的正确对象。不要在进程仍运行时清除锁；异常锁需先确认 PID 对应的任务已停止。
 
-对象键为 books/ID/SHA256.epub；上传设置 application/epub+zip、attachment、UTF-8 中文文件名及哈希元数据。上传前核对已有对象，只在对象缺失时条件写入，不覆盖冲突对象。对同一计划重跑即可恢复：已上传文件被复用，但仍重新下载校验。
-
-进度与结果写入 `.local/uploads/PLAN-upload.json`（单本报告额外含 BOOK）；每本都记录公开 URL、大小、完整 SHA-256、响应头和校验时间。verify 使用独立的 PLAN-verify.json 报告。状态必须是 verified，且 verified 数量与 expected 一致，才能报告整批成功；failed 时查看 failures，修复网络或权限后重跑原命令。
-
-同一桶的本地操作使用锁文件串行执行。异常退出遗留锁时先检查锁内 PID 与系统进程，确认任务已停止后才清理，不自动夺锁。失败时保留已上传对象和日志，不删除源文件或远端文件。
-
-上传不修改正式书目或发布网站；公开直链在上传完成后即可访问。接入网站发布前，还需验证百度、实现 publish / resume、确认生产部署及失败恢复。
+文件成功上传后，使用 [部署指南](pages-deployment.md) 中的独立 pages 命令发布网页。上传不会同步正式书目，也不会部署网站。百度参数目前只记录意图，不执行上传或创建分享；后续方案须能在 Windows 原生环境运行，不使用 WSL。

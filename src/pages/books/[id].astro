@@ -4,6 +4,7 @@ import path from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import { editionLabel, loadBooks, sizeLabel, subjectsOf, type Book } from '../../lib/books';
 import { SITE_TITLE } from '../../lib/site';
+import { categoryLabel } from '../../lib/categories';
 export async function getStaticPaths() {
   return (await loadBooks()).map(book => ({ params: { id: book.id }, props: { book } }));
 }
@@ -20,13 +21,14 @@ const available = !preview && book.downloads.r2Url?.startsWith('https://');
         <div class="file-summary"><span>EPUB</span><span>{sizeLabel(book.file.bytes)}</span></div>
         {available ? <a class="download-button" href={book.downloads.r2Url!}>下载电子书 <span aria-hidden="true">↓</span></a>
           : <div class="download-pending"><span>下载将在发布后开放</span><small>EPUB · {sizeLabel(book.file.bytes)}</small></div>}
-        <p class="download-note">{preview ? '当前为本地预览，文件尚未公开。' : '公开下载，无需登录。'}</p>
+        {preview && <p class="download-note">当前为本地预览，下载尚未开放。</p>}
       </aside>
       <article class="detail-content">
         <p class="eyebrow">AMAMIYA YUUKO LIBRARY / 书籍详情</p>
         <h1>{book.title}</h1>
         <p class="detail-author">{book.authors.join(' / ') || '作者未提供'}</p>
-        <div class="detail-subjects">{subjectsOf(book).map(subject => <a href={`/?subject=${encodeURIComponent(subject)}#library`}>{subject}</a>)}</div>
+        <div class="detail-categories" aria-label="分类">{book.categories.map(id => <a href={`/?category=${id}#library`}>{categoryLabel(id)}</a>)}</div>
+        {book.subjects.length > 0 && <div class="detail-subjects" aria-label="标签">{subjectsOf(book).map(subject => <a href={`/?subject=${encodeURIComponent(subject)}#library`}>{subject}</a>)}</div>}
         <section class="introduction" aria-labelledby="intro-heading"><h2 id="intro-heading"><span>01</span> 关于这本书</h2><div class="description">{book.description || '暂无简介'}</div></section>
         <section class="edition-section" aria-labelledby="edition-heading"><h2 id="edition-heading"><span>02</span> 版本信息</h2>
           <dl class="edition-table"><div><dt>版本来源</dt><dd>{book.edition.kind === 'transcription' ? '中文出版物转录' : 'AI 翻译'}</dd></div>

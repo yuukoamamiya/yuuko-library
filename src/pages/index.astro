@@ -5,10 +5,11 @@ import Layout from '../layouts/Layout.astro';
 import BookCard from '../components/BookCard.astro';
 import { loadBooks, subjectsOf } from '../lib/books';
 import { SITE_TITLE, SITE_NOTICE } from '../lib/site';
+import { CATEGORIES } from '../lib/categories';
 const books = await loadBooks();
 const counts = new Map<string, number>();
 books.forEach(book => subjectsOf(book).forEach(subject => counts.set(subject, (counts.get(subject) ?? 0) + 1)));
-const popular = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh-CN'));
+const categoryCounts = new Map(CATEGORIES.map(category => [category.id, books.filter(book => book.categories.includes(category.id)).length]));
 const subjects = [...counts.keys()].sort((a, b) => a.localeCompare(b, 'zh-CN'));
 const models = new Set(books.filter(book => book.edition.kind === 'ai-translation').map(book => book.edition.model));
 const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? process.cwd(), 'catalog/preview.json'), 'utf8').then(() => true).catch(() => false);
@@ -17,7 +18,6 @@ const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? proces
   <main id="main">
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow"><span></span> AMAMIYA YUUKO LIBRARY</p>
         <h1>{SITE_TITLE}</h1>
         <p class="hero-description">{SITE_NOTICE}</p>
         <a class="hero-link" href="#library">浏览馆藏 <span aria-hidden="true">↘</span></a>
@@ -29,29 +29,30 @@ const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? proces
       </div>
     </section>
     <section class="library-section" id="library" aria-labelledby="library-heading">
-      <div class="library-heading"><div><span class="section-index">01 / COLLECTION</span><h2 id="library-heading">全部书籍<span class="count-badge">{books.length}</span></h2></div><span class="library-caption">选一本书，开始新的思考。</span></div>
+      <div class="library-heading"><div><span class="section-index">01 / COLLECTION</span><h2 id="library-heading">全部书籍<span class="count-badge">{books.length}</span></h2></div></div>
       <div class="library-layout">
         <aside class="filters" aria-label="书籍分类">
           <span class="filter-caption">浏览分类 <span aria-hidden="true">⌘</span></span>
           <div class="category-list">
-            <button type="button" class="category-button active" data-subject="" aria-pressed="true"><span>全部书籍</span><span>{books.length}</span></button>
-            {popular.slice(0, 8).map(([subject, count]) => <button type="button" class="category-button" data-subject={subject} aria-pressed="false"><span>{subject}</span><span>{count}</span></button>)}
+            <button type="button" class="category-button active" data-category="" aria-pressed="true"><span>全部书籍</span><span>{books.length}</span></button>
+            {CATEGORIES.map(category => <button type="button" class="category-button" data-category={category.id} aria-pressed="false"><span>{category.label}</span><span>{categoryCounts.get(category.id)}</span></button>)}
           </div>
-          <label class="all-categories" for="category-select">所有分类 · {subjects.length}</label>
-          <select id="category-select" aria-label="选择所有分类中的一个"><option value="">全部分类</option>{subjects.map(subject => <option value={subject}>{subject} ({counts.get(subject)})</option>)}</select>
-          <div class="sidebar-note"><span aria-hidden="true">✳</span><p>文字跨越语言，<br />思想自有回响。</p><span class="note-rule"></span><small>每一本书均标注版本来源<br />支持 EPUB 格式</small></div>
+          <label class="all-categories" for="category-select">分类</label>
+          <select id="category-select" aria-label="选择分类"><option value="">全部分类</option>{CATEGORIES.map(category => <option value={category.id}>{category.label} ({categoryCounts.get(category.id)})</option>)}</select>
+          <label class="tag-label" for="tag-filter">标签 · {subjects.length}</label>
+          <input type="search" id="tag-filter" list="tag-options" placeholder="搜索或选择标签" autocomplete="off" />
+          <datalist id="tag-options">{subjects.map(subject => <option value={subject}>{subject} ({counts.get(subject)})</option>)}</datalist>
         </aside>
         <div class="books-area">
           <form class="search-toolbar" role="search" action="/" method="get">
-            <div class="search-field"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><label for="book-search" class="sr-only">搜索书名、作者、简介或分类</label><input id="book-search" name="q" type="search" placeholder="搜索书名、作者、简介…" autocomplete="off" /><kbd aria-hidden="true">/</kbd></div>
+            <div class="search-field"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><label for="book-search" class="sr-only">搜索书名、作者、简介或标签</label><input id="book-search" name="q" type="search" placeholder="搜索书名、作者、简介…" autocomplete="off" /><kbd aria-hidden="true">/</kbd></div>
             <label class="sort-control">排序<select id="sort-order" aria-label="书籍排序"><option value="default">默认顺序</option><option value="title">书名 A—Z</option><option value="author">作者 A—Z</option></select></label>
           </form>
           <div class="results-bar"><p id="result-count" role="status" aria-live="polite">共 {books.length} 本书籍</p><button id="reset-filters" type="button" hidden>清除筛选 <span aria-hidden="true">×</span></button><span class="format-label">EPUB COLLECTION</span></div>
           <div class="book-grid" id="book-grid">{books.map((book, index) => <BookCard book={book} index={index} />)}</div>
-          <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">⌕</span><h3>暂时没有找到这本书</h3><p>试试其他关键词，或清除分类筛选。</p><button type="button" id="empty-reset">查看全部书籍 <span aria-hidden="true">↗</span></button></div>
+          <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">⌕</span><h3>暂时没有找到这本书</h3><p>试试其他关键词，或清除筛选。</p><button type="button" id="empty-reset">查看全部书籍 <span aria-hidden="true">↗</span></button></div>
           {books.length === 0 && <div class="empty-state"><h3>书架正待填满</h3><p>准备 EPUB 后，即可在本地预览书籍。</p></div>}
-          <noscript><p class="no-script">全部书籍已列出。启用 JavaScript 后可使用本地搜索与分类筛选。</p></noscript>
-          <div class="collection-end"><span></span><p>书架有尽，阅读无界</p><span></span></div>
+          <noscript><p class="no-script">全部书籍已列出。启用 JavaScript 后可使用本地搜索、分类与标签筛选。</p></noscript>
         </div>
       </div>
     </section>
@@ -59,14 +60,16 @@ const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? proces
 </Layout>
 <script>
   import { matches, type SearchEntry } from '../lib/search';
+  import { categoryLabel } from '../lib/categories';
   async function init() {
     const search = document.querySelector<HTMLInputElement>('#book-search')!;
     const select = document.querySelector<HTMLSelectElement>('#category-select')!;
+    const tag = document.querySelector<HTMLInputElement>('#tag-filter')!;
     const sort = document.querySelector<HTMLSelectElement>('#sort-order')!;
     const form = document.querySelector<HTMLFormElement>('.search-toolbar')!;
     const grid = document.querySelector<HTMLElement>('#book-grid')!;
     const cards = new Map([...grid.querySelectorAll<HTMLElement>('[data-book-id]')].map(card => [card.dataset.bookId!, card]));
-    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-subject]');
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-category]');
     const count = document.querySelector<HTMLElement>('#result-count')!;
     const reset = document.querySelector<HTMLButtonElement>('#reset-filters')!;
     let entries: SearchEntry[];
@@ -79,38 +82,40 @@ const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? proces
     function fromUrl(preserveTypedInput = false) {
       const params = new URLSearchParams(location.search);
       search.value = params.get('q') ?? (preserveTypedInput ? search.value : '');
-      select.value = params.get('subject') ?? '';
+      select.value = params.get('category') ?? '';
+      tag.value = params.get('subject') ?? '';
       sort.value = ['title', 'author'].includes(params.get('sort') ?? '') ? params.get('sort')! : 'default';
     }
     function render(updateUrl = true) {
-      const query = search.value; const subject = select.value;
+      const query = search.value; const subject = tag.value.trim(); const category = select.value;
       const ordered = [...entries];
       if (sort.value !== 'default') ordered.sort((a, b) => (sort.value === 'title' ? a.title : a.authors.join(' ')).localeCompare(sort.value === 'title' ? b.title : b.authors.join(' '), 'zh-CN'));
       let total = 0;
       ordered.forEach(entry => {
         const card = cards.get(entry.id); if (!card) return;
-        const visible = matches(entry, query, subject);
+        const visible = matches(entry, query, subject, category);
         card.hidden = !visible; if (visible) total++;
         grid.append(card);
       });
-      count.textContent = query.trim() || subject ? `找到 ${total} 本书籍${subject ? ` · ${subject}` : ''}` : `共 ${total} 本书籍`;
+      count.textContent = query.trim() || subject || category ? `找到 ${total} 本书籍${category ? ` · ${categoryLabel(category)}` : ''}${subject ? ` · ${subject}` : ''}` : `共 ${total} 本书籍`;
       document.querySelector<HTMLElement>('#empty-state')!.hidden = total !== 0 || entries.length === 0;
-      reset.hidden = !query && !subject && sort.value === 'default';
-      buttons.forEach(button => { const active = button.dataset.subject === subject;
+      reset.hidden = !query && !subject && !category && sort.value === 'default';
+      buttons.forEach(button => { const active = button.dataset.category === category;
         button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active)); });
       if (updateUrl) {
         const url = new URL(location.href);
-        for (const [key, value] of [['q', query], ['subject', subject], ['sort', sort.value === 'default' ? '' : sort.value]]) {
+        for (const [key, value] of [['q', query], ['subject', subject], ['category', category], ['sort', sort.value === 'default' ? '' : sort.value]]) {
           if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
         }
         history.replaceState(null, '', url);
       }
     }
-    function clear() { search.value = ''; select.value = ''; sort.value = 'default'; render(); }
+    function clear() { search.value = ''; select.value = ''; tag.value = ''; sort.value = 'default'; render(); }
     search.addEventListener('input', () => render());
+    tag.addEventListener('input', () => render());
     select.addEventListener('change', () => render()); sort.addEventListener('change', () => render());
     form.addEventListener('submit', event => { event.preventDefault(); render(); });
-    buttons.forEach(button => button.addEventListener('click', () => { select.value = button.dataset.subject!; render(); }));
+    buttons.forEach(button => button.addEventListener('click', () => { select.value = button.dataset.category!; render(); }));
     reset.addEventListener('click', clear); document.querySelector('#empty-reset')!.addEventListener('click', clear);
     window.addEventListener('popstate', () => { fromUrl(); render(false); });
     document.addEventListener('keydown', event => {

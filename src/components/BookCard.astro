@@ -1,5 +1,6 @@
 ---
-import { editionLabel, subjectsOf, type Book } from '../lib/books';
+import { editionLabel, type Book } from '../lib/books';
+import { categoryLabel } from '../lib/categories';
 const { book, index = 0 } = Astro.props as { book: Book; index?: number };
 ---
 <article class="book-card" data-book-id={book.id}>
@@ -8,7 +9,7 @@ const { book, index = 0 } = Astro.props as { book: Book; index?: number };
       : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}
     <span class="cover-arrow" aria-hidden="true">↗</span>
   </a>
-  <div class="book-category">{subjectsOf(book).slice(0, 2).join(' / ')}</div>
+  <div class="book-category">{book.categories.map(categoryLabel).join(' / ')}</div>
   <h2><a href={`/books/${book.id}/`}>{book.title}</a></h2>
   <p class="book-author">{book.authors.join(' / ') || '作者未提供'}</p>
   <div class:list={['edition-label', { transcription: book.edition.kind === 'transcription' }]}>
