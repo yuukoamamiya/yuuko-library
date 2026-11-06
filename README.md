@@ -2,6 +2,8 @@
 
 个人维护的电子书目录，提供书目信息、检索与 EPUB 下载。馆藏内容由维护者整理；站点不提供在线阅读或正文搜索。
 
+[访问图书馆](https://library.amamiyayuuko.com) · [当前发布](https://library.amamiyayuuko.com/release.json)
+
 ## 架构
 
 - Astro 静态站点与 TypeScript 维护工具
