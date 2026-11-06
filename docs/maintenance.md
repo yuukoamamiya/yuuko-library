@@ -18,7 +18,7 @@ npm run verify
 
 ## 维护代码边界
 
-`src/lib/book.ts` 定义书目核心类型与校验；`tools/catalog.ts` 提供保留原始可选百度记录的书目读取、单本 CAS 写入和摘要。站点用 `src/lib/books.ts` 加载渲染副本，无效百度字段会降级隐藏；maintenance health 读取原始书目并诊断为 `unconfirmed`，不能用渲染副本代替。计划的冻结、摘要与 stale 校验复用 `tools/book/plan.ts` API；命令入口只解析参数和调用服务。health、cleanup-preview、verify 分别是可注入请求/runner 的只读服务；R2 与 Pages transport 负责各自远端操作。Pages 的 Cloudflare 账号从 `site.config.json` 的 R2 endpoint 主机名确定，操作目标须与项目配置一致。
+`src/lib/book.ts` 定义纯书目类型与核心校验；`src/lib/catalog.server.ts` 是站点与工具共用的原始书目读取层，`tools/catalog.ts` 提供 CAS 写入和统一摘要。站点的 `src/lib/books.ts` 只为渲染克隆并降级隐藏无效百度记录；maintenance health 读原始记录并报告 `unconfirmed`。计划由 `tools/book/plan.ts` 与 `workflow.ts` 共享；CLI 解析参数后调用 book、R2、Pages 或 maintenance 服务。R2 workflow 接收 root；Pages 目标按 `site.config.json` 中显式的 `cloudflareAccountId`、项目和区域配置确定，不从 R2 endpoint 推导账号。
 
 ## 新增或更新图书
 
