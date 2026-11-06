@@ -1,9 +1,11 @@
 import { readFile, readdir, lstat } from 'node:fs/promises';
 import path from 'node:path';
-import { sha256 } from './epub.ts';
+import { createHash } from 'node:crypto';
 import type { Book } from '../../src/lib/books.ts';
 import { validateBookCore } from '../../src/lib/book.ts';
 import { CliError } from './errors.ts';
+
+const sha256 = (value: Buffer | string) => createHash('sha256').update(value).digest('hex');
 
 export const SOURCE_PATHS = ['src', 'public', 'catalog', 'tools', 'astro.config.mjs', 'site.config.json', 'package.json', 'package-lock.json', 'tsconfig.json'];
 const PLAN_ID = /^p-[a-f0-9-]{36}$/u;

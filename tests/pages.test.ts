@@ -99,7 +99,7 @@ test('增量发布：65 本新增至 66 本、更新仍为 65 本；验证拒绝
       const reviewHash = digest(JSON.stringify({ baseFingerprint, inventory, books: [change], changes }));
       await writeFile(path.join(planRoot, 'plan.json'), JSON.stringify({ schemaVersion: 1, id: planId, status: 'prepared', createdAt: new Date().toISOString(), baseFingerprint, reviewHash, inventory, books: [change], changes }));
       const reportPath = path.join(root, 'report.json');
-      await writeFile(reportPath, JSON.stringify({ ...report, planId, reviewHash, verified: [{ ...report.verified[0], id: change.id }] }));
+      await writeFile(reportPath, JSON.stringify({ schemaVersion: 1, command: 'upload', planId, reviewHash, bucket: 'test-books', origin: 'https://books.example', startedAt: '2026-11-06T00:00:00.000Z', finishedAt: '2026-11-06T00:01:00.000Z', ...report, verified: [{ ...report.verified[0], id: change.id }] }));
       const release = await makeRelease(root, planId, reportPath, build);
       assert.equal(release.catalog.length, update ? 65 : 66);
       assert.equal(release.books.length, 1);

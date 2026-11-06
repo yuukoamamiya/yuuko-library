@@ -6,7 +6,7 @@ import type { Book } from '../../src/lib/books.ts';
 import { digest, canonical, catalogDigest, readCatalog, readCatalogBook, writeCatalogBook } from '../catalog.ts';
 export { digest, canonical, sortedCatalog, catalogDigest, readCatalog } from '../catalog.ts';
 import { requireCurrentPlan } from '../book/plan.ts';
-import type { UploadReport } from '../r2/report.ts';
+import { readUploadReport } from '../r2/report.ts';
 
 export interface UploadRecord { id: string; sha256: string; bytes: number; key: string; url: string }
 export interface Release {
@@ -106,8 +106,11 @@ export async function makeRelease(root: string, planId: string, reportPath: stri
   if (!/^[a-z0-9][a-z0-9-]{0,57}[a-z0-9]$/u.test(config.pagesProject ?? '') || !config.productionBranch) throw new Error('请配置 Pages 项目名和生产分支');
   const timestamp = new Date().toISOString();
   const baseline = await readCatalog(root);
-  const report = JSON.parse(await readFile(reportPath, 'utf8')) as UploadReport;
-  if (report.planId !== plan.id || report.reviewHash !== plan.reviewHash) throw new Error('上传报告与审核计划不匹配，请重新校验');
+  const report = await readUploadReport(reportPath, {
+    planId: plan.id,
+    reviewHash: plan.reviewHash,
+    bookIds: plan.books.map(book => book.id),
+  });
   const books = verifiedBooks(plan.books, report, timestamp, baseline);
   const id = `r-${randomUUID()}`; const dir = releaseDir(root, id); const site = path.join(dir, 'site');
   const frozenCode = await buildInputDigest(path.join(planRoot, 'site'));

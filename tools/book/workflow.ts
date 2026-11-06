@@ -8,6 +8,7 @@ import type { Book } from '../../src/lib/books.ts';
 import { validateCategories, categoryLabel } from '../../src/lib/categories.ts';
 import { type Input, type Plan, SOURCE_PATHS, planDir, inventory, exists, sourceFingerprint, inspectPlan } from './plan.ts';
 import { CliError } from './errors.ts';
+import { readCatalogBook } from '../catalog.ts';
 const jsonRead = async (file: string) => JSON.parse(await readFile(file, 'utf8'));
 async function jsonWrite(file: string, data: unknown) { await mkdir(path.dirname(file), { recursive: true }); await writeFile(file, JSON.stringify(data, null, 2) + '\n', 'utf8'); }
 function checkInput(input: Input) {
@@ -55,11 +56,12 @@ export async function prepareBooks(root:string,inputs:Input[],onProgress:(messag
   const baseFingerprint = await sourceFingerprint(root);
   const config = await jsonRead(path.join(root, 'site.config.json'));
   const changes: Plan['changes'] = []; const books: Book[] = [];
+  const previousBooks = new Map<string, Book>();
   for (const input of inputs) {
-    const bookFile = path.join(root, 'catalog/books', `${input.id}.json`);
-    const present = await exists(bookFile);
-    if (present !== Boolean(input.update)) throw new CliError(present
+    const existing = await readCatalogBook(root, input.id);
+    if (Boolean(existing) !== Boolean(input.update)) throw new CliError(existing
       ? `${input.id} 已存在；更新需要 --update` : `${input.id} 不存在，不能更新`, 3);
+    if (existing) previousBooks.set(input.id, existing.book);
   }
   await mkdir(path.join(dir, 'inputs'), { recursive: true });
   try {
@@ -79,7 +81,7 @@ export async function prepareBooks(root:string,inputs:Input[],onProgress:(messag
         await mkdir(path.dirname(destination), { recursive: true });
         await writeFile(destination, metadata.cover.bytes);
       }
-      const previous: Book | null = input.update ? await jsonRead(path.join(root, 'catalog/books', `${input.id}.json`)) : null;
+      const previous = previousBooks.get(input.id) ?? null;
       const r2Key = `books/${input.id}/${metadata.sha256}.epub`;
       const book: Book = { schemaVersion: 1, id: input.id,
         title: metadata.title, authors: metadata.authors, description: metadata.description, subjects: metadata.subjects,

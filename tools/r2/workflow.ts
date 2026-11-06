@@ -76,7 +76,7 @@ export async function executeR2(root: string, command: string, planId?: string, 
     try { lock = await open(lockPath, 'wx'); } catch { throw new TransferError('此桶已有上传或验证进程；先检查锁文件和正在运行的进程'); }
     const reportPath = path.join(reportDir, `${planId}${bookId ? `-${pilot.id}` : ''}-${command}.json`);
     const report: UploadReport = {
-      schemaVersion: 1, command, planId, reviewHash: plan.reviewHash, bucket: settings.bucket, origin,
+      schemaVersion: 1, command: command as UploadReport['command'], planId, reviewHash: plan.reviewHash, bucket: settings.bucket, origin,
       startedAt: new Date().toISOString(), finishedAt: null, status: 'running', expected: books.length, verified: [], failures: [] };
     let queue = Promise.resolve();
     function checkpoint() {
