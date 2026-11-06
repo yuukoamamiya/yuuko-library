@@ -9,3 +9,12 @@ test('comment issue identity is derived only from the stable book ID', () => {
   assert.match(url.searchParams.get('q') ?? '', new RegExp(`repo:${COMMENTS_REPOSITORY.replace('/', '\\/')}`));
   assert.match(url.searchParams.get('q') ?? '', /book:stable-book-42/);
 });
+
+test('SSR embed and GitHub search link share the configured repository', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const component = await readFile(new URL('../src/components/BookComments.astro', import.meta.url), 'utf8');
+  assert.match(component, /data-comments-repository=\{COMMENTS_REPOSITORY\}/u);
+  assert.match(component, /setAttribute\('repo', root\.dataset\.commentsRepository/u);
+  const url = new URL(commentIssueSearchUrl(commentIssueTerm('same-book')));
+  assert.ok(url.searchParams.get('q')?.includes(`repo:${COMMENTS_REPOSITORY}`));
+});

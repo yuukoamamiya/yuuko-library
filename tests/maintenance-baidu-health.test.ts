@@ -116,3 +116,41 @@ test('health recognizes boolean data attributes and checks Baidu despite invalid
     assert.equal(result.baidu?.passed, 1);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
+
+test('health diagnoses malformed source Baidu data while still checking a valid R2 download', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'health-bad-baidu-'));
+  try {
+    await writeFile(path.join(root, 'site.config.json'), JSON.stringify({ title: '图书馆', siteUrl: 'https://site.example', downloadsUrl: 'https://download.example' }));
+    await mkdir(path.join(root, 'public'));
+    const b = book('bad-record');
+    b.title = '书目标题'; b.file = { sha256: 'a'.repeat(64), bytes: 100, filename: 'bad-record.epub' };
+    b.authors = []; b.description = ''; b.subjects = []; b.categories = []; b.cover = null;
+    b.downloads.r2Url = 'https://download.example/books/bad-record/' + 'a'.repeat(64) + '.epub';
+    b.downloads.r2Key = 'books/bad-record/' + 'a'.repeat(64) + '.epub';
+    b.downloads.baidu = '';
+    const calls: string[] = [];
+    const request = async (url: URL, init: RequestInit = {}) => {
+      calls.push(`${init.method ?? 'GET'} ${url.href}`);
+      if (url.pathname === '/') return response('<h1>图书馆</h1>');
+      if (url.pathname === '/release.json') return response('{}');
+      if (url.pathname === '/search-index.json') return response('[]');
+      if (url.pathname === '/books/bad-record/') return response(`<h1>书目标题</h1><a class="download-button" href="${b.downloads.r2Url}">下载</a>`);
+      if (url.origin === 'https://download.example') return response('', 200, { 'content-type': 'application/epub+zip', 'content-length': '100', 'content-disposition': "attachment; filename*=UTF-8''bad-record.epub" });
+      return response('', 404);
+    };
+    const result = await runHealth(root, [b], undefined, false, 1000, request as any, [b], { baidu: true });
+    assert.equal(result.baidu?.unconfirmed, 1);
+    assert.ok(calls.some(call => call.includes('download.example/books/bad-record/')));
+    assert.ok(!result.failures.some(f => f.check === 'download'));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('falsy malformed Baidu payloads are unconfirmed, not unconfigured', async () => {
+  for (const payload of ['', false, 0]) {
+    let requests = 0;
+    const malformed = book('bad-payload'); malformed.downloads.baidu = payload;
+    const result = await checkBaiduShare(malformed, async () => { requests++; return response(''); });
+    assert.equal(result.status, 'unconfirmed');
+    assert.equal(requests, 0);
+  }
+});

@@ -16,6 +16,10 @@ npm run verify
 
 电子书 EPUB 由维护者手动保存在 Calibre；本仓库不集成 Calibre，不管理原书备份。不要将 EPUB、`.env.local`、Wrangler 凭据或 `.local/` 维护数据提交到 Git。
 
+## 维护代码边界
+
+`src/lib/book.ts` 定义书目核心类型与校验；`tools/catalog.ts` 提供保留原始可选百度记录的书目读取、单本 CAS 写入和摘要。站点用 `src/lib/books.ts` 加载渲染副本，无效百度字段会降级隐藏；maintenance health 读取原始书目并诊断为 `unconfirmed`，不能用渲染副本代替。计划的冻结、摘要与 stale 校验复用 `tools/book/plan.ts` API；命令入口只解析参数和调用服务。health、cleanup-preview、verify 分别是可注入请求/runner 的只读服务；R2 与 Pages transport 负责各自远端操作。Pages 的 Cloudflare 账号从 `site.config.json` 的 R2 endpoint 主机名确定，操作目标须与项目配置一致。
+
 ## 新增或更新图书
 
 每本图书使用稳定 ID。AI 译本需填维护者提供的模型名；中文出版物转录用 `transcription`，不填模型。新增图书须选择 1–2 个 `src/lib/categories.ts` 中定义的分类。原始 EPUB subjects 会作为标签保留。

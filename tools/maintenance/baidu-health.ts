@@ -1,4 +1,4 @@
-import type { Book } from '../../src/lib/books.ts';
+import type { Book } from '../../src/lib/book.ts';
 
 export type BaiduHealthResult = { status: 'passed' | 'unavailable' | 'unconfirmed' | 'not-configured'; reason?: string };
 type AnonymousRequest = (url: URL, init: RequestInit) => Promise<Response>;
@@ -12,7 +12,8 @@ const htmlText = (html: string) => html.replace(/<script\b[^>]*>[\s\S]*?<\/scrip
 /** Anonymous, read-only check. The cookie jar exists only for this one book. */
 export async function checkBaiduShare(book: Book, request: AnonymousRequest = fetch as AnonymousRequest, timeout = 20000): Promise<BaiduHealthResult> {
   const b = book as any, share = b?.downloads?.baidu;
-  if (!share) return { status: 'not-configured' };
+  if (share === null || share === undefined) return { status: 'not-configured' };
+  if (typeof share !== 'object' || Array.isArray(share)) return { status: 'unconfirmed', reason: '百度分享记录格式无效' };
   if (share.fileSha256 !== b.file?.sha256) return { status: 'unconfirmed', reason: '分享记录与当前文件 SHA-256 不匹配' };
   let shareUrl: URL;
   try {

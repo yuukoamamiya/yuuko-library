@@ -1,11 +1,11 @@
 ---
-import { commentIssueSearchUrl, commentIssueTerm } from '../lib/comments';
+import { COMMENTS_REPOSITORY, commentIssueSearchUrl, commentIssueTerm } from '../lib/comments';
 interface Props { bookId: string; preview?: boolean }
 const { bookId, preview = false } = Astro.props;
 const issueTerm = commentIssueTerm(bookId);
 const issueSearchUrl = commentIssueSearchUrl(issueTerm);
 ---
-<section class="book-comments" aria-labelledby="comments-heading" data-comments data-preview={preview ? 'true' : 'false'} data-issue-term={issueTerm} data-issue-search={issueSearchUrl}>
+<section class="book-comments" aria-labelledby="comments-heading" data-comments data-preview={preview ? 'true' : 'false'} data-issue-term={issueTerm} data-issue-search={issueSearchUrl} data-comments-repository={COMMENTS_REPOSITORY}>
   <h2 id="comments-heading">读者评论</h2>
   {preview ? <p>本地预览不加载评论。</p> : <>
     <p class="comments-login">评论需要使用 GitHub 登录。</p>
@@ -72,7 +72,7 @@ const issueSearchUrl = commentIssueSearchUrl(issueTerm);
       script.src = 'https://utteranc.es/client.js';
       script.async = true;
       script.crossOrigin = 'anonymous';
-      script.setAttribute('repo', 'yuukoamamiya/yuuko-library-comments');
+      script.setAttribute('repo', root.dataset.commentsRepository ?? '');
       script.setAttribute('issue-term', term);
       script.setAttribute('theme', 'github-light');
       script.addEventListener('error', () => finish('评论脚本加载失败，请重试或在 GitHub 查看。', true), { once: true });

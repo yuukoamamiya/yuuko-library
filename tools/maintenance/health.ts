@@ -2,15 +2,12 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { convert } from 'html-to-text';
-import type { Book } from '../../src/lib/books.ts';
+import type { Book } from '../../src/lib/book.ts';
+import { canonical, catalogDigest, digest } from '../catalog.ts';
 import { checkBaiduShare } from './baidu-health.ts';
 
 type Failure = { check: string; target: string; reason: string };
 type CheckResult = { status: 'passed' | 'failed'; checks: number; failures: Failure[]; warnings: string[]; baidu?: { checked: number; passed: number; unavailable: number; unconfirmed: number; notConfigured: number }; provenance?: unknown };
-const digest = (bytes: Buffer | string) => createHash('sha256').update(bytes).digest('hex');
-const canonical = (value: unknown): string => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
-  ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
-const catalogDigest = (books: Book[]) => digest(canonical([...books].sort((a, b) => a.id.localeCompare(b.id, 'en'))));
 const safeReason = (e: unknown) => e instanceof Error && e.name === 'TimeoutError' ? '请求超时' : '请求失败或响应格式无效';
 const parseAttrs = (html: string) => [...html.matchAll(/([\w:-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/gu)]
   .map(m => [m[1].toLowerCase(), m[2] ?? m[3] ?? m[4] ?? ''] as const);

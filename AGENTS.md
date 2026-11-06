@@ -11,6 +11,7 @@
 - AI 译本用 `edition.kind=ai-translation` 和维护者提供的模型名；中文出版物转录用 `transcription`，模型为 null。不得补写或擅自改正来源信息。
 - 一书只记录一个当前 EPUB。不得让旧 R2/百度下载地址指向新文件。
 - 电子书原件由维护者手动保存在 Calibre；本仓库不集成 Calibre。
+- 正式书目写入统一经 `tools/catalog.ts` 的 CAS writer；plan 校验与 inventory 复用 `tools/book/plan.ts` API，不在 CLI 或业务服务中另行实现。
 
 ## 操作边界
 

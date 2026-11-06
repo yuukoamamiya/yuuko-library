@@ -4,7 +4,8 @@ import path from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import BookComments from '../../components/BookComments.astro';
 import BaiduDownload from '../../components/BaiduDownload.astro';
-import { editionLabel, loadBooks, sizeLabel, subjectsOf, type Book } from '../../lib/books';
+import { editionLabel, loadBooks, sizeLabel, subjectsOf } from '../../lib/books';
+import type { Book } from '../../lib/book';
 import { SITE_TITLE } from '../../lib/site';
 import { categoryLabel } from '../../lib/categories';
 export async function getStaticPaths() {

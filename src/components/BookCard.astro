@@ -1,5 +1,6 @@
 ---
-import { editionLabel, type Book } from '../lib/books';
+import { editionLabel } from '../lib/books';
+import type { Book } from '../lib/book';
 import { categoryLabel } from '../lib/categories';
 const { book, index = 0 } = Astro.props as { book: Book; index?: number };
 ---
