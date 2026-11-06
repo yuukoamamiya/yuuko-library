@@ -14,12 +14,16 @@ npm run dev
 默认地址为 http://127.0.0.1:4321/。正式书目和封面已保存在仓库中，本地浏览不需要 EPUB 原文件或云凭据。
 
 ```bash
+npm run verify
+npm run verify -- --docs
 npm run check
 npm test
 npm run build
 ```
 
 check 包含 Astro 与 TypeScript 检查；test 运行现有解析、检索、快照和上传／发布测试；build 将正式书目构建到 dist/。
+
+常规本地验收可运行 `npm run verify`，依次执行 check、test、build、`git diff --check`，任一步失败立即停止。纯文档修改使用 `npm run verify -- --docs`，仅检查 Markdown 本地链接与 diff 空白，不调用测试、构建或云服务。
 
 ## 配置与凭据
 

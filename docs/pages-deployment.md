@@ -54,7 +54,7 @@ HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_EN
 HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 npm run pages -- verify --release RELEASE --url https://library.amamiyayuuko.com
 ```
 
-verify 检查线上发布标识、首页、完整索引和所有详情链接，成功后把正式书目和封面同步回工作区。若用户同时要求 push，且待推送提交包含前端变化，需先准备固定站点快照，再由主代理推送；push 成功后部署该 RELEASE 并 verify。纯文档提交不触发站点部署。完整维护与授权规则见 [AGENTS.md](../AGENTS.md#codex-维护流程)。
+verify 检查线上发布标识、源码溯源、首页、完整索引和所有详情链接，成功后把正式书目和封面同步回工作区。若用户同时要求 push，且待推送提交包含前端变化，需先准备固定站点快照，再由主代理推送；push 成功后部署该 RELEASE 并 verify。纯文档提交不触发站点部署。完整维护与授权规则见 [AGENTS.md](../AGENTS.md#codex-维护流程)。
 
 deploy 出错或超时时先检查 project-status 与线上 release.json；不要把结果未知当作未部署。若线上已经成功而本地同步失败，可以保留快照并重跑 verify。
 
@@ -66,7 +66,7 @@ deploy 出错或超时时先检查 project-status 与线上 release.json；不�
 npm run pages -- prepare --site-only
 ```
 
-该命令冻结源码、封面与完整正式书目；复制前后校验一致性，保留每本书的 publishedAt / updatedAt。返回的 RELEASE 使用同样的 deploy / verify 流程。它不会验证 EPUB 的公开文件内容；需要复核文件时仍使用 r2 verify。书籍文件或书目内容更新继续使用 book prepare 和上传报告流程。
+该命令冻结源码、封面与完整正式书目；复制前后校验一致性，保留每本书的 publishedAt / updatedAt。发布快照同时记录仓库提交、工作区脏状态、输入来源和固定站点输入 SHA-256；源码、封面、书目或站点配置与依赖清单在冻结/构建期间变化时拒绝快照。计划发布以仓库提交作为基线、以计划覆盖后的冻结输入摘要作为实际内容摘要。返回的 RELEASE 使用同样的 deploy / verify 流程。旧快照缺少溯源字段时必须重新 prepare；新标记需再次部署后才会出现在正式网站。它不会验证 EPUB 的公开文件内容；需要复核文件时仍使用 r2 verify。书籍文件或书目内容更新继续使用 book prepare 和上传报告流程。
 
 ## 用户要求 push 时的前端发布联动
 
@@ -97,7 +97,9 @@ status 只读查询匹配发布编号与生产分支的远端记录，不上传�
 
 异常退出可能留下锁。先核对锁中 PID 的进程与任务确已终止，再人工移除指定锁；不自动按时间清锁。保留 active.json、deployment.json 和发布快照用于恢复。远端始终无法定位或确认失败的提交保持阻塞，需核对 Pages 控制台，不把“未查到”当作失败。永久失败且需重新制作快照时，核对失败记录后人工解除对应 active 状态，再准备新发布。
 
-线上验证核对 schemaVersion=2 发布标记、全站书目数量与摘要、完整索引 ID 集合与字节摘要、所有书籍详情和下载链接。全站 books 与 changedBooks 分开记录。旧 schemaVersion=1 快照需重新准备，不能交给新版部署流程绕过校验。
+线上验证核对 schemaVersion=2 发布标记、提交号与源码摘要、全站书目数量与摘要、完整索引 ID 集合与字节摘要、所有书籍详情和下载链接。全站 books 与 changedBooks 分开记录。旧 schemaVersion=1 快照或缺少源码溯源字段的本地快照需重新准备，不能交给新版部署流程绕过校验。线上独立体检可兼容旧 schema2 marker，并单独报告它缺少溯源字段。
+
+无需本机 .local 快照、EPUB 或云凭据的只读检查：`npm run maintenance -- health` 检查正式书目对应网页、索引、详情、封面及下载响应头；它默认对 EPUB 使用 HEAD，不等于文件内容已完整验证。`npm run maintenance -- health --full-download` 流式下载并比较字节数与 SHA-256。可用 `--book ID` 做样本检查，样本结果不代表全站通过。`npm run maintenance -- cleanup-preview` 只列本地文件的保护状态与候选，不删除文件；任何实际清理均须列出目标并另行明确授权。
 
 ## 域名
 

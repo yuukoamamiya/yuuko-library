@@ -1,5 +1,5 @@
 import { type Book } from '../../src/lib/books.ts';
-import { assertIndex, digest, type Release } from './release.ts';
+import { assertIndex, canonical, digest, type Release } from './release.ts';
 
 export function siteUrl(value: string): URL {
   const url = new URL(value);
@@ -16,7 +16,8 @@ export async function verifyRelease(release: Release, url: URL, request: typeof 
   }
   const marker = await (await get('/release.json')).json();
   if (marker.schemaVersion !== 2 || marker.releaseId !== release.id || marker.books !== release.catalog.length
-    || marker.changedBooks !== release.books.length || marker.catalogDigest !== release.catalogDigest) throw new Error('线上发布标识不匹配');
+    || marker.changedBooks !== release.books.length || marker.catalogDigest !== release.catalogDigest
+    || canonical(marker.provenance) !== canonical(release.provenance)) throw new Error('线上发布标识或源码溯源不匹配');
   const html = await (await get('/')).text();
   if (!html.includes('雨宫优子图书馆') || html.includes('本地预览 · 尚未发布')) throw new Error('线上首页校验失败');
   const bytes = Buffer.from(await (await get('/search-index.json')).arrayBuffer());

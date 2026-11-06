@@ -55,6 +55,22 @@ deploy 的成功状态为 submitted；仍需 verify 确认 published。若输出
 
 pages 工具按项目加锁，并通过发布编号、分支和提交说明查重。已成功提交的快照只提示 verify；进行中或结果未知时停止。远端确认失败后，可使用 deploy --release RELEASE --retry 显式重试。status 不上传、不部署、不同步书目。恢复步骤见 [部署指南](pages-deployment.md#中断与恢复)。尚未提供跨 book / r2 / pages 的统一自动发布命令。计划编号使用 p-UUID，发布编号使用 r-UUID，均为本机资料，不能在其他环境凭编号自动恢复。
 
+## 本地统一验收与独立线上体检
+
+```bash
+npm run verify
+npm run verify -- --docs
+npm run maintenance -- health
+npm run maintenance -- health --book BOOK_ID --full-download
+npm run maintenance -- cleanup-preview
+```
+
+`verify` 顺序运行 check、test、build，再检查已暂存和未暂存 diff 空白；首个命令失败、被信号终止或无法启动时立即返回失败步骤。`--docs` 只扫描 Markdown 本地链接及 diff 空白，不运行测试、构建或云服务。
+
+`health` 仅从正式书目与 site.config.json 读取期望值，以只读 HTTP 检查首页、全量索引、详情页、封面和公开下载；不需要 .local、EPUB 原件或云凭据，也不修改书目。`--book` 限定样本，结果明确标记为 sample。默认 HEAD 只核对下载状态和响应头，不能证明文件内容正确；`--full-download` 流式 GET 并校验完整字节数及 SHA-256。进度写 stderr，结果 JSON 写 stdout，任一失败返回非零。
+
+`cleanup-preview` 仅生成本地清单，报告路径、类型、大小、时间、保护理由、候选和未知项；命令没有 apply/delete。30 天内快照、prepared / active / submitting / submitted / uncertain 状态、沿 release/plan/report 的依赖关系和最近两份成功发布会保留；线上状态、符号链接边界或报告格式未知时保守保护。候选仍需人工逐项确认并另行明确授权。此命令不清理旧 EPUB 或 R2 对象。
+
 ## Cloudflare 域名工具
 
 入口为：

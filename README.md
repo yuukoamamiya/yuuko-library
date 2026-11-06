@@ -46,10 +46,17 @@ npm run dev
 打开终端提示的本地地址，默认是 `http://127.0.0.1:4321/`。仓库已包含正式书目和封面，查看网站不需要本地 EPUB 或云服务凭据。
 
 ```bash
+npm run verify
+npm run verify -- --docs
+npm run maintenance -- health
+npm run maintenance -- health --book BOOK_ID --full-download
+npm run maintenance -- cleanup-preview
 npm run check
 npm test
 npm run build
 ```
+
+`verify` 顺序运行检查、测试、构建和 Git 空白检查；`--docs` 只检查文档本地链接与空白。`health` 可在仅克隆仓库的机器上只读检查线上站点，默认以 HEAD 检查下载响应头；`--full-download` 才会核对完整文件哈希。`cleanup-preview` 仅列出本地快照和报告状态，不执行删除。详见 [维护命令说明](docs/publishing-cli.md)。
 
 新增或替换电子书时才需要本地 EPUB，具体步骤见 [本地维护指南](docs/local-development.md)。
 

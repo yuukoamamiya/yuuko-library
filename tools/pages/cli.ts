@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { readFile, unlink } from 'node:fs/promises';
 import path from 'node:path';
-import { assertCatalogSyncable, makeRelease, makeSiteRelease, readRelease, releaseDir, syncCatalog } from './release.ts';
+import { assertCatalogSyncable, assertDeployable, makeRelease, makeSiteRelease, readRelease, releaseDir, syncCatalog } from './release.ts';
 import { siteUrl, verifyRelease } from './verify.ts';
 import { deploymentDecision, matchingDeployments, projectStateDir, readOptional, remoteDeployments, withProjectLock, writeState } from './deployment.ts';
 
@@ -51,6 +51,7 @@ async function main() {
       next: remote.some(item => item.status === 'success') ? '运行 verify 核对线上并恢复本地同步' : '核对远端状态；未确定结果时禁止重试' }, null, 2));
     return;
   }
+  if (command === 'deploy') assertDeployable(release);
   await withProjectLock(root, release.project, async () => {
     if (command === 'deploy') {
       await assertCatalogSyncable(root, release);

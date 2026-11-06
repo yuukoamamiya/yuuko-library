@@ -13,6 +13,7 @@
 | EPUB | Cloudflare R2，通过独立域名下载 |
 | 部署 | Pages Direct Upload；本地构建后由 Wrangler CLI 上传 |
 | 维护 | TypeScript 编写的 book、r2、pages 三组工具 |
+| 验收与只读状态 | verify 统一本地检查；maintenance health / cleanup-preview 用于独立只读诊断 |
 
 站点没有业务数据库或阅读器。翻译、转录和元数据刮削在本项目之外完成。GitHub 保存可重建网页的源码和正式书目，推送不会自动部署。
 
@@ -42,6 +43,7 @@ tests/                     解析、搜索、快照和发布逻辑测试
 .local/plans/              本地审核快照，p-UUID
 .local/uploads/            上传日志、校验报告和本地锁
 .local/releases/           发布快照与部署记录，r-UUID
+.local/pages/              项目锁、active 发布指针与远端状态缓存
 .env.local                 本地凭据；不进入 Git 或产物
 ```
 
@@ -90,6 +92,8 @@ EPUB 对象键为 books/ID/SHA256.epub。内容变化产生新地址，避免同
 - 百度备用下载未实现，评论区未接入。
 - R2 有本地桶级锁和逐本检查点；Pages 有项目锁、远端查重、status 与 verify 恢复入口，但跨三组工具的统一自动发布入口尚未提供。
 - release.json schemaVersion=2：books 统计全站，changedBooks 统计本批；完整书目摘要、全站索引摘要及全部详情页参与验证。
+- 新发布快照附 Git 提交、脏状态、冻结站点输入 SHA-256 与来源字段。部署要求 clean Git 提交；旧线上 schema2 marker 可由独立体检读取，但会标注缺少溯源信息，旧本地快照必须重新 prepare。源码修改后尚未部署时，线上 marker 不包含新字段。
+- maintenance health 从正式 Git 书目检查线上页面与资源，无需原始 EPUB 或云凭据；HEAD 响应用于轻量检查，完整 GET 才校验 EPUB 内容 SHA-256。cleanup-preview 只报告本地对象状态，不执行删除；R2/旧 EPUB 清理仍需单独流程。
 - 有内容变化的本批书籍才更新 updatedAt；prepare --site-only 保留书籍时间，部署快照时间记录在 createdAt。
 - 审核和发布快照只存于本机 .local/；其他电脑无法仅靠 Git 恢复旧计划，需要保留迁移资料或重新准备。
 

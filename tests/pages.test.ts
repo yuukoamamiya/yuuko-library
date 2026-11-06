@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, rm, readFile, cp } from 'node:fs/promises';
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { verifiedBooks, readRelease, inventory, digest, makeRelease, makeSiteRelease, catalogDigest, assertIndex, syncCatalog } from '../tools/pages/release.ts';
+import { verifiedBooks, readRelease, inventory, digest, makeRelease, makeSiteRelease, catalogDigest, assertIndex, syncCatalog, sourceDigest, assertDeployable } from '../tools/pages/release.ts';
 import { verifyRelease } from '../tools/pages/verify.ts';
 import type { Book } from '../src/lib/books.ts';
 
@@ -25,11 +25,21 @@ test('发布产物被改动或含 EPUB、凭据文件时拒绝部署', async () 
     const dist = path.join(dir, 'site/dist'); await mkdir(dist, { recursive: true });
     await writeFile(path.join(dist, 'index.html'), 'original');
     await mkdir(path.join(dir, 'site/catalog/books'), { recursive: true });
+    await mkdir(path.join(dir, 'site/src'), { recursive: true }); await writeFile(path.join(dir, 'site/src/app.ts'), 'source');
     await writeFile(path.join(dist, 'search-index.json'), '[]');
     const complete = await inventory(dist);
-    await writeFile(path.join(dir, 'release.json'), JSON.stringify({ schemaVersion: 2, id, files: complete, digest: digest(JSON.stringify(complete)), books: [], catalog: [], catalogDigest: catalogDigest([]), indexDigest: complete['search-index.json'] }));
-    await readRelease(root, id);
+    await mkdir(path.join(dir, 'site/public'), { recursive: true });
+    const provenance = { commit: 'a'.repeat(40), dirty: true, sourceDigest: await sourceDigest(path.join(dir, 'site')), source: 'repository' };
+    await writeFile(path.join(dir, 'site/public/release.json'), JSON.stringify({ schemaVersion: 2, releaseId: id, provenance, books: 0, changedBooks: 0, catalogDigest: catalogDigest([]) }));
+    await writeFile(path.join(dir, 'release.json'), JSON.stringify({ schemaVersion: 2, id, provenance, files: complete, digest: digest(JSON.stringify(complete)), books: [], catalog: [], catalogDigest: catalogDigest([]), indexDigest: complete['search-index.json'] }));
+    const savedRelease = await readRelease(root, id);
+    assert.throws(() => assertDeployable(savedRelease), /clean 工作区/u);
+    await writeFile(path.join(dir, 'site/public/release.json'), JSON.stringify({ schemaVersion: 2, releaseId: id, provenance: { ...provenance, sourceDigest: 'b'.repeat(64) }, books: 0, changedBooks: 0, catalogDigest: catalogDigest([]) }));
+    await assert.rejects(readRelease(root, id), /溯源不一致/u);
+    await writeFile(path.join(dir, 'site/public/release.json'), JSON.stringify({ schemaVersion: 2, releaseId: id, provenance, books: 0, changedBooks: 0, catalogDigest: catalogDigest([]) }));
     await writeFile(path.join(dist, 'index.html'), 'changed'); await assert.rejects(readRelease(root, id), /修改/u);
+    await writeFile(path.join(dist, 'index.html'), 'original');
+    await writeFile(path.join(dir, 'site/src/app.ts'), 'tampered'); await assert.rejects(readRelease(root, id), /源码已修改/u);
     await writeFile(path.join(dist, 'file.epub'), 'not public'); await assert.rejects(inventory(dist), /EPUB/u);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
@@ -62,16 +72,23 @@ test('增量发布：65 本新增至 66 本、更新仍为 65 本；验证拒绝
   };
   try {
     await mkdir(path.join(root, 'catalog/books'), { recursive: true });
+    const repoRoot = process.cwd();
+    await cp(path.join(repoRoot, 'src'), path.join(root, 'src'), { recursive: true });
+    await cp(path.join(repoRoot, 'public'), path.join(root, 'public'), { recursive: true });
+    for (const name of ['astro.config.mjs', 'site.config.json', 'package.json', 'package-lock.json', 'tsconfig.json']) await cp(path.join(repoRoot, name), path.join(root, name));
     for (const record of catalog) await writeFile(path.join(root, 'catalog/books', `${record.id}.json`), JSON.stringify(record));
     for (const update of [false, true]) {
       const planId = update ? 'p-12345678-1234-1234-1234-123456789012' : 'p-22345678-1234-1234-1234-123456789012';
       const planRoot = path.join(root, '.local/plans', planId); const site = path.join(planRoot, 'site');
       await mkdir(path.join(site, 'public'), { recursive: true });
+      await cp(path.join(root, 'src'), path.join(site, 'src'), { recursive: true });
+      await cp(path.join(root, 'public'), path.join(site, 'public'), { recursive: true });
+      for (const name of ['astro.config.mjs', 'site.config.json', 'package.json', 'package-lock.json', 'tsconfig.json']) await cp(path.join(root, name), path.join(site, name));
       await cp(path.join(root, 'catalog'), path.join(site, 'catalog'), { recursive: true });
       const change = update ? { ...catalog[0], title: '更新标题' } : book;
       await writeFile(path.join(site, 'catalog/books', `${change.id}.json`), JSON.stringify(change));
       await writeFile(path.join(site, 'catalog/preview.json'), '{}');
-      await writeFile(path.join(site, 'site.config.json'), JSON.stringify({ pagesProject: 'test-library', productionBranch: 'main' }));
+      await cp(path.join(root, 'site.config.json'), path.join(site, 'site.config.json'));
       await writeFile(path.join(planRoot, 'plan.json'), JSON.stringify({ id: planId, books: [change] }));
       const reportPath = path.join(root, 'report.json');
       await writeFile(reportPath, JSON.stringify({ ...report, verified: [{ ...report.verified[0], id: change.id }] }));

@@ -13,7 +13,9 @@
     "check": "astro check && tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "r2": "tsx tools/r2/cli.ts",
-    "pages": "tsx tools/pages/cli.ts"
+    "pages": "tsx tools/pages/cli.ts",
+    "maintenance": "tsx tools/maintenance/cli.ts",
+    "verify": "tsx tools/maintenance/cli.ts verify"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1163.0",
