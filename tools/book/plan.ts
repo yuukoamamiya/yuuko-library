@@ -68,3 +68,57 @@ export async function inspectPlan(root: string, plan: Plan) {
   if (hash !== plan.reviewHash) errors.push('计划清单的审核摘要不匹配'); return errors;
 }
 export async function requireCurrentPlan(root: string, id: string) { const plan = await readPlan(root, id); const errors = await inspectPlan(root, plan); if (errors.length) throw new PlanError(errors.join('；')); return plan; }
+
+export type PlanStatus =
+  | { kind: 'current'; plan: Plan; blockers: string[] }
+  | { kind: 'legacy-stale'; id: string; bookCount: number; changes: Plan['changes']; reason: string };
+
+async function legacyCategoriesStaleStatus(root: string, id: string): Promise<PlanStatus | null> {
+  const raw: unknown = JSON.parse(await readFile(path.join(planDir(root, id), 'plan.json'), 'utf8'));
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const value = raw as Partial<Plan>;
+  if (value.id !== id || value.schemaVersion !== 1 || value.status !== 'prepared'
+    || !Array.isArray(value.books) || value.books.length < 1 || value.books.length > 200
+    || !Array.isArray(value.changes) || !value.inventory || typeof value.inventory !== 'object'
+    || !/^[a-f0-9]{64}$/u.test(value.baseFingerprint ?? '') || !/^[a-f0-9]{64}$/u.test(value.reviewHash ?? '')) return null;
+
+  const ids = new Set<string>();
+  for (const book of value.books) {
+    if (!book || typeof book !== 'object' || typeof book.id !== 'string'
+      || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(book.id) || ids.has(book.id)) return null;
+    ids.add(book.id);
+    if (Object.hasOwn(book, 'categories')) return null;
+    try { validateBookCore({ ...book, categories: ['history'] }); }
+    catch { return null; }
+  }
+
+  const changedIds = new Set<string>();
+  if (value.changes.length !== ids.size || value.changes.some(change => {
+    if (!change || !ids.has(change.id) || changedIds.has(change.id) || !['add', 'update'].includes(change.operation)
+      || !Array.isArray(change.warnings) || !change.warnings.every(warning => typeof warning === 'string')) return true;
+    changedIds.add(change.id);
+    return false;
+  })) return null;
+  if (Object.entries(value.inventory).some(([name, hash]) => typeof name !== 'string' || typeof hash !== 'string' || !/^[a-f0-9]{64}$/u.test(hash))) return null;
+
+  return {
+    kind: 'legacy-stale',
+    id,
+    bookCount: value.books.length,
+    changes: value.changes,
+    reason: '旧审核计划缺少当前必需的 categories 字段，请重新 prepare',
+  };
+}
+
+export async function readPlanStatus(root: string, id: string): Promise<PlanStatus> {
+  try {
+    const plan = await readPlan(root, id);
+    return { kind: 'current', plan, blockers: await inspectPlan(root, plan) };
+  } catch (error) {
+    try {
+      const legacy = await legacyCategoriesStaleStatus(root, id);
+      if (legacy) return legacy;
+    } catch { /* Keep the original plan error when the legacy envelope is not readable. */ }
+    throw error;
+  }
+}

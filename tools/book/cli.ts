@@ -2,7 +2,7 @@ import { parseArgs } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type Input, type Plan, planDir, readPlan, inspectPlan } from './plan.ts';
+import { type Input, type Plan, planDir, readPlan, readPlanStatus } from './plan.ts';
 import { prepareBooks, validatePlan, servePreview } from './workflow.ts';
 import { CliError } from './errors.ts';
 
@@ -29,7 +29,9 @@ async function main() {
   const command = positionals[0];
   if (values.help || !command) { console.log(HELP); return; }
   if (positionals.length !== 1) throw new CliError('只允许一个子命令');
-  let data: unknown; let plan: Plan; let status = 'ok';
+  let data: unknown; let plan: Plan | undefined; let status = 'ok';
+  let outputPlanId: string | null = null;
+  let outputWarnings: string[] = [];
   if (command === 'prepare') {
     if (values.plan || values.port) throw new CliError('prepare 不接受 plan 或 port 参数');
     if (values.manifest && [values.id, values.epub, values.model, values.kind, values.update, values.category].some(value => value !== undefined)) {
@@ -42,6 +44,7 @@ async function main() {
     }];
     if (!Array.isArray(inputs)) throw new CliError('manifest 必须为 JSON 数组');
     plan = await prepareBooks(ROOT,inputs); status = 'prepared';
+    outputPlanId = plan.id;
     data = { planId: plan.id, count: plan.books.length, reviewHash: plan.reviewHash,
       report: path.join(planDir(ROOT,plan.id), 'report.md'), changes: plan.changes };
   } else if (['preview', 'validate', 'status'].includes(command)) {
@@ -49,19 +52,39 @@ async function main() {
     if ([values.id, values.epub, values.model, values.kind, values.update, values.manifest, values.category].some(value => value !== undefined)) {
       throw new CliError('本命令不接受修改书籍的参数');
     }
-    plan = await readPlan(ROOT,values.plan);
-    if (command === 'preview') {
-      const port = Number(values.port ?? 4321);
-      if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new CliError('port 必须在 1024–65535 之间');
-      data = { url: await servePreview(ROOT,plan,port), books: plan.books.length, planId: plan.id }; status = 'previewing';
-    } else if (command === 'validate') { data = await validatePlan(ROOT,plan); status = 'valid'; }
-    else { const blockers = await inspectPlan(ROOT,plan); status = blockers.length ? 'stale' : 'prepared';
-      data = { planId: plan.id, books: plan.books.length, blockers, changes: plan.changes, remoteWrites: false };
-      if (blockers.length) process.exitCode = 3;
+    if (command === 'status') {
+      const result = await readPlanStatus(ROOT, values.plan);
+      if (result.kind === 'legacy-stale') {
+        outputPlanId = result.id;
+        outputWarnings = result.changes.flatMap(change => change.warnings.map(warning => `${change.id}: ${warning}`));
+        status = 'stale';
+        data = { planId: result.id, books: result.bookCount, blockers: [result.reason], changes: result.changes, remoteWrites: false };
+        process.exitCode = 3;
+      } else {
+        plan = result.plan;
+        outputPlanId = plan.id;
+        outputWarnings = plan.changes.flatMap(change => change.warnings.map(warning => `${change.id}: ${warning}`));
+        status = result.blockers.length ? 'stale' : 'prepared';
+        data = { planId: plan.id, books: plan.books.length, blockers: result.blockers, changes: plan.changes, remoteWrites: false };
+        if (result.blockers.length) process.exitCode = 3;
+      }
+    } else {
+      plan = await readPlan(ROOT, values.plan);
+      outputPlanId = plan.id;
+      outputWarnings = plan.changes.flatMap(change => change.warnings.map(warning => `${change.id}: ${warning}`));
+      if (command === 'preview') {
+        const port = Number(values.port ?? 4321);
+        if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new CliError('port 必须在 1024–65535 之间');
+        data = { url: await servePreview(ROOT, plan, port), books: plan.books.length, planId: plan.id };
+        status = 'previewing';
+      } else {
+        data = await validatePlan(ROOT, plan);
+        status = 'valid';
+      }
     }
   } else throw new CliError(`尚未实现的命令：${command}。运行 --help 查看可用命令`);
-  if (values.json) console.log(JSON.stringify({ schemaVersion: 1, command, planId: plan!.id, status, data,
-    warnings: plan!.changes.flatMap(change => change.warnings.map(warning => `${change.id}: ${warning}`)), error: null }));
+  if (values.json) console.log(JSON.stringify({ schemaVersion: 1, command, planId: outputPlanId ?? plan!.id, status, data,
+    warnings: outputWarnings, error: null }));
   else console.log(JSON.stringify({ status, ...data as object }, null, 2));
 }
 main().catch(error => {

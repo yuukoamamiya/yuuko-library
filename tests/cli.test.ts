@@ -68,3 +68,48 @@ test('book prepare no longer accepts the unused baidu plan flag', () => {
   const result = run(['prepare', '--id', 'unused-flag-check', '--epub', 'book.epub', '--model', '模型', '--baidu', 'optional']);
   assert.notEqual(result.status, 0);
 });
+
+test('旧 schema1 分类快照仅可只读报告为 stale，不能被其他服务接受', async () => {
+  const { randomUUID } = await import('node:crypto');
+  const planId = `p-${randomUUID()}`;
+  const dir = path.join(ROOT, '.local', 'plans', planId);
+  const book = {
+    schemaVersion: 1, id: 'legacy-category-check', title: '旧分类快照', authors: ['作者'], description: '', subjects: [],
+    cover: null, edition: { kind: 'transcription', model: null },
+    file: { sha256: 'a'.repeat(64), bytes: 17, filename: 'legacy.epub' },
+    downloads: { r2Key: `books/legacy-category-check/${'a'.repeat(64)}.epub`, r2Url: null,
+      baidu: { url: 'https://pan.baidu.com/s/abcdefg', code: '1234', fileSha256: 'a'.repeat(64), fsId: '123',
+        shareId: 'share-1', path: '/legacy.epub', expiresAt: null, verifiedAt: '2026-01-01T00:00:00Z' } },
+    publishedAt: null, updatedAt: null,
+  };
+  const plan = {
+    schemaVersion: 1, id: planId, status: 'prepared', createdAt: '2026-01-01T00:00:00Z',
+    baseFingerprint: 'b'.repeat(64), reviewHash: 'c'.repeat(64), inventory: { 'site/catalog/books/legacy-category-check.json': 'd'.repeat(64) },
+    books: [book], changes: [{ id: book.id, operation: 'add', warnings: ['旧提示'] }],
+  };
+  await mkdir(dir, { recursive: true });
+  try {
+    await writeFile(path.join(dir, 'plan.json'), JSON.stringify(plan));
+    const status = run(['status', '--plan', planId]);
+    assert.equal(status.status, 3, status.stderr + status.stdout);
+    const result = JSON.parse(status.stdout);
+    assert.equal(result.status, 'stale');
+    assert.equal(result.planId, planId);
+    assert.equal(result.data.books, 1);
+    assert.match(result.data.blockers[0], /categories.*重新 prepare/u);
+    assert.deepEqual(result.warnings, ['legacy-category-check: 旧提示']);
+    assert.equal(result.error, null);
+
+    const { readPlan, requireCurrentPlan } = await import('../tools/book/plan.ts');
+    await assert.rejects(readPlan(ROOT, planId), /核心字段/u);
+    await assert.rejects(requireCurrentPlan(ROOT, planId), /核心字段/u);
+
+    await writeFile(path.join(dir, 'plan.json'), JSON.stringify({ ...plan, books: [{ ...book, id: '../invalid-id' }],
+      changes: [{ id: '../invalid-id', operation: 'add', warnings: [] }] }));
+    const invalid = run(['status', '--plan', planId]);
+    assert.equal(invalid.status, 3);
+    assert.equal(JSON.parse(invalid.stdout).status, 'failed');
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
