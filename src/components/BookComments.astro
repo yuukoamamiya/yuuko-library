@@ -1,0 +1,95 @@
+---
+import { commentIssueSearchUrl, commentIssueTerm } from '../lib/comments';
+interface Props { bookId: string; preview?: boolean }
+const { bookId, preview = false } = Astro.props;
+const issueTerm = commentIssueTerm(bookId);
+const issueSearchUrl = commentIssueSearchUrl(issueTerm);
+---
+<section class="book-comments" aria-labelledby="comments-heading" data-comments data-preview={preview ? 'true' : 'false'} data-issue-term={issueTerm} data-issue-search={issueSearchUrl}>
+  <h2 id="comments-heading">读者评论</h2>
+  {preview ? <p>本地预览不加载评论。</p> : <>
+    <p class="comments-login">评论需要使用 GitHub 登录。</p>
+    <button class="comments-load" type="button" data-load>加载评论</button>
+    <p class="comments-status" data-status role="status" aria-live="polite">点击后加载 GitHub 评论。</p>
+    <a class="comments-search" href={issueSearchUrl} target="_blank" rel="noopener noreferrer">在 GitHub 查看或搜索此书的评论</a>
+    <noscript><p>启用 JavaScript 后可加载嵌入评论；也可 <a href={issueSearchUrl} target="_blank" rel="noopener noreferrer">在 GitHub 查看或搜索此书的评论</a>。</p></noscript>
+  </>}
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-comments][data-preview="false"]').forEach((root) => {
+    const button = root.querySelector<HTMLButtonElement>('[data-load]');
+    const status = root.querySelector<HTMLElement>('[data-status]');
+    if (!button || !status) return;
+    const term = root.dataset.issueTerm ?? '';
+    let attempt = 0;
+
+    button.addEventListener('click', () => {
+      if (button.disabled) return;
+      attempt += 1;
+      const currentAttempt = attempt;
+      button.disabled = true;
+      button.textContent = '正在加载…';
+      status.textContent = '正在连接评论服务…';
+
+      const container = document.createElement('div');
+      container.className = 'comments-embed';
+      root.append(container);
+      let settled = false;
+      let observer: MutationObserver | undefined;
+      let timeout: number;
+      const finish = (message: string, failed: boolean) => {
+        if (settled || currentAttempt !== attempt) return;
+        settled = true;
+        window.clearTimeout(timeout);
+        observer?.disconnect();
+        if (failed) {
+          container.remove();
+          status.textContent = message;
+          button.disabled = false;
+          button.textContent = '重试加载评论';
+        } else {
+          status.textContent = message;
+          button.remove();
+        }
+      };
+      const watchFrame = (node: ParentNode) => {
+        const frame = node.querySelector<HTMLIFrameElement>('iframe');
+        if (!frame || frame.dataset.commentsWatched) return;
+        frame.dataset.commentsWatched = 'true';
+        frame.addEventListener('load', () => finish('评论已加载。', false), { once: true });
+        frame.addEventListener('error', () => finish('评论加载失败，请重试或在 GitHub 查看。', true), { once: true });
+      };
+      observer = new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach((node) => {
+        if (node instanceof HTMLElement) {
+          if (node.matches('iframe')) watchFrame(container);
+          watchFrame(node);
+        }
+      })));
+      observer.observe(container, { childList: true, subtree: true });
+      timeout = window.setTimeout(() => finish('评论服务响应超时，请重试或在 GitHub 查看。', true), 20000);
+
+      const script = document.createElement('script');
+      script.src = 'https://utteranc.es/client.js';
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      script.setAttribute('repo', 'yuukoamamiya/yuuko-library-comments');
+      script.setAttribute('issue-term', term);
+      script.setAttribute('theme', 'github-light');
+      script.addEventListener('error', () => finish('评论脚本加载失败，请重试或在 GitHub 查看。', true), { once: true });
+      container.append(script);
+    });
+  });
+</script>
+<style>
+  .book-comments{border-top:1px solid var(--line);margin-top:36px;padding-top:24px;min-width:0;overflow-wrap:anywhere}
+  .book-comments h2{font-size:16px;font-weight:600;margin:0 0 12px}
+  .book-comments p,.comments-search{font-size:13px;line-height:1.8;color:var(--muted)}
+  .comments-load{border:1px solid #cbd2c4;background:#e9ece3;color:var(--green);padding:10px 16px;font:inherit;font-size:13px;cursor:pointer}
+  .comments-load:focus-visible{outline:3px solid #849876;outline-offset:3px}
+  .comments-load:disabled{cursor:wait}
+  .comments-status{min-height:1.8em}
+  .comments-search{display:inline-block;margin:8px 0}
+  .comments-embed{min-width:0;max-width:100%;overflow:hidden}
+  .comments-embed iframe{width:100%;max-width:100%;border:0}
+  @media(max-width:680px){.book-comments{margin-top:28px;padding-top:20px}.comments-embed{margin-left:-2px;margin-right:-2px}}
+</style>

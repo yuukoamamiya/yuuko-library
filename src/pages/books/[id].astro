@@ -2,6 +2,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import Layout from '../../layouts/Layout.astro';
+import BookComments from '../../components/BookComments.astro';
 import { editionLabel, loadBooks, sizeLabel, subjectsOf, type Book } from '../../lib/books';
 import { SITE_TITLE } from '../../lib/site';
 import { categoryLabel } from '../../lib/categories';
@@ -38,6 +39,7 @@ const available = !preview && book.downloads.r2Url?.startsWith('https://');
           </dl>
           <p class="edition-disclaimer">{book.edition.kind === 'ai-translation' ? '本书由 AI 翻译，可能存在术语、理解或表达上的偏差。阅读与引用时，请酌情参照原文。' : '本书为中文出版物的 EPUB 转录，未使用 AI 翻译。'}</p>
         </section>
+        <BookComments bookId={book.id} preview={preview} />
       </article>
     </div>
   </main>

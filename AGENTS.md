@@ -19,7 +19,7 @@
 - Pages 项目：`yuuko-library`，Direct Upload，生产分支参数 `main`。Git push 不触发网站部署。
 - 正式书目位于 `catalog/books/`，封面位于 `public/covers/`。数量以目录和实际线上结果为准。
 - 原始主题标签保存在 `subjects`，独立分类保存在 `categories`；每本 1–2 类，六个分类 ID 统一定义于 `src/lib/categories.ts`。首次迁移对照见 `docs/category-migration.md`。
-- 百度网盘未接入；评论区仅讨论。不得把 `--baidu optional` 当作已实现自动分享。
+- 百度网盘未接入；评论区已在本地接入 utterances，尚未部署。不得把 `--baidu optional` 当作已实现自动分享。
 
 ## 工具与环境
 
@@ -119,10 +119,10 @@ npm run pages -- --help
 - [ ] 用单本验证上传、创建分享、返回链接与提取码、有效期、登录续期和费用条件；只有上传而无法自动创建分享的工具不满足维护要求。
 - [ ] 方案通过并获准接入后，再实现备用下载与失败降级；R2 主下载可以独立运行。
 
-### 仅讨论：图书评论区
+### 图书评论区
 
-- [ ] 评估是否为每本书使用 GitHub Issues 评论区，可参考 Gitalk、utterances 等方案；当前未决定实施，不创建应用、Issue 或接入前端。
-- [ ] 若决定实施，先确定 Issue 所在仓库、稳定 book ID 与 Issue 的映射、GitHub 登录要求、权限、凭据处理和内容管理方式，再安排开发。
+- [x] 本地接入 utterances：每本书使用独立评论线程，Issue 标题映射固定为 `book:<stable ID>`；详情页按需加载，预览不接入真实评论。部署前需创建公开仓库 `yuukoamamiya/yuuko-library-comments` 并安装 utterances App；配置、权限、登录和管理说明见 [docs/comments.md](docs/comments.md)。
+- [ ] 发布评论区配置并线上验证。当前组件只在本地代码中，尚未部署；GitHub App/仓库配置由主代理另行处理。
 
 ## 完成记录
 

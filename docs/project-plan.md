@@ -89,7 +89,7 @@ EPUB 对象键为 books/ID/SHA256.epub。内容变化产生新地址，避免同
 
 ## 已知边界
 
-- 百度备用下载未实现，评论区未接入。
+- 百度备用下载未实现。utterances 评论组件已在本地实现、尚未部署；启用前需要公开 Issues 仓库及 utterances App，详见 [评论区配置与管理](comments.md)。
 - R2 有本地桶级锁和逐本检查点；Pages 有项目锁、远端查重、status 与 verify 恢复入口，但跨三组工具的统一自动发布入口尚未提供。
 - release.json schemaVersion=2：books 统计全站，changedBooks 统计本批；完整书目摘要、全站索引摘要及全部详情页参与验证。
 - 新发布快照附 Git 提交、脏状态、冻结站点输入 SHA-256 与来源字段。部署要求 clean Git 提交；旧线上 schema2 marker 可由独立体检读取，但会标注缺少溯源信息，旧本地快照必须重新 prepare。源码修改后尚未部署时，线上 marker 不包含新字段。
