@@ -21,4 +21,17 @@ export function validateBaiduDownload(value: unknown, expectedSha256: string): a
     || typeof record.shareId !== 'string' || !numericIdPattern.test(record.shareId)) throw new Error('百度分享标识无效');
   if (record.expiresAt !== null) throw new Error('百度分享必须为永久分享');
   if (typeof record.verifiedAt !== 'string' || !isoDatePattern.test(record.verifiedAt) || !Number.isFinite(Date.parse(record.verifiedAt))) throw new Error('百度验证时间无效');
+  if (record.archive !== undefined) {
+    const archive = record.archive;
+    if (!archive || typeof archive !== 'object') throw new Error('RAR 压缩包记录无效');
+    if (typeof archive.filename !== 'string' || archive.filename.trim() !== archive.filename
+      || /[\\/:*?"<>|\u0000-\u001f]/u.test(archive.filename) || /[. ]$/u.test(archive.filename)
+      || archive.filename === '.' || archive.filename === '..' || !/\.rar$/iu.test(archive.filename)) {
+      throw new Error('RAR 文件名必须是安全的单级 .rar 文件名');
+    }
+    if (typeof archive.sha256 !== 'string' || !sha256Pattern.test(archive.sha256)) throw new Error('RAR 文件 SHA-256 无效');
+    if (!Number.isSafeInteger(archive.bytes) || archive.bytes <= 0) throw new Error('RAR 文件大小无效');
+    if (typeof archive.password !== 'string' || archive.password.trim().length === 0
+      || archive.password.length > 256 || /[\u0000-\u001f\u007f]/u.test(archive.password)) throw new Error('RAR 解压密码无效');
+  }
 }

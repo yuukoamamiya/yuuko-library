@@ -28,6 +28,7 @@ export interface BaiduDownload {
   path: string;
   expiresAt: null;
   verifiedAt: string;
+  archive?: { filename: string; sha256: string; bytes: number; password: string };
 }
 
 export const editionLabel = (book: Book) => book.edition.kind === 'transcription'

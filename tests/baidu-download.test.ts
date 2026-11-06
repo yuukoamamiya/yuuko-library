@@ -30,3 +30,23 @@ test('rejects invalid extraction codes and expiring shares', () => {
   assert.throws(() => validateBaiduDownload({ ...record, code: '１２３４' }, hash), /提取码/u);
   assert.throws(() => validateBaiduDownload({ ...record, expiresAt: '2026-11-13T12:00:00Z' }, hash), /永久/u);
 });
+
+const archive = { filename: '普兰查斯著作01.rar', sha256: 'c'.repeat(64), bytes: 12345, password: '114514' };
+
+test('accepts a hidden-file-name RAR record with its own entity hash', () => {
+  assert.doesNotThrow(() => validateBaiduDownload({ ...record, archive }, hash));
+});
+
+test('rejects unsafe or incomplete RAR metadata', () => {
+  const invalid = [
+    { ...archive, filename: '../普兰查斯著作01.rar' },
+    { ...archive, filename: 'folder\\archive.rar' },
+    { ...archive, filename: 'archive.zip' },
+    { ...archive, sha256: 'bad-hash' },
+    { ...archive, bytes: 0 },
+    { ...archive, bytes: Number.MAX_SAFE_INTEGER + 1 },
+    { ...archive, password: '  ' },
+    { ...archive, password: 'x'.repeat(257) },
+  ];
+  for (const badArchive of invalid) assert.throws(() => validateBaiduDownload({ ...record, archive: badArchive }, hash));
+});
