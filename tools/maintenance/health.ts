@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { convert } from 'html-to-text';
 import type { Book } from '../../src/lib/books.ts';
+import { checkBaiduShare } from './baidu-health.ts';
 
 type Failure = { check: string; target: string; reason: string };
 type CheckResult = { status: 'passed' | 'failed'; checks: number; failures: Failure[]; warnings: string[]; provenance?: unknown };
@@ -30,7 +31,7 @@ function checkBookShape(book: any): string | null {
 }
 
 export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl?: string, full = false, timeout = 20000,
-  request: typeof fetch = fetch, allBooks: Book[] = selectedBooks): Promise<CheckResult> {
+  request: typeof fetch = fetch, allBooks: Book[] = selectedBooks, options: { baidu?: boolean } = {}): Promise<CheckResult> {
   const failures: Failure[] = [], warnings: string[] = []; let checks = 0; let provenance: unknown;
   const fail = (check: string, target: string, reason: string) => failures.push({ check, target, reason });
   const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8')) as { siteUrl: string; downloadsUrl: string; title: string };
@@ -90,6 +91,12 @@ export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl
         const anchors = [...html.matchAll(/<a\b([^>]*)>/giu)].map(m => Object.fromEntries(parseAttrs(m[1])));
         const expectedUrl = book.downloads.r2Url;
         if (!anchors.some(a => a.href === expectedUrl && /(?:^|\s)download-button(?:\s|$)/u.test(a.class ?? ''))) fail('detail-download', id, '缺少匹配 URL 的 download-button 链接');
+        if (options.baidu && book.downloads.baidu) {
+          const bd = book.downloads.baidu as any;
+          const inputs = [...html.matchAll(/<input\b([^>]*)>/giu)].map(m => Object.fromEntries(parseAttrs(m[1])));
+          if (!anchors.some(a => a.href === bd.url) || !inputs.some(a => a.value === bd.code && 'data-baidu-code' in a)) fail('detail-baidu', id, '详情页缺少匹配的百度链接或提取码');
+          if (bd.archive && (!html.includes(bd.archive.filename) || !inputs.some(a => a.value === bd.archive.password && 'data-baidu-password' in a))) fail('detail-baidu-archive', id, '详情页缺少匹配的 RAR 文件名或解压密码引用');
+        }
         if (book.cover && !html.includes(book.cover)) fail('detail-cover-reference', id, '详情页封面引用不匹配');
       } catch (e) { fail('detail', id, e instanceof Error ? e.message : '详情页响应无效'); }
       if (book.cover) {
@@ -126,6 +133,13 @@ export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl
           if (hash.digest('hex') !== book.file.sha256) fail('download-sha256', id, '完整下载 SHA-256 不匹配');
         }
       } catch (e) { fail('download', id, e instanceof Error ? e.message : '下载响应无效'); }
+      if (options.baidu) {
+        checks++;
+        const result = await checkBaiduShare(book, request as any, timeout);
+        if (result.status === 'unavailable') fail('baidu-unavailable', id, result.reason ?? '百度分享不可用');
+        else if (result.status === 'unconfirmed') { fail('baidu-unconfirmed', id, result.reason ?? '百度分享状态未能确认'); warnings.push(`${id}: 百度公开访问未能确认`); }
+        else if (result.status === 'not-configured') warnings.push(`${id}: 百度分享未配置`);
+      }
     }
   }));
   return { status: failures.length ? 'failed' : 'passed', checks, failures, warnings, ...(provenance === undefined ? {} : { provenance }) };
