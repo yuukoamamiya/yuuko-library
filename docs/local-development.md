@@ -121,33 +121,11 @@ verify 只读复核，不执行上传。上传与校验报告保存在 .local/up
 R2 文件成功上传后，使用 [部署指南](pages-deployment.md) 中的独立 pages 命令发布网页。上传不会同步正式书目，也不会部署网站。百度备用分享使用独立 `npm run baidu` 流程，详情见[发布命令参考](publishing-cli.md#baidu-备用下载)；不会使用 WSL，也不影响 R2。异常书只有维护者指定 RAR 文件名后，才可用 `prepare-archive` 本地加密/核验，再用 `publish-archive --manifest FILE`：已有分享记录时复核并复用；没有既有记录时上传、回读并创建永久分享后导入书目。新版 EPUB/RAR 会进入独立版本历史；若分享结果未知，先使用对应 `recover` 命令核对，不得盲目重复创建分享或删除 journal。
 
 
-## 维护数据备份与清理
 
-先将本地维护数据备份到工作区之外的独立目录。备份会从正式书目匹配源 EPUB，并以 SHA-256 内容寻址存储，相同字节只保存一个对象：
+## 本地维护状态盘点
 
-```bash
-npm run maintenance -- backup --output 'D:/LibraryBackups/book-share'
-npm run maintenance -- backup-verify --backup 'D:/LibraryBackups/book-share'
-npm run maintenance -- restore --backup 'D:/LibraryBackups/book-share' --target 'D:/Restore/book-share'
-```
+电子书 EPUB 由维护者手动保存在 Calibre。仓库不集成 Calibre，也不提供电子书备份或同步命令。
 
-备份结果中的 `complete` 必须为 true 才能用于恢复或清理。备份清单记录缺失、未知或不支持文件；凭据、EPUB 以外的非允许类型和敏感文件不会被纳入。若正式书目所需 EPUB、百度 journal 或已发布 RAR 缺失，备份不完整。manifest sidecar 与每个对象均使用 SHA-256 校验，验证器也拒绝未登记文件、符号链接和路径冲突。默认恢复只做 dry-run；确认输出目标路径是新目录后才加 `--apply`。恢复保留文件路径并输出 RAR manifest 的 `.json.restored.json` 副本；原备份不会修改。备份保存维护数据，不包含 Git 源码、依赖目录或登录凭据。恢复目录不是可直接运行的完整仓库：先从 Git clone 目标版本并运行 `npm ci`，再核对备份来源版本与文件清单，将需要的维护数据导入该新 clone；凭据须从仓库外的凭据管理位置单独配置。
-
-生成清理计划前确保备份完整有效：
-
-```bash
-npm run maintenance -- cleanup-plan --backup 'D:/LibraryBackups/book-share' --output '.local/cleanup-plan.json'
-```
-
-计划仅含当前预览识别为候选的 `.local/plans`、`.local/releases`、`.local/uploads` 目录，并逐文件确认内容已在同工作区备份中。查看计划中的路径、字节数及原因；只有这些候选都明确可清理时，才把计划摘要作为精确确认值执行隔离：
-
-```bash
-npm run maintenance -- cleanup-apply --plan '.local/cleanup-plan.json' --confirm PLAN_DIGEST --quarantine 'D:/LibraryBackups/quarantine-2026-11-06'
-npm run maintenance -- cleanup-undo --quarantine 'D:/LibraryBackups/quarantine-2026-11-06'
-```
-
-`cleanup-apply` 会重新核对计划、备份、候选集合和当前内容，确认隔离目录位于工作区外，再将目录移入隔离区；它不会永久删除。2026-11-06 本机实际 preview 共 29 项（28 protected、1 unknown），候选字节数为 0；7 条 unknown 原因包括旧 plan/release 缺元数据及 markdown 摘要/remote inventory 状态未知，cleanup-plan 按工具规则预期因未知状态阻断，尚未实际执行该命令。没有执行 quarantine 或删除；需先人工整理未知快照并重跑预览。若要撤销，使用 `cleanup-undo`，且原路径必须空缺、隔离内容哈希必须吻合。隔离目录的最终删除属于独立文件清理，需先核对具体目标并取得本次明确授权。线上或本地状态未知、依赖关系不明及百度 journal、RAR manifest/对象均不作为清理候选。
+`cleanup-preview` 只读扫描本地 `.local` 快照，报告路径、保护原因、候选和未知状态；不会删除或移动文件。它保护近期快照、活跃/不确定状态、依赖闭包及最近两份成功发布。当前盘点发现未知旧快照证据，需先人工核对来源与依赖；在完成核对前，不据此采取清理操作。任何未来清理都须列明精确目标并取得本次明确授权。
 
 `health` 默认对全馆逐条调用百度匿名提取码 challenge endpoint，验证分享 URL 与提取码能通过挑战；这不是文件完整下载/SHA 检查。`--skip-baidu` 可只查站点/R2；默认下载检查为 HEAD，`--full-download` 才读取全文件并核对 SHA-256。使用 `--book ID` 仅检查样本，报告须标为 sample。
-
-主代理于 2026-11-06 完成本机备份演练：备份 `D:/Documents/book-share-backups/maintenance-20261106-2055` 为 `complete=true`、`missing=[]`，包含 5155 个逻辑文件（1,553,412,143 字节），CAS 去重后为 1178 个对象（137,887,900 字节）。`backup-verify` 与新目录 `restore-drill-20261106-2055` 恢复通过；主代理用独立 Python 对恢复的 5155 个文件逐一比较 SHA-256 和大小，全部匹配。恢复的 `archive-prepared.json.restored.json` 路径指向新目录内已发布 RAR；WinRAR 无密码列名为 11 项、正确密码测试/解包通过，内部 EPUB SHA 与源文件匹配。该演练不证明真实 quarantine/delete 已执行。

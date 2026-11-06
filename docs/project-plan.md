@@ -93,7 +93,7 @@ EPUB 对象键为 books/ID/SHA256.epub。内容变化产生新地址，避免同
 - R2 有本地桶级锁和逐本检查点；Pages 有项目锁、远端查重、status 与 verify 恢复入口，但跨四组工具的统一自动发布入口尚未提供。
 - release.json schemaVersion=2：books 统计全站，changedBooks 统计本批；完整书目摘要、全站索引摘要及全部详情页参与验证。
 - 新发布快照附 Git 提交、脏状态、冻结站点输入 SHA-256 与来源字段。当前生产快照来源为 clean commit `c9fdfcb`，sourceDigest 前缀 `08b59af`；部署要求 clean Git 提交。旧本地快照必须重新 prepare。
-- maintenance health 从正式 Git 书目检查线上页面与资源，无需原始 EPUB 或云凭据；HEAD 响应用于轻量检查，完整 GET 才校验 EPUB 内容 SHA-256。cleanup-preview 只报告本地对象状态，不执行删除；R2/旧 EPUB 清理仍需单独流程。
+- maintenance health 从正式 Git 书目检查线上页面与资源，无需原始 EPUB 或云凭据；HEAD 响应用于轻量检查，完整 GET 才校验 EPUB 内容 SHA-256。cleanup-preview 只报告本地对象状态，不执行删除；旧 EPUB 由维护者手动保存在 Calibre，远端 R2 与旧 EPUB 清理不在该命令范围，需另行核对并取得明确授权。
 - 有内容变化的本批书籍才更新 updatedAt；prepare --site-only 保留书籍时间，部署快照时间记录在 createdAt。
 - 审核和发布快照只存于本机 .local/；其他电脑无法仅靠 Git 恢复旧计划，需要保留迁移资料或重新准备。
 

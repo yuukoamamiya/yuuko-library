@@ -111,7 +111,7 @@ npm run pages -- --help
 - [x] **区分书籍更新与站点部署时间（本地实现）。** 内容变化才刷新 updatedAt；prepare --site-only 保留全部书籍时间，部署快照时间为 createdAt。
 - [x] **统一本地验收与发布溯源（本地实现）。** npm run verify 顺序运行检查、测试、构建及 Git 空白检查，支持文档模式；固定快照记录 Git 提交、dirty 状态、来源和冻结站点输入摘要，快照源或 build 期间变化时停止，部署要求 clean 提交。新来源标记需下一次 Pages 发布后才在线可见。
 - [x] **增加独立线上体检（本地实现）。** 可在任意克隆仓库机器只读检查正式书目对应的完整索引、详情、封面和下载；默认 HEAD 与完整 GET/SHA 校验区分，样本结果不冒称全站通过。
-- [x] **完善本地维护数据备份与清理工具（主代理本机验收）。** SHA-256 CAS 备份 `complete=true`、`missing=[]`；5155 个逻辑文件共 1,553,412,143 字节，去重为 1178 个 CAS 对象、137,887,900 字节。完整备份校验及新目录恢复演练通过；主代理独立逐文件核对 5155 个路径的 SHA-256 和大小全部一致，恢复的 RAR manifest 路径/密码/内部 EPUB SHA 也通过 WinRAR 验证。真实 cleanup preview 有 29 项：28 protected、1 unknown，候选字节为 0；7 条 unknown（旧 plan/release 元数据缺失及 markdown 摘要/remote inventory 未知）按工具规则 cleanup-plan 预期因 unknown 阻断，主代理正在做最终只读确认；未执行 quarantine 或删除；未知旧快照需人工梳理。隔离区永久删除仍需另行精确核对并取得本次授权；旧 EPUB 与远端 R2 对象仍不在此本地清理范围。
+- [ ] **人工核查本地旧快照与清理需求。** `npm run maintenance -- cleanup-preview` 仅只读盘点 `.local` 快照并报告保护项、候选和未知状态；当前旧快照有未知证据，待人工核对，暂不建议据此清理。若未来需要清理，须逐项列出精确目标并取得本次明确授权。旧 EPUB 由维护者手动保存在 Calibre；本仓库没有 Calibre 集成，也没有旧 EPUB 或远端 R2 对象的自动清理流程。
 
 ### 百度备用下载
 
