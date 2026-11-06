@@ -121,8 +121,8 @@ npm run pages -- --help
 
 ### 图书评论区
 
-- [x] 本地接入 utterances：每本书使用独立评论线程，Issue 标题映射固定为 `book:<stable ID>`；详情页按需加载，预览不接入真实评论。部署前需创建公开仓库 `yuukoamamiya/yuuko-library-comments` 并安装 utterances App；配置、权限、登录和管理说明见 [docs/comments.md](docs/comments.md)。
-- [ ] 发布评论区配置并线上验证。当前组件只在本地代码中，尚未部署；GitHub App/仓库配置由主代理另行处理。
+- [x] 本地接入 utterances：每本书使用独立评论线程，Issue 标题映射固定为 `book:<stable ID>`；详情页按需加载，预览不接入真实评论。公开仓库 `yuukoamamiya/yuuko-library-comments` 已创建；配置、权限、登录和管理说明见 [docs/comments.md](docs/comments.md)。
+- [ ] 完成 utterances App 安装、发布评论区配置并线上验证。App 已选择授权评论仓库，仍等待 GitHub Confirm access 二次确认；当前组件只在本地代码中，尚未部署。Issue 仅在首次发表评论时自动创建。
 
 ## 完成记录
 

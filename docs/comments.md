@@ -4,7 +4,7 @@
 
 ## 启用配置
 
-主仓库 `yuukoamamiya/yuuko-library` 与评论仓库分开。启用前需创建公开仓库 [`yuukoamamiya/yuuko-library-comments`](https://github.com/yuukoamamiya/yuuko-library-comments)，并在该仓库安装/授权 [utterances GitHub App](https://github.com/apps/utterances)。App 需要读取 Issues 并创建/更新 Issues 的权限；按 GitHub 安装流程授予评论仓库访问。utterances 会在首次访问每个书籍线程时创建 Issue，仓库应保持公开，使访客能查看讨论。
+主仓库 `yuukoamamiya/yuuko-library` 与评论仓库分开。公开仓库 [`yuukoamamiya/yuuko-library-comments`](https://github.com/yuukoamamiya/yuuko-library-comments) 已创建。utterances GitHub App 已选定该仓库授权，但 GitHub 的 Confirm access 二次确认仍待完成，因此 App 尚未安装完成。App 需要读取 Issues 并创建/更新 Issues 的权限。仓库保持公开，使访客能查看讨论。utterances 只在首次有读者发表评论时自动创建对应 Issue；加载或浏览嵌入评论本身不会创建 Issue。
 
 组件固定设置 `repo=yuukoamamiya/yuuko-library-comments`、`theme=github-light`，Issue 匹配模式为 `issue-term`。映射值为 `book:<稳定书籍 ID>`，不依赖书名、详情页 URL 或标题，因此改名不改变评论归属。不要手工更改已有书籍 ID。
 
@@ -14,4 +14,4 @@
 
 评论仓库 Issues 即评论内容。仓库管理员可按 GitHub Issues 的常规方式查看、锁定或删除不当内容；管理者可以在该仓库的 Issues 设置中决定是否允许创建 Issue。关闭 Issues 会使 utterances 无法创建新书目线程。评论仓库必须保留与站点配置一致的所有权和名称，否则组件需同步更新。
 
-本次本地代码变更尚未部署；评论仓库和 App 的创建、安装与授权由主代理处理。完成配置并部署后，需在线核验详情页按需加载、首次创建 Issue、已存在线程匹配、GitHub 登录评论流程和 320px 手机布局。
+本次本地代码变更尚未部署；评论仓库已创建，App 安装等待完成 GitHub Confirm access 二次确认。安装完成并部署后，需在线核验详情页按需加载、首次发表评论后自动创建 Issue、已存在线程匹配、GitHub 登录评论流程和 320px 手机布局。
