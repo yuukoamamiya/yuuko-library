@@ -187,13 +187,8 @@ export async function makeCleanupPreview(root: string, request: typeof fetch = f
     for (const id of plans.keys()) protectedPlans.add(id);
     for (const item of uploadReports.values()) if (item.planId) protectedPlans.add(item.planId);
   }
-  // A retained release retains its plan; a retained plan retains its reports. Iterate to closure.
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const [id, data] of releaseData) if (protectedReleases.has(id) && data.planId && !protectedPlans.has(data.planId)) { protectedPlans.add(data.planId); changed = true; }
-    for (const report of uploadReports.values()) if (report.planId && protectedPlans.has(report.planId) && report.status !== 'verified') { /* retained below as an object */ }
-  }
+  // A retained release retains its plan.
+  for (const [id, data] of releaseData) if (protectedReleases.has(id) && data.planId) protectedPlans.add(data.planId);
 
   const now = Date.now();
   async function byteSize(p: string): Promise<number> {

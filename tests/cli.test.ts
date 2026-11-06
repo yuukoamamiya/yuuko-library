@@ -60,3 +60,11 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
     if (updatePlanDir) await rm(updatePlanDir, { recursive: true, force: true });
   }
 });
+
+test('book prepare no longer accepts the unused baidu plan flag', () => {
+  const help = run(['--help']);
+  assert.equal(help.status, 0, help.stderr);
+  assert.doesNotMatch(help.stdout, /--baidu/u);
+  const result = run(['prepare', '--id', 'unused-flag-check', '--epub', 'book.epub', '--model', '模型', '--baidu', 'optional']);
+  assert.notEqual(result.status, 0);
+});

@@ -14,11 +14,11 @@ const SOURCE_PATHS = ['src', 'public', 'catalog', 'tools', 'astro.config.mjs', '
   'package.json', 'package-lock.json', 'tsconfig.json'];
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const PLAN_ID = /^p-[a-f0-9-]{36}$/u;
-type Input = { id: string; epub: string; model?: string; kind?: 'ai-translation' | 'transcription'; update?: boolean; baidu?: 'off' | 'optional'; categories?: string[] };
+type Input = { id: string; epub: string; model?: string; kind?: 'ai-translation' | 'transcription'; update?: boolean; categories?: string[] };
 type Plan = {
   schemaVersion: 1; id: string; status: 'prepared'; createdAt: string; baseFingerprint: string;
   reviewHash: string; inventory: Record<string, string>; books: Book[];
-  changes: { id: string; operation: 'add' | 'update'; baidu: 'off' | 'optional'; warnings: string[] }[];
+  changes: { id: string; operation: 'add' | 'update'; warnings: string[] }[];
 };
 class CliError extends Error {
   constructor(message: string, readonly exitCode = 2) { super(message); }
@@ -65,7 +65,6 @@ function checkInput(input: Input) {
   if (input.kind === 'transcription' ? input.model !== undefined : !input.model?.trim()) {
     throw new CliError('AI 译本必须填写 model；中文出版物转录不得填写 model');
   }
-  if (input.baidu && !['off', 'optional'].includes(input.baidu)) throw new CliError('baidu 只能为 off 或 optional');
   if (!input.update || input.categories !== undefined) {
     try { validateCategories(input.categories); } catch (error) { throw new CliError((error as Error).message); }
   }
@@ -125,7 +124,7 @@ async function prepare(inputs: Input[]): Promise<Plan> {
         publishedAt: previous?.publishedAt ?? null, updatedAt: previous?.updatedAt ?? null };
       const warnings = [...metadata.warnings];
       if (previous?.downloads.baidu && previous.file.sha256 !== metadata.sha256) warnings.push('新文件不沿用原百度分享链接');
-      changes.push({ id: book.id, operation: input.update ? 'update' : 'add', baidu: input.baidu ?? 'off', warnings });
+      changes.push({ id: book.id, operation: input.update ? 'update' : 'add', warnings });
       books.push(book);
       await jsonWrite(path.join(site, 'catalog/books', `${input.id}.json`), book);
       process.stderr.write(`已准备 ${books.length}/${inputs.length}：${book.title}\n`);
@@ -234,7 +233,7 @@ async function servePreview(plan: Plan, port: number) {
 }
 
 const HELP = `本地上架工具（尚未实现云发布）
-  prepare --id ID --epub FILE --model MODEL [--category ID] [--update] [--baidu off|optional]
+  prepare --id ID --epub FILE --model MODEL [--category ID] [--update]
   prepare --id ID --epub FILE --kind transcription [--category ID]
   prepare --manifest FILE  # JSON 数组；批量准备为一个审核计划
   preview --plan PLAN [--port 4321]
@@ -247,7 +246,7 @@ const HELP = `本地上架工具（尚未实现云发布）
 async function main() {
   const { values, positionals } = parseArgs({ allowPositionals: true, strict: true, options: {
     id: { type: 'string' }, epub: { type: 'string' }, model: { type: 'string' }, kind: { type: 'string' },
-    update: { type: 'boolean' }, baidu: { type: 'string' }, manifest: { type: 'string' }, plan: { type: 'string' },
+    update: { type: 'boolean' }, manifest: { type: 'string' }, plan: { type: 'string' },
     port: { type: 'string' }, json: { type: 'boolean' }, help: { type: 'boolean' },
     category: { type: 'string', multiple: true },
   } });
@@ -257,12 +256,12 @@ async function main() {
   let data: unknown; let plan: Plan; let status = 'ok';
   if (command === 'prepare') {
     if (values.plan || values.port) throw new CliError('prepare 不接受 plan 或 port 参数');
-    if (values.manifest && [values.id, values.epub, values.model, values.kind, values.update, values.baidu, values.category].some(value => value !== undefined)) {
+    if (values.manifest && [values.id, values.epub, values.model, values.kind, values.update, values.category].some(value => value !== undefined)) {
       throw new CliError('manifest 不能与单书参数混用');
     }
     const inputs: Input[] = values.manifest ? await jsonRead(path.resolve(values.manifest)) : [{
       id: values.id!, epub: values.epub!, model: values.model, kind: values.kind as Input['kind'],
-      update: values.update, baidu: values.baidu as Input['baidu'],
+      update: values.update,
       categories: values.category,
     }];
     if (!Array.isArray(inputs)) throw new CliError('manifest 必须为 JSON 数组');
@@ -271,7 +270,7 @@ async function main() {
       report: path.join(planDir(plan.id), 'report.md'), changes: plan.changes };
   } else if (['preview', 'validate', 'status'].includes(command)) {
     if (!values.plan) throw new CliError('需要 --plan');
-    if ([values.id, values.epub, values.model, values.kind, values.update, values.baidu, values.manifest, values.category].some(value => value !== undefined)) {
+    if ([values.id, values.epub, values.model, values.kind, values.update, values.manifest, values.category].some(value => value !== undefined)) {
       throw new CliError('本命令不接受修改书籍的参数');
     }
     plan = await loadPlan(values.plan);
