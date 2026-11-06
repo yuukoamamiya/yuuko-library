@@ -42,6 +42,21 @@ test('catalog book reads enforce filename ID and return exact source hash', asyn
   } finally { await t.cleanup(); }
 });
 
+test('render reader rejects filename identity mismatches and linked catalog directories', async () => {
+  const t = await setup(); const prior = process.env.BOOK_SITE_ROOT; process.env.BOOK_SITE_ROOT = t.root;
+  try {
+    await writeFile(path.join(t.root, 'catalog/books/named.json'), JSON.stringify(book('different')));
+    await assert.rejects(loadBooks(), /文件名与 ID 不一致/);
+    await rm(path.join(t.root, 'catalog/books'), { recursive: true });
+    const outside = path.join(t.root, 'outside'); await mkdir(outside);
+    await symlink(outside, path.join(t.root, 'catalog/books'), 'junction');
+    await assert.rejects(loadBooks(), /链接或非目录/);
+  } finally {
+    if (prior === undefined) delete process.env.BOOK_SITE_ROOT; else process.env.BOOK_SITE_ROOT = prior;
+    await t.cleanup();
+  }
+});
+
 test('catalog writes enforce expected hash, strict Baidu shape, and exclusive new-book creation', async () => {
   const t = await setup();
   try {
@@ -53,6 +68,21 @@ test('catalog writes enforce expected hash, strict Baidu shape, and exclusive ne
     const nextHash = await writeCatalogBook(t.root, { ...initial, title: '更新' }, firstHash);
     assert.notEqual(nextHash, firstHash);
     assert.equal((await readCatalogBook(t.root, 'sample'))?.book.title, '更新');
+  } finally { await t.cleanup(); }
+});
+
+test('canonical same-data write preserves raw bytes and hash after checking expectedHash', async () => {
+  const t = await setup();
+  try {
+    const target = path.join(t.root, 'catalog/books/sample.json');
+    const original = JSON.stringify(book(), null, 4);
+    await writeFile(target, original);
+    const initial = await readCatalogBook(t.root, 'sample'); assert.ok(initial);
+    const returned = await writeCatalogBook(t.root, initial.book, initial.hash);
+    assert.equal(returned, initial.hash);
+    assert.equal(await readFile(target, 'utf8'), original);
+    await assert.rejects(writeCatalogBook(t.root, initial.book, 'f'.repeat(64)), /CAS 冲突/);
+    assert.equal(await readFile(target, 'utf8'), original);
   } finally { await t.cleanup(); }
 });
 

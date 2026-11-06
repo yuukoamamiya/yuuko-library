@@ -5,7 +5,7 @@ import { spawn } from 'node:child_process';
 import { constants as fsConstants } from 'node:fs';
 import type { Book, BaiduDownload } from '../../src/lib/book.ts';
 import { validateBaiduDownload } from '../../src/lib/baidu.ts';
-import { readCatalogBook, writeCatalogBook } from '../catalog.ts';
+import { isCatalogCasConflict, readCatalogBook, writeCatalogBook } from '../catalog.ts';
 import { acquireJournalLocks, persistSchema1Migration, saveJournalJson } from './journal.ts';
 
 export type Runner = (args: string[]) => Promise<{ code: number; stdout: string; stderr: string }>;
@@ -297,7 +297,7 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       if (!['complete', 'shared'].includes(record.state) || !record.baidu) throw new BaiduError(`${book.id}: 状态 ${record.state} 需要人工恢复`);
       validateBaiduDownload(record.baidu, book.file.sha256);
       current.downloads.baidu = record.baidu;
-      record.catalogHash = await writeCatalogBook(root, current, beforeHash).catch(() => { throw new BaiduError(`${book.id}: catalog 在流程中变化，拒绝覆盖`); }); record.catalogGuard = { file: current.file, downloads: current.downloads };
+      record.catalogHash = await writeCatalogBook(root, current, beforeHash).catch(error => { if (isCatalogCasConflict(error)) throw new BaiduError(`${book.id}: catalog 在流程中变化，拒绝覆盖`, { cause: error }); throw error; }); record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);
       completed++;
     }
@@ -347,7 +347,7 @@ export async function recoverUnknownShare(root: string, book: Book, run: Runner,
     record.fsId = meta.fsId; record.shareId = shareId; record.baidu = baidu; record.state = 'shared'; journal.entries[key] = record; await saveJournal(journalFile, journal);
     if (activeVersion) {
       current.downloads.baidu = baidu;
-      record.catalogHash = await writeCatalogBook(root, current, catalogHashBefore).catch(() => { throw new BaiduError('恢复期间 catalog 发生竞态变化；已保存分享恢复 checkpoint，可安全续跑'); });
+      record.catalogHash = await writeCatalogBook(root, current, catalogHashBefore).catch(error => { if (isCatalogCasConflict(error)) throw new BaiduError('恢复期间 catalog 发生竞态变化；已保存分享恢复 checkpoint，可安全续跑', { cause: error }); throw error; });
       record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);
     }

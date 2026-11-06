@@ -4,7 +4,7 @@ import { access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { readCatalog } from '../catalog.ts';
 import { createRunner, getJournalEntry, loadJournal, locateInputs, recoverUnknownShare, runPublish, BaiduError } from './transfer.ts';
-import { createRarRunner, loadArchiveJournal, prepareArchive, publishArchive, recoverUnknownArchiveShare } from './archive.ts';
+import { createRarRunner, loadArchiveJournal, prepareArchive, publishArchive, recoverUnknownArchiveShare, type RarRunner } from './archive.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const help = `百度网盘维护工具（无 WSL）
@@ -18,6 +18,17 @@ const help = `百度网盘维护工具（无 WSL）
 
 publish --all 是显式批量云写；状态未知时停止，不盲目重复分享。RAR 命令完成不代替匿名链接可用性检查。
 提取码随分享记录写入本地 journal 与公开书目；账号登录凭据始终留在仓库外。`;
+function createBaiduRunner() {
+  const app = process.env.LOCALAPPDATA;
+  if (!app) throw new BaiduError('LOCALAPPDATA 未设置');
+  return createRunner(path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe'),
+    path.join(app, 'YuukoLibrary/credentials/baidupcs-config'));
+}
+async function createCheckedRarRunner(): Promise<RarRunner> {
+  const rarPath = path.join(process.env.ProgramFiles ?? 'C:/Program Files', 'WinRAR/Rar.exe');
+  try { await access(rarPath); } catch { throw new BaiduError(`未找到 WinRAR：${rarPath}`); }
+  return createRarRunner(rarPath);
+}
 async function main() {
   const { values, positionals } = parseArgs({ allowPositionals: true, strict: true, options: {
     help: { type: 'boolean' }, id: { type: 'string' }, all: { type: 'boolean' }, password: { type: 'string' },
@@ -31,20 +42,13 @@ async function main() {
     if (!values.id || values.all || !values.name || values.manifest || values.password) throw new Error('prepare-archive 需要 --id 和 --name，不能指定 --all 或分享密码');
     const books = await readCatalog(root); const book = books.find(item => item.id === values.id);
     if (!book) throw new Error(`找不到正式书目 ID：${values.id}`);
-    const rarPath = path.join(process.env.ProgramFiles ?? 'C:/Program Files', 'WinRAR/Rar.exe');
-    try { await access(rarPath); } catch { throw new BaiduError(`未找到 WinRAR：${rarPath}`); }
-    const result = await prepareArchive(root, book, values.name, values['archive-password'] ?? '114514', createRarRunner(rarPath));
+    const result = await prepareArchive(root, book, values.name, values['archive-password'] ?? '114514', await createCheckedRarRunner());
     console.log(JSON.stringify({ status: 'prepared', manifest: result.manifestPath,
       bookId: result.manifest.bookId, sourceSha256: result.manifest.sourceSha256, archive: result.manifest.archive })); return;
   }
   if (command === 'publish-archive') {
     if (!values.manifest || values.id || values.all || values.name || values.password || values['archive-password']) throw new Error('publish-archive 仅接受 --manifest FILE');
-    const app = process.env.LOCALAPPDATA; if (!app) throw new BaiduError('LOCALAPPDATA 未设置');
-    const rarPath = path.join(process.env.ProgramFiles ?? 'C:/Program Files', 'WinRAR/Rar.exe');
-    try { await access(rarPath); } catch { throw new BaiduError(`未找到 WinRAR：${rarPath}`); }
-    const configDir = path.join(app, 'YuukoLibrary/credentials/baidupcs-config');
-    const result = await publishArchive(root, await readCatalog(root), values.manifest, createRunner(
-      path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe'), configDir), createRarRunner(rarPath));
+    const result = await publishArchive(root, await readCatalog(root), values.manifest, createBaiduRunner(), await createCheckedRarRunner());
     console.log(JSON.stringify(result)); return;
   }
   if (command === 'recover') {
@@ -53,10 +57,8 @@ async function main() {
     }
     if (values.manifest) {
       if (values.id || !values['share-id'] || !values.code || values['source-sha']) throw new Error('RAR recover 需要 --manifest、--share-id 和 --code');
-      const app = process.env.LOCALAPPDATA; if (!app) throw new BaiduError('LOCALAPPDATA 未设置');
-      const result = await recoverUnknownArchiveShare(root, await readCatalog(root), values.manifest, createRunner(
-        path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe'),
-        path.join(app, 'YuukoLibrary/credentials/baidupcs-config')), values['share-id'], values.code);
+      const result = await recoverUnknownArchiveShare(root, await readCatalog(root), values.manifest, createBaiduRunner(),
+        values['share-id'], values.code);
       console.log(JSON.stringify(result)); return;
     }
     if (!values.id) throw new Error('raw recover 需要 --id');
@@ -71,10 +73,7 @@ async function main() {
         remotePath: entry.remotePath, fsId: entry.fsId ?? null, attemptedCodeSaved: Boolean(entry.sharePassword),
         next: '请在百度 share list 中人工核对后，以 --share-id 和 --code 精确认领；不会自动重新 share set' }, null, 2)); return;
     }
-    const app = process.env.LOCALAPPDATA; if (!app) throw new BaiduError('LOCALAPPDATA 未设置');
-    const configDir = path.join(app, 'YuukoLibrary/credentials/baidupcs-config');
-    const result = await recoverUnknownShare(root, book, createRunner(
-      path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe'), configDir), values['share-id'], values.code!, { sourceSha256: sourceSha });
+    const result = await recoverUnknownShare(root, book, createBaiduRunner(), values['share-id'], values.code!, { sourceSha256: sourceSha });
     console.log(JSON.stringify(result)); return;
   }
   if (values.id && values.all) throw new Error('--id 与 --all 不能同时使用');
@@ -99,11 +98,7 @@ async function main() {
     console.log(JSON.stringify({ mode: 'read-only', books: selected.map(book => ({ id: book.id, sha256: book.file.sha256,
       bytes: book.file.bytes, source: inputs.get(book.id)?.file, state: getJournalEntry(journal, book.id, book.file.sha256)?.state ?? 'ready' })) }, null, 2)); return;
   }
-  const app = process.env.LOCALAPPDATA;
-  if (!app) throw new BaiduError('LOCALAPPDATA 未设置');
-  const exe = path.join(app, 'YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe');
-  const configDir = path.join(app, 'YuukoLibrary/credentials/baidupcs-config');
-  const result = await runPublish(root, selected, createRunner(exe, configDir), { password: values.password });
+  const result = await runPublish(root, selected, createBaiduRunner(), { password: values.password });
   console.log(JSON.stringify({ status: result.unavailableCount ? 'partial' : 'complete', ...result }));
 }
 main().catch(error => { console.error((error as Error).message); process.exitCode = 1; });
