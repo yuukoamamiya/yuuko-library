@@ -43,6 +43,19 @@ test('an archive that can be listed without a password is refused', async () => 
     await assert.rejects(prepareArchive(t.root, t.b, 'plain.rar', '114514', rar.runner), /未证明文件头已加密/);
   } finally { await t.cleanup(); }
 });
+test('prepare refuses to regenerate a book with an already published RAR', async () => {
+  const t = await setup(); let rarCalls = 0;
+  try {
+    const archive = { filename: 'published.rar', sha256: digest(rarBytes), bytes: rarBytes.length, password: '114514' };
+    t.b.downloads.baidu = { url: 'https://pan.baidu.com/s/AbCdEF12', code: '4o9z', fileSha256: epubSha,
+      fsId: '12345', shareId: '23456', path: `/yuuko-library/archives/sample/${epubSha}/${archive.sha256}/${archive.filename}`,
+      expiresAt: null, verifiedAt: '2026-11-06T11:00:47.052Z', archive };
+    await assert.rejects(prepareArchive(t.root, t.b, 'new-random-salt.rar', '114514', async () => {
+      rarCalls++; return { code: 0, stdout: '', stderr: '' };
+    }), /已发布 RAR.*原发布 manifest/);
+    assert.equal(rarCalls, 0);
+  } finally { await t.cleanup(); }
+});
 test('verified archive manifest imports after remote meta, full download, inner hash and share list checks without share.set', async () => {
   const t = await setup(); const rar = rarMock(); let writes = 0;
   try {

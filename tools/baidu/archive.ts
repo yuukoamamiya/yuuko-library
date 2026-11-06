@@ -7,7 +7,7 @@ import { constants as fsConstants } from 'node:fs';
 import type { BaiduDownload, Book } from '../../src/lib/books.ts';
 import { validateBaiduDownload } from '../../src/lib/baidu.ts';
 import { replaceFileAtomically } from './atomic.ts';
-import { call, confirmShareList, digest, ensureRemoteDirectory, locateInputs, parseMeta, parseShare, probeRemoteFile,
+import { call, confirmShareList, ensureRemoteDirectory, locateInputs, parseMeta, parseShare, probeRemoteFile,
   type Runner, BaiduError } from './transfer.ts';
 
 export type ArchiveInfo = { filename: string; sha256: string; bytes: number; password: string };
@@ -98,6 +98,7 @@ function checkArchivePassword(value: string) {
 
 export async function prepareArchive(root: string, book: Book, name: string, password: string,
   rarRun: RarRunner, options: { manifestPath?: string; scratchRoot?: string } = {}) {
+  if (book.downloads.baidu?.archive) throw new BaiduError(`${book.id}: 已有已发布 RAR；请使用原发布 manifest 复核/复用，不自动重制归档`);
   if (!archiveNamePattern.test(name) || path.basename(name) !== name || name.endsWith('. ') || name.endsWith('.')) throw new BaiduError('--name 必须是安全的 .rar 文件名');
   checkArchivePassword(password);
   const source = (await locateInputs(root, [book])).get(book.id)!;
