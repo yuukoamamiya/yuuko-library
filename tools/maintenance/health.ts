@@ -6,14 +6,14 @@ import type { Book } from '../../src/lib/books.ts';
 import { checkBaiduShare } from './baidu-health.ts';
 
 type Failure = { check: string; target: string; reason: string };
-type CheckResult = { status: 'passed' | 'failed'; checks: number; failures: Failure[]; warnings: string[]; provenance?: unknown };
+type CheckResult = { status: 'passed' | 'failed'; checks: number; failures: Failure[]; warnings: string[]; baidu?: { checked: number; passed: number; unavailable: number; unconfirmed: number; notConfigured: number }; provenance?: unknown };
 const digest = (bytes: Buffer | string) => createHash('sha256').update(bytes).digest('hex');
 const canonical = (value: unknown): string => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
   ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
 const catalogDigest = (books: Book[]) => digest(canonical([...books].sort((a, b) => a.id.localeCompare(b.id, 'en'))));
 const safeReason = (e: unknown) => e instanceof Error && e.name === 'TimeoutError' ? '请求超时' : '请求失败或响应格式无效';
-const parseAttrs = (html: string) => [...html.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gu)]
-  .map(m => [m[1].toLowerCase(), m[2] ?? m[3] ?? m[4]] as const);
+const parseAttrs = (html: string) => [...html.matchAll(/([\w:-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/gu)]
+  .map(m => [m[1].toLowerCase(), m[2] ?? m[3] ?? m[4] ?? ''] as const);
 const decodeHtml = (s: string) => convert(s, { wordwrap: false, selectors: [{ selector: 'a', options: { hideLinkHrefIfSameAsText: true } }] }).trim();
 const strictPath = /^\/covers\/[a-z0-9][a-z0-9-]{0,79}\/[a-f0-9]{64}\.(?:jpg|png|gif|webp)$/u;
 function dispositionFilename(value: string): string | null {
@@ -33,6 +33,7 @@ function checkBookShape(book: any): string | null {
 export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl?: string, full = false, timeout = 20000,
   request: typeof fetch = fetch, allBooks: Book[] = selectedBooks, options: { baidu?: boolean } = {}): Promise<CheckResult> {
   const failures: Failure[] = [], warnings: string[] = []; let checks = 0; let provenance: unknown;
+  const baidu = { checked: 0, passed: 0, unavailable: 0, unconfirmed: 0, notConfigured: 0 };
   const fail = (check: string, target: string, reason: string) => failures.push({ check, target, reason });
   const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8')) as { siteUrl: string; downloadsUrl: string; title: string };
   const site = new URL(suppliedUrl ?? config.siteUrl);
@@ -112,6 +113,15 @@ export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl
           catch { fail('cover-local', id, '本地封面文件不可读'); }
         }
       }
+      // Public-share checking is independent of the configured R2 URL.
+      if (options.baidu) {
+        checks++; baidu.checked++;
+        const result = await checkBaiduShare(book, request as any, timeout);
+        baidu[result.status === 'not-configured' ? 'notConfigured' : result.status]++;
+        if (result.status === 'unavailable') fail('baidu-unavailable', id, result.reason ?? '百度分享不可用');
+        else if (result.status === 'unconfirmed') { fail('baidu-unconfirmed', id, result.reason ?? '百度分享状态未能确认'); warnings.push(`${id}: 百度公开访问未能确认`); }
+        else if (result.status === 'not-configured') warnings.push(`${id}: 百度分享未配置`);
+      }
       let download: URL;
       try {
         download = new URL(book.downloads.r2Url);
@@ -133,14 +143,7 @@ export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl
           if (hash.digest('hex') !== book.file.sha256) fail('download-sha256', id, '完整下载 SHA-256 不匹配');
         }
       } catch (e) { fail('download', id, e instanceof Error ? e.message : '下载响应无效'); }
-      if (options.baidu) {
-        checks++;
-        const result = await checkBaiduShare(book, request as any, timeout);
-        if (result.status === 'unavailable') fail('baidu-unavailable', id, result.reason ?? '百度分享不可用');
-        else if (result.status === 'unconfirmed') { fail('baidu-unconfirmed', id, result.reason ?? '百度分享状态未能确认'); warnings.push(`${id}: 百度公开访问未能确认`); }
-        else if (result.status === 'not-configured') warnings.push(`${id}: 百度分享未配置`);
-      }
     }
   }));
-  return { status: failures.length ? 'failed' : 'passed', checks, failures, warnings, ...(provenance === undefined ? {} : { provenance }) };
+  return { status: failures.length ? 'failed' : 'passed', checks, failures, warnings, ...(options.baidu ? { baidu } : {}), ...(provenance === undefined ? {} : { provenance }) };
 }
