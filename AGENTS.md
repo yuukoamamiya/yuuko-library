@@ -113,16 +113,16 @@ npm run pages -- --help
 - [ ] **完善文件清理流程。** 旧 EPUB 与失败/旧 R2 对象尚无清理工具或保留策略；实际清理需列出目标并获得本次授权，不默认自动删除。
   - [x] 本地 `.local` 快照只读预览：`npm run maintenance -- cleanup-preview` 扫描 plans / releases / uploads；30 天内快照、prepared / active / submitted / uncertain 状态、依赖闭包以及最近两份成功发布均保护；线上或本地状态未知时保守保护。预览不删除任何内容，候选仍须人工核对并另获授权。
 
-### 待调研：百度备用下载
+### 百度备用下载
 
-- [ ] 调研 Windows 原生命令行工具或可直接在本机调用的 API，**排除依赖 WSL 的方案**。
-- [ ] 用单本验证上传、创建分享、返回链接与提取码、有效期、登录续期和费用条件；只有上传而无法自动创建分享的工具不满足维护要求。
-- [ ] 方案通过并获准接入后，再实现备用下载与失败降级；R2 主下载可以独立运行。
+- [x] 调研 Windows 原生工具和 API，排除 WSL。候选 BaiduPCS-Go v4.0.2 Windows x64 已下载并校验 SHA-256；CLI 登录、quota、`ls /ebook` 和 `share list` 只读检查通过。证据、凭据边界和已知限制见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
+- [ ] 等待本次对单本上传和 7 天分享的明确授权；上传、新分享、重新下载哈希校验、登录续期和费用条件尚未验证。未授权前不上传、不创建分享。
+- [ ] 单本验证通过并另行批准接入后，再实现备用下载与失败降级；R2 主下载可以独立运行。
 
 ### 图书评论区
 
-- [x] 本地接入 utterances：每本书使用独立评论线程，Issue 标题映射固定为 `book:<stable ID>`；详情页按需加载，预览不接入真实评论。公开仓库 `yuukoamamiya/yuuko-library-comments` 已创建；配置、权限、登录和管理说明见 [docs/comments.md](docs/comments.md)。
-- [ ] 发布评论区配置并线上验证。utterances App 已安装，仅授权公开仓库 `yuukoamamiya/yuuko-library-comments`（metadata 只读、Issues 读写）；当前组件只在本地代码中，尚未 push/deploy，首次发表评论自动创建 Issue 的实际流程尚未验证。
+- [x] 本地接入并验证 utterances：每本书使用独立评论线程，Issue 标题映射固定为 `book:<stable ID>`；详情页按需加载，预览不接入评论。通过本地页面完成 GitHub OAuth 并发布验证评论，utterances bot 自动创建 `book:endnotes-2` Issue，刷新后仍映射到同一 Issue；320px 窄屏加载后无横向溢出。公开仓库和 App 权限、验证细节见 [docs/comments.md](docs/comments.md)。
+- [ ] push/deploy 后验证生产评论区。App 仅授权公开仓库 `yuukoamamiya/yuuko-library-comments`（metadata 只读、Issues 读写）；本地验证评论保留，生产页面仍未验。
 
 ## 完成记录
 

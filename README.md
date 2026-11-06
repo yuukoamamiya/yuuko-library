@@ -32,7 +32,7 @@
 
 日常维护以命令行为主。主代理检查并明确方案后，由固定 GPT-6 Luna Codex 子代理实施、自测并选择性提交；主代理随后独立验收。只有主代理在用户明确要求 push 时才推送。若待推送改动影响前端，push 同时授权构建、生产部署和验证网站；R2 上传、分享、清理等仍按各自授权边界执行。细则见 [AGENTS.md](AGENTS.md#codex-维护流程)。
 
-截至 2026-11-06，首批 65 本书已上架。百度备用下载尚未接入。详情页评论组件已在本地接入 utterances，尚未 push/deploy；公开评论仓库已创建，App 已安装且仅授权该仓库。首次发表评论自动创建 Issue 的实际流程尚未验证，见[评论区说明](docs/comments.md)。
+截至 2026-11-06，首批 65 本书已上架。百度备用下载方案已完成只读调研，单本上传与分享仍待授权验证。详情页 utterances 已在本地页面通过真实 GitHub OAuth、评论发布和自动建 Issue 流程验证，尚未 push/deploy；见[评论区说明](docs/comments.md)与[百度备用下载调研](docs/baidu-downloads.md)。
 
 ## 本地查看
 
@@ -65,7 +65,7 @@ npm run build
 页面已精简重复文案；分类与标签现已独立：六个稳定分类用于导航，EPUB 原始主题词作为标签保留，可与关键词组合筛选。首次迁移详见 [分类迁移对照](docs/category-migration.md)。
 
 发布工具已区分本批变更与全站数量，支持仅更新站点的本地快照，并提供部署锁、查重与状态恢复检查。这些改动已在本地实现；是否上线以线上发布标记为准。
-另外会评估不依赖 WSL 的百度网盘上传与分享方案。
+百度备用下载的调研进展和下一步验证边界见[百度备用下载调研](docs/baidu-downloads.md)。
 
 完整待办及完成标准见 [AGENTS.md](AGENTS.md#待办清单)。
 
@@ -79,4 +79,5 @@ npm run build
 | [本地维护指南](docs/local-development.md) | 开发、EPUB 导入、预览和文件校验 |
 | [命令参考](docs/publishing-cli.md) | 已实现命令、参数、输出和失败处理 |
 | [部署指南](docs/pages-deployment.md) | Cloudflare 授权、代理、部署和域名检查 |
+| [百度备用下载调研](docs/baidu-downloads.md) | Windows 原生候选、凭据边界和单本验证门槛 |
 | [架构与数据说明](docs/project-plan.md) | 数据流、目录、存储方式和实现边界 |
