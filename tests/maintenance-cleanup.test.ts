@@ -78,9 +78,12 @@ test('unknown report and missing dependency prevent candidates', async () => {
 
 test('bad report protects snapshots; failed online fetch keeps inventory visible but conservative', async () => {
   const root = await fixture(); await plan(root, 'p-x'); await release(root, 'r-x', 'p-x', 'failed');
-  await writeFile(path.join(root, '.local', 'uploads', 'bad.json'), '{');
+  const marker = 'FAKE_SECRET_DO_NOT_LEAK';
+  await writeFile(path.join(root, '.local', 'uploads', 'bad.json'), `{"apiKey":"${marker}",`);
   const badReport = await makeCleanupPreview(root, online as typeof fetch);
   assert.equal(badReport.objects.find(o => o.path.endsWith('r-x'))?.status, 'protected');
+  assert.ok(badReport.unknown.some(x => x.reason.includes('JSON 格式无效')));
+  assert.ok(!JSON.stringify(badReport).includes(marker));
   const offline = await makeCleanupPreview(root, (async () => { throw new Error('offline'); }) as typeof fetch);
   assert.equal(offline.onlineRelease, null);
   assert.ok(offline.objects.length > 0);

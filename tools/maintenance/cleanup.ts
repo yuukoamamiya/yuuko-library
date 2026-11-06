@@ -44,7 +44,11 @@ export async function makeCleanupPreview(root: string, request: typeof fetch = f
     const actual = await realpath(p);
     const parent = await realpath(path.dirname(p));
     if (path.basename(actual).toLocaleLowerCase('en-US') !== path.basename(p).toLocaleLowerCase('en-US') || canonical(path.dirname(actual)) !== canonical(parent)) throw new Error('元数据 realpath 越界');
-    return JSON.parse(await readFile(p, 'utf8'));
+    try { return JSON.parse(await readFile(p, 'utf8')); }
+    catch (error) {
+      if (error instanceof SyntaxError) throw new Error('JSON 格式无效');
+      throw error;
+    }
   }
   const local = path.join(base, '.local');
   let localOk = await safeDirectory(local);
