@@ -19,7 +19,7 @@
 - Pages 项目：`yuuko-library`，Direct Upload，生产分支参数 `main`。Git push 不触发网站部署。
 - 正式书目位于 `catalog/books/`，封面位于 `public/covers/`。数量以目录和实际线上结果为准。
 - 原始主题标签保存在 `subjects`，独立分类保存在 `categories`；每本 1–2 类，六个分类 ID 统一定义于 `src/lib/categories.ts`。首次迁移对照见 `docs/category-migration.md`。
-- 百度备用分享 CLI 和详情页备用链接已在本地实现；65 条当前分享已写入书目且匿名提取码检查 65/65 通过（64 EPUB + 1 RAR），线上网站尚未部署。评论区已在本地接入 utterances，尚未部署。旧 `--baidu optional` 仍只是计划字段，不代表分享已完成。
+- 百度备用分享、详情页备用入口及 utterances 评论区已随正式站点发布并通过生产验证。2026-11-06 20:03（Asia/Shanghai）发布 release `r-26a96f39-d704-4c26-98a8-956f8eec2094`；固定快照来源为 clean commit `c9fdfcb`，全站 65 本、`changedBooks=0`，线上完整索引和 65 个详情页通过验证，正式书目已同步。生产 HTTP 检查确认 65/65 页面含当前直链、百度入口与稳定评论 term；RAR 文件名和解压密码正确。真实浏览器确认主下载直链、RAR 密码复制及按需评论加载，评论映射到既有 Issue #1。旧 `--baidu optional` 仍只是计划字段，不代表分享已完成。
 
 ## 工具与环境
 
@@ -119,13 +119,13 @@ npm run pages -- --help
 - [x] 调研 Windows 原生工具和 API，排除 WSL。候选 BaiduPCS-Go v4.0.2 Windows x64 已下载并校验 SHA-256；CLI 登录及只读检查通过。凭据边界和证据见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
 - [x] 获授权完成 `endnotes-2` 单本试传：独立 SHA 目录上传、`meta` 核对大小与 fsId、密码保护的永久分享、PCS 回读完整 SHA-256 均通过。永久分享不保证永不失效。
 - [x] 全部 65 本原始 EPUB 均已上传、创建永久密码分享并回读验证完整 SHA-256，总计 108772188 字节；64 条普通分享通过匿名提取码检查。
-- [x] 唯一异常书的维护者指定 RAR 包已独立加密验证、上传/回读并导入正式书目；异常原始分享和失败记录保留。详情弹窗展示已验证，最终 65/65 当前百度入口匿名提取码检查通过（64 EPUB + 1 RAR）。生产页面尚未部署。详情见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
+- [x] 唯一异常书的维护者指定 RAR 包已独立加密验证、上传/回读并导入正式书目；异常原始分享和失败记录保留。详情弹窗展示已验证，最终 65/65 当前百度入口匿名提取码检查通过（64 EPUB + 1 RAR）；生产站点已部署，HTTP 与真实浏览器验证通过。详情见 [docs/baidu-downloads.md](docs/baidu-downloads.md)。
 - [ ] 同书新版的百度 journal 跨 SHA 自动迁移尚未实现：更新准备会清空旧分享字段，`publish` 检测到旧 journal SHA 后会停止。保留旧 journal 和分享记录，人工核对后恢复；不要删除 journal 绕过保护。新增书可在正式书目与本地匹配 EPUB 准备完成后单独 `publish --id ID`。R2 独立运行。
 
 ### 图书评论区
 
 - [x] 本地接入并验证 utterances：每本书使用独立评论线程，Issue 标题映射固定为 `book:<stable ID>`；详情页按需加载，预览不接入评论。通过本地页面完成 GitHub OAuth 并发布验证评论，utterances bot 自动创建 `book:endnotes-2` Issue，刷新后仍映射到同一 Issue；320px 窄屏加载后无横向溢出。公开仓库和 App 权限、验证细节见 [docs/comments.md](docs/comments.md)。
-- [ ] push/deploy 后验证生产评论区。App 仅授权公开仓库 `yuukoamamiya/yuuko-library-comments`（metadata 只读、Issues 读写）；本地验证评论保留，生产页面仍未验。
+- [x] push/deploy 后验证生产评论区。生产页面按需加载评论，稳定映射到既有 `book:endnotes-2` Issue #1（1 条评论），未新增评论；App 仅授权公开仓库 `yuukoamamiya/yuuko-library-comments`（metadata 只读、Issues 读写）。本地验证评论保留。
 
 ## 完成记录
 

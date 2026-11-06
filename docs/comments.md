@@ -14,4 +14,6 @@
 
 评论仓库 Issues 即评论内容。仓库管理员可按 GitHub Issues 的常规方式查看、锁定或删除不当内容；管理者可以在该仓库的 Issues 设置中决定是否允许创建 Issue。关闭 Issues 会使 utterances 无法创建新书目线程。评论仓库必须保留与站点配置一致的所有权和名称，否则组件需同步更新。
 
-本地构建页面 `http://127.0.0.1:4399/books/endnotes-2/` 已连接真实 GitHub 服务完成验证：GitHub OAuth 后发布评论，utterances bot 自动创建 [book:endnotes-2 Issue](https://github.com/yuukoamamiya/yuuko-library-comments/issues/1)（评论 ID `6682303769`）；刷新页面仍显示 1 Comment 并映射到同一 Issue，没有重复建帖。该验证评论保留。另从 `localhost:4399`（不同 origin，该 origin 的评论组件未登录，显示“Sign in with GitHub”）加载同一详情时，仍能读取 Issue #1 的 1 条评论，验证公开免登录阅读和稳定 ID 跨 URL 关联。320px viewport 下加载真实嵌入后 `scrollWidth=305`、评论区宽 262.7px，无横向溢出。代码尚未 push 或部署，生产页面仍未验证；部署后仍需核验按需加载和移动布局。
+本地构建页面 `http://127.0.0.1:4399/books/endnotes-2/` 曾连接真实 GitHub 服务完成验证：GitHub OAuth 后发布评论，utterances bot 自动创建 [book:endnotes-2 Issue](https://github.com/yuukoamamiya/yuuko-library-comments/issues/1)（评论 ID `6682303769`）；刷新页面仍显示 1 Comment 并映射到同一 Issue，没有重复建帖。该验证评论保留。另从 `localhost:4399`（不同 origin，该 origin 的评论组件未登录，显示“Sign in with GitHub”）加载同一详情时，仍能读取 Issue #1 的 1 条评论，验证公开免登录阅读和稳定 ID 跨 URL 关联。320px viewport 下加载真实嵌入后 `scrollWidth=305`、评论区宽 262.7px，无横向溢出。
+
+生产验证：release `r-26a96f39-d704-4c26-98a8-956f8eec2094` 于 2026-11-06 20:03（Asia/Shanghai）发布并通过 verify。生产 HTTP 检查确认 65 个详情页均带稳定评论 term；真实浏览器确认评论初始不加载，点击后读取既有 Issue #1 的 1 Comment，没有新增评论。生产验证的是已存在讨论线程的正确映射与按需加载；本地 OAuth 评论保留。

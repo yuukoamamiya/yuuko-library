@@ -89,10 +89,10 @@ EPUB 对象键为 books/ID/SHA256.epub。内容变化产生新地址，避免同
 
 ## 已知边界
 
-- 65 本原始 EPUB 上传、永久分享创建与完整 SHA-256 回读均已完成；正式书目当前版本的 65 个百度入口全部通过匿名访问检查（64 个 EPUB + 1 个加密 RAR）。R2 主下载保持原样；本地站点改动尚未 push/deploy。CLI、RAR 验证、异常处理和版本更新限制见 [百度备用下载调研](baidu-downloads.md)。utterances 已在本地页面通过 GitHub OAuth、发表评论、自动建 Issue 和刷新后稳定映射验证，尚未 push/deploy；详见 [评论区配置与管理](comments.md)。
+- 65 本原始 EPUB 上传、永久分享创建与完整 SHA-256 回读均已完成；正式书目当前版本的 65 个百度入口全部通过匿名访问检查（64 个 EPUB + 1 个加密 RAR），并已在生产详情页验证。R2 主下载保持原样；release `r-26a96f39-d704-4c26-98a8-956f8eec2094` 于 2026-11-06 20:03（Asia/Shanghai）验证通过，来源为 clean commit `c9fdfcb`。CLI、RAR 验证、异常处理和版本更新限制见 [百度备用下载调研](baidu-downloads.md)。utterances 本地 OAuth 和生产按需加载、既有 Issue 稳定映射均已验证；详见 [评论区配置与管理](comments.md)。
 - R2 有本地桶级锁和逐本检查点；Pages 有项目锁、远端查重、status 与 verify 恢复入口，但跨四组工具的统一自动发布入口尚未提供。
 - release.json schemaVersion=2：books 统计全站，changedBooks 统计本批；完整书目摘要、全站索引摘要及全部详情页参与验证。
-- 新发布快照附 Git 提交、脏状态、冻结站点输入 SHA-256 与来源字段。部署要求 clean Git 提交；旧线上 schema2 marker 可由独立体检读取，但会标注缺少溯源信息，旧本地快照必须重新 prepare。源码修改后尚未部署时，线上 marker 不包含新字段。
+- 新发布快照附 Git 提交、脏状态、冻结站点输入 SHA-256 与来源字段。当前生产快照来源为 clean commit `c9fdfcb`，sourceDigest 前缀 `08b59af`；部署要求 clean Git 提交。旧本地快照必须重新 prepare。
 - maintenance health 从正式 Git 书目检查线上页面与资源，无需原始 EPUB 或云凭据；HEAD 响应用于轻量检查，完整 GET 才校验 EPUB 内容 SHA-256。cleanup-preview 只报告本地对象状态，不执行删除；R2/旧 EPUB 清理仍需单独流程。
 - 有内容变化的本批书籍才更新 updatedAt；prepare --site-only 保留书籍时间，部署快照时间记录在 createdAt。
 - 审核和发布快照只存于本机 .local/；其他电脑无法仅靠 Git 恢复旧计划，需要保留迁移资料或重新准备。
