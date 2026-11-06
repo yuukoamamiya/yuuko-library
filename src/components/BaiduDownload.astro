@@ -5,7 +5,7 @@ const { record, preview = false } = Astro.props;
 ---
 {!preview && <>
 <div class="baidu-download">
-  <button class="baidu-trigger" type="button" data-baidu-open aria-haspopup="dialog">网盘下载</button>
+  <button class="baidu-trigger" type="button" data-baidu-open aria-haspopup="dialog" hidden>网盘下载</button>
   <dialog class="baidu-dialog" aria-labelledby="baidu-heading" data-baidu-dialog>
     <div class="baidu-dialog-content">
       <button class="baidu-close" type="button" data-baidu-close aria-label="关闭">×</button>
@@ -50,5 +50,6 @@ const { record, preview = false } = Astro.props;
         }
       });
     });
+    opener.hidden = false;
   });
 </script>
