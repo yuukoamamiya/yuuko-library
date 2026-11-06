@@ -52,6 +52,6 @@ export async function loadBooks(): Promise<Book[]> {
       validateBaiduDownload(book.downloads.baidu, book.file.sha256);
     }
   });
-  return books.sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '')
+  return books.sort((a, b) => (b.updatedAt ?? b.publishedAt ?? '').localeCompare(a.updatedAt ?? a.publishedAt ?? '')
     || a.title.localeCompare(b.title, 'zh-CN') || a.id.localeCompare(b.id));
 }

@@ -17,6 +17,7 @@
 - 先完成本地改动并给出可审阅结果。上传 R2、创建分享、Pages 部署和文件清理都需要本次会话明确授权；已有授权不重复询问。
 - 用户明确要求 push，且本次待推送内容影响站点产物时，该要求同时授权构建、部署和线上验证：push 前 `pages prepare --site-only` 并核对快照；push 后 deploy、verify 并同步正式书目。纯文档变更不触发部署。
 - `book` prepare/preview/validate/status 是本地步骤；R2 upload 会公开文件；Pages deploy 会发布网页。每个阶段分别验证，不以本地成功代替线上完成。
+- 正常上架从 EPUB metadata 生成页面，依次完成 R2 上传与公开文件完整校验，再经 Pages 发布与线上验证。百度分享不自动发布；仅在用户另行要求时执行。书籍 ID、版本类型、模型和分类依据 metadata 与既有规则确定；信息不足时向维护者确认，不捏造。
 - R2 上传后核对公开 GET 的完整 SHA-256、大小、MIME 和文件名；multipart ETag 不是 SHA-256。
 - plan 可能因源码、依赖、配置、书目或冻结输入变化而 stale；重新 prepare，不绕过校验。未知的云端/远端状态先查 status、日志和远端事实，不能盲目重试。
 - `.env.local`、Wrangler/百度凭据、EPUB、`.local/` 和构建产物不进 Git；不得输出原始凭据、签名请求或密钥。

@@ -46,7 +46,7 @@ const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? proces
         <div class="books-area">
           <form class="search-toolbar" role="search" action="/" method="get">
             <div class="search-field"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><label for="book-search" class="sr-only">搜索书名、作者、简介或标签</label><input id="book-search" name="q" type="search" placeholder="搜索书名、作者、简介…" autocomplete="off" /><kbd aria-hidden="true">/</kbd></div>
-            <label class="sort-control">排序<select id="sort-order" aria-label="书籍排序"><option value="default">默认顺序</option><option value="title">书名 A—Z</option><option value="author">作者 A—Z</option></select></label>
+            <label class="sort-control">排序<select id="sort-order" aria-label="书籍排序"><option value="default">最近更新</option><option value="title">书名 A—Z</option><option value="author">作者 A—Z</option></select></label>
           </form>
           <div class="results-bar"><p id="result-count" role="status" aria-live="polite">共 {books.length} 本书籍</p><button id="reset-filters" type="button" hidden>清除筛选 <span aria-hidden="true">×</span></button><span class="format-label">EPUB COLLECTION</span></div>
           <div class="book-grid" id="book-grid">{books.map((book, index) => <BookCard book={book} index={index} />)}</div>
