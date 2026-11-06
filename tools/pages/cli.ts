@@ -1,10 +1,12 @@
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { readFile, unlink } from 'node:fs/promises';
+import { unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { assertCatalogSyncable, assertDeployable, makeRelease, makeSiteRelease, readRelease, releaseDir, syncCatalog } from './release.ts';
 import { siteUrl, verifyRelease } from './verify.ts';
+import { readPagesConfig } from './config.ts';
+import { requireCurrentPlan } from '../book/plan.ts';
 import { deploymentDecision, matchingDeployments, projectStateDir, readOptional, remoteDeployments, withProjectLock, writeState } from './deployment.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -17,7 +19,7 @@ async function main() {
   const command = positionals[0];
   if (values.help || !command) { console.log('Pages CLI:\n  prepare --plan PLAN --report UPLOAD_REPORT\n  prepare --site-only\n  status --release RELEASE\n  deploy --release RELEASE [--retry]\n  verify --release RELEASE --url HTTPS_URL\nprepare 仅生成本地正式构建；status 只读查询；deploy 会发布网站；verify 通过后同步正式书目。'); return; }
   if (positionals.length !== 1) throw new Error('只接受一个子命令');
-  const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8'));
+  const config = await readPagesConfig(root);
   if (command !== 'prepare' && (values.plan || values.report || values['site-only'])) throw new Error('本命令不接受 prepare 参数');
   if (command !== 'deploy' && values.retry) throw new Error('--retry 仅用于 deploy');
   if (command === 'prepare') {
@@ -25,8 +27,7 @@ async function main() {
     if (values['site-only'] && (values.plan || values.report)) throw new Error('--site-only 不能与 --plan 或 --report 混用');
     if (!values['site-only'] && (!values.plan || !values.report)) throw new Error('需要 --plan 和 --report，或 --site-only');
     if (!values['site-only']) {
-      const status = spawnSync(process.execPath, ['--import', 'tsx', 'tools/book/cli.ts', 'status', '--plan', values.plan!, '--json'], { cwd: root, encoding: 'utf8' });
-      if (status.status !== 0) throw new Error('审核计划过期，请重新 prepare');
+      try { await requireCurrentPlan(root, values.plan!); } catch { throw new Error('审核计划过期，请重新 prepare'); }
     }
     const build = (site: string) => {
       const result = spawnSync(process.execPath, [path.join(root, 'node_modules/astro/bin/astro.mjs'), 'build', '--root', site],
@@ -42,7 +43,7 @@ async function main() {
   const release = await readRelease(root, values.release);
   const dir = releaseDir(root, release.id);
   if (release.project !== config.pagesProject || release.branch !== config.productionBranch) throw new Error('部署目标改变，请重新准备发布');
-  const accountId = new URL(config.r2Endpoint).hostname.split('.')[0];
+  const accountId = config.cloudflareAccountId;
   const stateFile = path.join(dir, 'deployment.json');
   const activeFile = path.join(projectStateDir(root, release.project), 'active.json');
   if (command === 'status') {

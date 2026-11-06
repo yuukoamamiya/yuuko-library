@@ -7,6 +7,7 @@ import path from 'node:path';
 import { verifiedBooks, readRelease, inventory, digest, makeRelease, makeSiteRelease, catalogDigest, assertIndex, syncCatalog, sourceDigest, assertDeployable } from '../tools/pages/release.ts';
 import { verifyRelease } from '../tools/pages/verify.ts';
 import type { Book } from '../src/lib/books.ts';
+import { inventory as planInventory, sourceFingerprint } from '../tools/book/plan.ts';
 
 const book: Book = { schemaVersion: 1, id: 'sample', title: '示例', authors: [], description: '', subjects: [], categories: ['philosophy'], cover: null,
   edition: { kind: 'transcription', model: null }, file: { sha256: 'a'.repeat(64), bytes: 100, filename: 'sample.epub' },
@@ -73,6 +74,7 @@ test('增量发布：65 本新增至 66 本、更新仍为 65 本；验证拒绝
   try {
     await mkdir(path.join(root, 'catalog/books'), { recursive: true });
     const repoRoot = process.cwd();
+    await cp(path.join(repoRoot, 'tools'), path.join(root, 'tools'), { recursive: true });
     await cp(path.join(repoRoot, 'src'), path.join(root, 'src'), { recursive: true });
     await cp(path.join(repoRoot, 'public'), path.join(root, 'public'), { recursive: true });
     for (const name of ['astro.config.mjs', 'site.config.json', 'package.json', 'package-lock.json', 'tsconfig.json']) await cp(path.join(repoRoot, name), path.join(root, name));
@@ -89,9 +91,15 @@ test('增量发布：65 本新增至 66 本、更新仍为 65 本；验证拒绝
       await writeFile(path.join(site, 'catalog/books', `${change.id}.json`), JSON.stringify(change));
       await writeFile(path.join(site, 'catalog/preview.json'), '{}');
       await cp(path.join(root, 'site.config.json'), path.join(site, 'site.config.json'));
-      await writeFile(path.join(planRoot, 'plan.json'), JSON.stringify({ id: planId, books: [change] }));
+      await mkdir(path.join(planRoot, 'inputs'), { recursive: true });
+      await writeFile(path.join(planRoot, 'inputs', `${change.id}.epub`), 'fixture epub');
+      const inventory = await planInventory(planRoot, ['inputs', 'site']);
+      const changes = [{ id: change.id, operation: update ? 'update' : 'add', warnings: [] }];
+      const baseFingerprint = await sourceFingerprint(root);
+      const reviewHash = digest(JSON.stringify({ baseFingerprint, inventory, books: [change], changes }));
+      await writeFile(path.join(planRoot, 'plan.json'), JSON.stringify({ schemaVersion: 1, id: planId, status: 'prepared', createdAt: new Date().toISOString(), baseFingerprint, reviewHash, inventory, books: [change], changes }));
       const reportPath = path.join(root, 'report.json');
-      await writeFile(reportPath, JSON.stringify({ ...report, verified: [{ ...report.verified[0], id: change.id }] }));
+      await writeFile(reportPath, JSON.stringify({ ...report, planId, reviewHash, verified: [{ ...report.verified[0], id: change.id }] }));
       const release = await makeRelease(root, planId, reportPath, build);
       assert.equal(release.catalog.length, update ? 65 : 66);
       assert.equal(release.books.length, 1);

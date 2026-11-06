@@ -1,6 +1,6 @@
-import { readFile } from 'node:fs/promises';
+import { readPagesConfig } from './config.ts';
 import { loadEnvFile } from 'node:process';
-import { spawnSync } from 'node:child_process';
+import { readWranglerToken, requestCloudflare } from './cloudflare-api.ts';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,30 +9,15 @@ async function main() {
   try { loadEnvFile(path.join(root, '.env.local')); } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw new Error('无法读取本地环境配置');
   }
-  const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8'));
-  const account = new URL(config.r2Endpoint).hostname.split('.')[0];
+  const config = await readPagesConfig(root);
+  const account = config.cloudflareAccountId;
   const hostname = new URL(config.siteUrl).hostname;
   if (!/^[a-f0-9]{32}$/u.test(account) || !/^[a-z0-9-]+$/u.test(config.pagesProject)
     || !/^[a-z0-9.-]+$/u.test(config.cloudflareZone) || !hostname.endsWith('.' + config.cloudflareZone)) throw new Error('Cloudflare 目标配置无效');
   const command = process.argv[2];
   if (!['domain-status', 'domain-add', 'dns-status', 'dns-add', 'project-status'].includes(command)) throw new Error('接受 domain-status / domain-add / dns-status / dns-add / project-status');
-  let token: string | undefined;
-  if (!token) {
-    // Capture credentials from Wrangler in memory; never echo or persist the output.
-    const result = spawnSync(process.execPath, [path.join(root, 'node_modules/wrangler/bin/wrangler.js'), 'auth', 'token', '--json'],
-      { cwd: root, encoding: 'utf8', env: { ...process.env, WRANGLER_SEND_METRICS: 'false' } });
-    if (result.status !== 0) throw new Error('请先完成 Wrangler 登录');
-    try { token = JSON.parse(result.stdout).token; } catch { throw new Error('Wrangler 凭据输出无效，内容已隐藏'); }
-  }
-  if (!token) throw new Error('Cloudflare 凭据不可用');
-  async function api(endpoint: string, method = 'GET', payload?: unknown): Promise<any> {
-    const response = await fetch(`https://api.cloudflare.com/client/v4/${endpoint}`, { method,
-      headers: { Authorization: `Bearer ${endpoint.includes('/dns_records') ? process.env.CLOUDFLARE_DNS_API_TOKEN ?? token : token}`, 'Content-Type': 'application/json' },
-      ...(payload === undefined ? {} : { body: JSON.stringify(payload) }), signal: AbortSignal.timeout(30000) });
-    const data = await response.json();
-    if (!response.ok || !data.success) throw new Error(`Cloudflare API HTTP ${response.status}，错误码 ${data.errors?.map((error: { code: number }) => error.code).join(',') ?? 'unknown'}`);
-    return data.result;
-  }
+  const token = readWranglerToken(root);
+  const api = (endpoint: string, method = 'GET', payload?: unknown): Promise<any> => requestCloudflare(endpoint, token, { method, payload, apiToken: endpoint.includes('/dns_records') ? process.env.CLOUDFLARE_DNS_API_TOKEN ?? token : token });
   const projectPath = `accounts/${account}/pages/projects/${encodeURIComponent(config.pagesProject)}`;
   if (command === 'project-status') {
     const project = await api(projectPath);

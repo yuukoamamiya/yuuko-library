@@ -4,6 +4,8 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import type { Book } from '../../src/lib/books.ts';
 import { validateCategories } from '../../src/lib/categories.ts';
+import { requireCurrentPlan } from '../book/plan.ts';
+import type { UploadReport } from '../r2/report.ts';
 
 export const digest = (bytes: Buffer | string) => createHash('sha256').update(bytes).digest('hex');
 export interface UploadRecord { id: string; sha256: string; bytes: number; key: string; url: string }
@@ -115,12 +117,14 @@ export async function makeRelease(root: string, planId: string, reportPath: stri
   const startingState = repositoryState(root);
   if (!/^p-[a-f0-9-]{36}$/u.test(planId)) throw new Error('计划编号格式无效');
   const planRoot = path.join(root, '.local/plans', planId);
-  const plan = JSON.parse(await readFile(path.join(planRoot, 'plan.json'), 'utf8')) as { id: string; books: Book[] };
+  const plan = await requireCurrentPlan(root, planId);
   const config = JSON.parse(await readFile(path.join(planRoot, 'site/site.config.json'), 'utf8'));
   if (!/^[a-z0-9][a-z0-9-]{0,57}[a-z0-9]$/u.test(config.pagesProject ?? '') || !config.productionBranch) throw new Error('请配置 Pages 项目名和生产分支');
   const timestamp = new Date().toISOString();
   const baseline = await readCatalog(root);
-  const books = verifiedBooks(plan.books, JSON.parse(await readFile(reportPath, 'utf8')), timestamp, baseline);
+  const report = JSON.parse(await readFile(reportPath, 'utf8')) as UploadReport;
+  if (report.planId !== plan.id || report.reviewHash !== plan.reviewHash) throw new Error('上传报告与审核计划不匹配，请重新校验');
+  const books = verifiedBooks(plan.books, report, timestamp, baseline);
   const id = `r-${randomUUID()}`; const dir = releaseDir(root, id); const site = path.join(dir, 'site');
   const frozenCode = await buildInputDigest(path.join(planRoot, 'site'));
   if (frozenCode !== await buildInputDigest(root)) throw new Error('审核计划源码或站点配置已过期，请重新 prepare');

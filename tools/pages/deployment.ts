@@ -1,6 +1,6 @@
 import { mkdir, open, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { readWranglerToken, requestCloudflare } from './cloudflare-api.ts';
 import type { Release } from './release.ts';
 
 export async function readOptional(file: string) {
@@ -43,20 +43,13 @@ export function deploymentDecision(previous: { status: string } | null, remote: 
 }
 export async function remoteDeployments(root: string, account: string, project: string): Promise<RemoteDeployment[]> {
   if (!/^[a-f0-9]{32}$/u.test(account) || !/^[a-z0-9-]+$/u.test(project)) throw new Error('Cloudflare 目标配置无效');
-  const auth = spawnSync(process.execPath, [path.join(root, 'node_modules/wrangler/bin/wrangler.js'), 'auth', 'token', '--json'],
-    { cwd: root, encoding: 'utf8', env: { ...process.env, WRANGLER_SEND_METRICS: 'false' } });
-  if (auth.status !== 0) throw new Error('请先完成 Wrangler 登录');
-  let token: string;
-  try { token = JSON.parse(auth.stdout).token; if (!token) throw new Error(); } catch { throw new Error('Wrangler 凭据不可用，输出已隐藏'); }
+  const token = readWranglerToken(root);
   const records: RemoteDeployment[] = [];
   for (let page = 1; ; page++) {
-    const url = `https://api.cloudflare.com/client/v4/accounts/${account}/pages/projects/${project}/deployments?page=${page}&per_page=25`;
-    const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(30000), redirect: 'error' });
-    const data = await response.json();
-    if (!response.ok || !data.success || !Array.isArray(data.result)) throw new Error(`读取 Pages 部署记录失败：HTTP ${response.status}`);
-    records.push(...data.result.map((item: any) => ({ id: item.id, url: item.url, status: item.latest_stage?.status ?? 'unknown',
+    const pageRecords = await requestCloudflare<any[]>(`accounts/${account}/pages/projects/${project}/deployments?page=${page}&per_page=25`, token);
+    records.push(...pageRecords.map((item: any) => ({ id: item.id, url: item.url, status: item.latest_stage?.status ?? 'unknown',
       branch: item.deployment_trigger?.metadata?.branch ?? '', message: item.deployment_trigger?.metadata?.commit_message ?? '' })));
-    if (data.result.length < 25) break;
+    if (pageRecords.length < 25) break;
   }
   return records;
 }

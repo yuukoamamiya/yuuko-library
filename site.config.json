@@ -5,6 +5,7 @@
   "downloadsUrl": "https://book.amamiyayuuko.com",
   "r2Bucket": "yuuko-library-books",
   "r2Endpoint": "https://2912ff2cbf77384d49e43048debf8287.r2.cloudflarestorage.com",
+  "cloudflareAccountId": "2912ff2cbf77384d49e43048debf8287",
   "pagesProject": "yuuko-library",
   "cloudflareZone": "amamiyayuuko.com",
   "productionBranch": "main"
