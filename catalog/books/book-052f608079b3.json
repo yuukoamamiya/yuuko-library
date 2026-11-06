@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-052f608079b3",
+  "title": "政治权力与社会阶级",
+  "authors": [
+    "Nicos Poulantzas"
+  ],
+  "description": "本书是尼科斯·普兰查斯享誉国际的成名代表作，奠定了其作为战后最杰出马克思主义政治学家的地位。普兰查斯在书中系统打破了经济主义还原论与工具主义国家观，开创性地确立了“相对自主性（Relative Autonomy）”与“权力集团（Power Bloc）”核心范畴。全书深入阐释了资本主义国家如何作为一种组织统治阶级政治统一、同时将工人阶级原子化为个体公民（孤立效应）的结构性装置，为现代政治科学、阶级分析与国家理论提供了深远的奠基性贡献。",
+  "subjects": [
+    "普兰查斯",
+    "国家理论",
+    "相对自主性",
+    "马克思主义政治学"
+  ],
+  "cover": "/covers/book-052f608079b3/be86d2431436da1cbc55ccb71ef17d73b8300cdfaa6d35f4c6844226ef51180f.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6",
+    "bytes": 623424,
+    "filename": "政治权力与社会阶级 - Nicos Poulantzas.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-052f608079b3/08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-052f608079b3/08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

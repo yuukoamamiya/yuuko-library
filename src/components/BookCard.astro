@@ -1,0 +1,18 @@
+---
+import { editionLabel, subjectsOf, type Book } from '../lib/books';
+const { book, index = 0 } = Astro.props as { book: Book; index?: number };
+---
+<article class="book-card" data-book-id={book.id}>
+  <a href={`/books/${book.id}/`} class="cover-stage" style={`--book-hue: ${[40, 100, 20, 175, 220][index % 5]}`} tabindex="-1" aria-hidden="true">
+    {book.cover ? <img src={book.cover} alt="" loading={index < 5 ? 'eager' : 'lazy'} decoding="async" width="180" height="260" />
+      : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}
+    <span class="cover-arrow" aria-hidden="true">↗</span>
+  </a>
+  <div class="book-category">{subjectsOf(book).slice(0, 2).join(' / ')}</div>
+  <h2><a href={`/books/${book.id}/`}>{book.title}</a></h2>
+  <p class="book-author">{book.authors.join(' / ') || '作者未提供'}</p>
+  <div class:list={['edition-label', { transcription: book.edition.kind === 'transcription' }]}>
+    <span class="edition-symbol" aria-hidden="true">{book.edition.kind === 'transcription' ? '▤' : '✧'}</span>
+    <span>{editionLabel(book)}</span>
+  </div>
+</article>

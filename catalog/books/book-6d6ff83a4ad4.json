@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-6d6ff83a4ad4",
+  "title": "康德手册：生平与著作",
+  "authors": [
+    "Gerd Irrlitz"
+  ],
+  "description": "本书由德国哲学家格尔德·伊尔利茨（Gerd Irrlitz）倾力撰写，梅茨勒出版社（J.B. Metzler）出版，是一部在“宏观尺度”上完整展现康德生平与全部思想体系的百科全书式鸿篇巨制。全书系统考察了18世纪普鲁士社会的物质文化语境，以详尽的文献考证逐一精读康德生前出版的全部著作、手稿与通信遗存。伊尔利茨深入解构了先验哲学的逻辑结构、纯粹知性原理、道德信念论与世界主义法权思想，全景描摹了自《纯粹理性批判》问世以来两百余年国际学术界围绕康德思想展开的思想论辩，堪称当代德语学界康德研究的学术丰碑。",
+  "subjects": [
+    "康德",
+    "康德手册",
+    "先验哲学",
+    "德国启蒙哲学"
+  ],
+  "cover": "/covers/book-6d6ff83a4ad4/7321d76dc7c8258a5d6a1214c34f350de5550fc2b3a4d5af1725231ebbd62658.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f",
+    "bytes": 2147979,
+    "filename": "康德手册：生平与著作 - Gerd Irrlitz.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-6d6ff83a4ad4/e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-6d6ff83a4ad4/e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

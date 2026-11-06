@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-75aac88a4006",
+  "title": "前工业化欧洲的农业阶级结构与经济发展",
+  "authors": [
+    "Robert Brenner"
+  ],
+  "description": "本书是当代著名历史社会学家罗伯特·布伦纳（Robert Brenner）发表于《过去与现在》的经典奠基之作，由此掀起了国际史学界著名的“布伦纳辩论”（Brenner Debate）。布伦纳在文中系统批判了传统的人口/马尔萨斯模型与商业化贸易模型，比较了英国、法国及东欧在前工业化时期的发展分野，深刻指出推动资本主义在西欧破土而出的决定性力量，在于农村具体的土地财产权制度演变以及领主与农民之间的阶级斗争动态，确立了政治马克思主义与农业资本主义起源理论的学术基石。",
+  "subjects": [
+    "布伦纳辩论",
+    "资本主义起源",
+    "历史社会学",
+    "政治马克思主义"
+  ],
+  "cover": "/covers/book-75aac88a4006/25c71d666197c26856e44667f39edfcb6f333c53293bb1c8c1a0553e5e1c039f.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d",
+    "bytes": 370737,
+    "filename": "前工业化欧洲的农业阶级结构与经济发展 - Robert Brenner.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-75aac88a4006/65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-75aac88a4006/65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-fd57f77e953e",
+  "title": "黑格尔的《美学讲演录》",
+  "authors": [
+    "Birgit Sandkaulen-Bock"
+  ],
+  "description": "本书由德国著名哲学家比尔吉特·桑德考伦主编，为“经典诠释”丛书系列权威评注之一。针对黑格尔未留下正式专著的美学思想，本书在霍托1835/1842年经典整理本的基础上，开创性地全面对照了黑格尔四次柏林讲演的历史原始听课笔记（包括1828/29年海曼笔记等考订成果）。各篇专论不仅深入探讨了“艺术终结论”、美的理念之感性显现、象征/古典/浪漫三种艺术类型与具体门类艺术的辩证展开，更阐发了艺术作为绝对精神核心媒介与人类自我理解形态的现代文化哲学意义。",
+  "subjects": [
+    "黑格尔",
+    "美学",
+    "艺术哲学",
+    "德国观念论"
+  ],
+  "cover": "/covers/book-fd57f77e953e/928a43df1fb008d68894f079949dbc965d1101ea69a557061253016ff45a5c5e.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25",
+    "bytes": 579407,
+    "filename": "黑格尔的《美学讲演录》 - Birgit Sandkaulen-Bock.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-fd57f77e953e/4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-fd57f77e953e/4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

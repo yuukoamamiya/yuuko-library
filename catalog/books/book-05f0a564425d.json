@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-05f0a564425d",
+  "title": "传播的理论化：一部历史",
+  "authors": [
+    "Dan Schiller"
+  ],
+  "description": "本书是丹·席勒对西方现代传播思想史展开宏大理论重构的学术专著。全书摆脱了传统传播学对狭隘工具主义与经验测量的沉溺，力图将传播探究重新锚定于经典社会理论的核心传统。席勒独具匠心地将“传播”与“劳动”这一古老分裂作为思想史的主轴，深入剖析了近一个世纪以来人类自我活动如何在社会理论中被割裂为“符号互动”与“体力耗费”，揭示了传播研究是如何在脑体分工、阶级控制与资本再生产的裂隙中获得其隐匿的理论基础设施，是传播学理论反思与思想史梳理的峰峦之作。",
+  "subjects": [
+    "传播思想史",
+    "传播理论",
+    "劳动与传播",
+    "社会理论"
+  ],
+  "cover": "/covers/book-05f0a564425d/f1b3df1e8e3662f59ea1de617277b2819fae6854a673f8c276ccbda74d3106e2.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "c5d416159ecac3f1fdd71655d00f867ade5e58ae4f597a4df6caa9810c84b6e7",
+    "bytes": 1206691,
+    "filename": "传播的理论化：一部历史 - Dan Schiller.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-05f0a564425d/c5d416159ecac3f1fdd71655d00f867ade5e58ae4f597a4df6caa9810c84b6e7.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-05f0a564425d/c5d416159ecac3f1fdd71655d00f867ade5e58ae4f597a4df6caa9810c84b6e7.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

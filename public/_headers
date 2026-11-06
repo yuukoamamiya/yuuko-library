@@ -1,0 +1,8 @@
+/release.json
+  Cache-Control: no-store
+
+/search-index.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*
+  X-Content-Type-Options: nosniff

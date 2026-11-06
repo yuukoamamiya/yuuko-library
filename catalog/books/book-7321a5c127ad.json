@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-7321a5c127ad",
+  "title": "黑格尔的《法哲学原理》",
+  "authors": [
+    "Ludwig Siep"
+  ],
+  "description": "本书由当代德国权威黑格尔学者路德维希·西普主编，收录于著名的德意志“经典诠释”（Klassiker Auslegen）丛书（第4版修订版）。本书汇聚了国际黑格尔研究领域杰出学者的专门论文，对黑格尔1820年《法哲学原理》各关键章节提供了全面而权威的合作式学术评注。全书深入剖析了抽象法、道德、家庭、市民社会经济理论、国家正义以及国家与宗教关系，并结合最新整理的黑格尔讲授课听课笔记与考证版全集（GW），系统展现了黑格尔政治哲学在当代立宪主义、社群主义与法哲学辩论中的深远意涵。",
+  "subjects": [
+    "黑格尔",
+    "法哲学",
+    "政治哲学",
+    "德国观念论"
+  ],
+  "cover": "/covers/book-7321a5c127ad/a3a320908c93ec6fa0bbdb75feafa7e787bb2f8231caae4293ed904f958ce33f.png",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab",
+    "bytes": 18074133,
+    "filename": "黑格尔的《法哲学原理》 - Ludwig Siep.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-7321a5c127ad/07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-7321a5c127ad/07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

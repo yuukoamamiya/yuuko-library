@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-8f9c2860611c",
+  "title": "数字资本主义",
+  "authors": [
+    "Dan Schiller"
+  ],
+  "description": "本书是批判传播学者丹·席勒揭示互联网与跨国资本主义全球扩张内在机制的先驱性经典著作。作者尖锐挑战了早期网络乌托邦主义关于“全球无摩擦自由与民主繁荣”的幻象，率先提出了“数字资本主义（Digital Capitalism）”这一奠基性概念。席勒深入剖析了计算机网络如何从原本由军方和公共机构支持的科研系统，被新自由主义市场逻辑全面殖民为跨国垄断资本的核心生产与控制基础设施，并警示了网络对家庭消费主义和公共教育领域的商业掠夺，为理解当代平台资本主义与全球数字鸿沟提供了历久弥新的洞见。",
+  "subjects": [
+    "数字资本主义",
+    "网络政治经济学",
+    "批判传播学",
+    "新自由主义"
+  ],
+  "cover": "/covers/book-8f9c2860611c/6dcdd9760ba97a1d39e296f79ff9be8d8b8c3b0c5eac300d88aafcef9149b0b0.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c",
+    "bytes": 913913,
+    "filename": "数字资本主义 - Dan Schiller.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-8f9c2860611c/2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-8f9c2860611c/2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

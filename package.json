@@ -1,0 +1,37 @@
+{
+  "name": "book-share",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "book": "tsx tools/book/cli.ts",
+    "check": "astro check && tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "r2": "tsx tools/r2/cli.ts",
+    "pages": "tsx tools/pages/cli.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.1163.0",
+    "astro": "7.4.7",
+    "fast-xml-parser": "5.12.0",
+    "fast-xml-validator": "1.4.2",
+    "html-to-text": "10.0.1",
+    "yauzl": "3.4.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/html-to-text": "9.0.4",
+    "@types/node": "26.6.6",
+    "@types/yauzl": "3.4.0",
+    "@types/yazl": "3.3.1",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "wrangler": "4.158.0",
+    "yazl": "3.3.1"
+  }
+}

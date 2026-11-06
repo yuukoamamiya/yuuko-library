@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-e95eee6a2cb7",
+  "title": "普兰查斯读本：马克思主义、法律与国家",
+  "authors": [
+    "Nicos Poulantzas"
+  ],
+  "description": "本书由政治理论学者詹姆斯·马丁精选编纂，全景式汇集了20世纪著名希腊-法国马克思主义国家理论泰斗尼科斯·普兰查斯（Nicos Poulantzas）横跨法学、社会学与国家理论的核心文献。全书真实呈现了普兰查斯从早年存在主义法现象学、阿尔都塞结构主义到晚期战略关系理论的思想蜕变。文集收录了关于相对自主性、阶级结构、威权国家主义与民主社会主义战略的经典文本，深入展示了他如何将资本主义国家解构为阶级斗争的“物质凝聚”，是全面领略普兰查斯激进政治理论遗产的必备权威读本。",
+  "subjects": [
+    "普兰查斯",
+    "国家理论",
+    "相对自主性",
+    "马克思主义法学"
+  ],
+  "cover": "/covers/book-e95eee6a2cb7/6ac9c1586a3cee86cdff82ae6a92ed6af07b00aa5645196b986d9159bc73110e.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "4af3e6159109bfcb227d730b9f709678095812db88f5fcf15d1ebfe10d18eae5",
+    "bytes": 2127507,
+    "filename": "普兰查斯读本：马克思主义、法律与国家 - Nicos Poulantzas.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-e95eee6a2cb7/4af3e6159109bfcb227d730b9f709678095812db88f5fcf15d1ebfe10d18eae5.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-e95eee6a2cb7/4af3e6159109bfcb227d730b9f709678095812db88f5fcf15d1ebfe10d18eae5.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

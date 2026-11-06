@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-93d06f6d7374",
+  "title": "黑格尔手册：生平·著作·学派",
+  "authors": [
+    "Walter Jaeschke"
+  ],
+  "description": "本书由国际著名黑格尔文献学泰斗瓦尔特·耶施克（Walter Jaeschke）倾力编纂，是当代黑格尔哲学研究领域不可替代的权威百科全书式手册。全书基于权威的黑格尔历史考证版（GW）最新成果，分为三大部分：系统梳理黑格尔从青年施蒂夫特时期到柏林巅峰的生平线索；逐部考证并深度解析从早年神学手稿、《精神现象学》、《逻辑科学》到各学科讲演录的思想展开；全面勾勒黑格尔学派在“三月革命前”时期的分裂与世界范围内的接受史，是学术界与哲学研究者研读黑格尔必备的经典工具书。",
+  "subjects": [
+    "黑格尔",
+    "德国古典哲学",
+    "哲学史",
+    "文献考证"
+  ],
+  "cover": "/covers/book-93d06f6d7374/22e8d3108b766e14ac8b14e4a50642f23795cc7a6c3b04156db64853bc694cce.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "d62ff58e3a0c177afcc38b988ead697d2432d02d880f8531e71413ed1830ba1a",
+    "bytes": 1803282,
+    "filename": "黑格尔手册：生平·著作·学派 - Walter Jaeschke.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-93d06f6d7374/d62ff58e3a0c177afcc38b988ead697d2432d02d880f8531e71413ed1830ba1a.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-93d06f6d7374/d62ff58e3a0c177afcc38b988ead697d2432d02d880f8531e71413ed1830ba1a.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

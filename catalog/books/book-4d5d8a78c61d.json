@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-4d5d8a78c61d",
+  "title": "政治经济学原理：纯粹资本主义社会理论",
+  "authors": [
+    "Kozo Uno"
+  ],
+  "description": "本书是日本马克思主义经济学泰斗宇野弘藏最为成熟、凝练的代表作（日文原名《经济原论》，关根友彦英译）。宇野在书中将马克思《资本论》原理论彻底重构为一套封闭、自洽且高度严谨的“纯粹资本主义社会辩证理论”。全书以流通论（商品、货币、资本）、生产论与分配论为核心三段论，剖析了资本主义如何将劳动力商品化作为绝对基石，以及价值规律、剩余价值与相对过剩人口规律如何纯粹依赖经济逻辑自我展开，是把握日本马克思主义政治经济学原理论的奠基之作。",
+  "subjects": [
+    "宇野弘藏",
+    "马克思主义经济学",
+    "原理论",
+    "资本论重构"
+  ],
+  "cover": "/covers/book-4d5d8a78c61d/457a289299f3d8d9e60985779b400bd429d8a3ea599fe4ad2db1ded211e778e7.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "fed25c56dcdf8fcb68015d823fef611f122e94f6c948c816136f113d0e4404a4",
+    "bytes": 591689,
+    "filename": "政治经济学原理：纯粹资本主义社会理论 - Kozo Uno.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-4d5d8a78c61d/fed25c56dcdf8fcb68015d823fef611f122e94f6c948c816136f113d0e4404a4.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-4d5d8a78c61d/fed25c56dcdf8fcb68015d823fef611f122e94f6c948c816136f113d0e4404a4.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

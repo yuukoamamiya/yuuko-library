@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "less-than-nothing",
+  "title": "少于无：黑格尔与辩证唯物主义的阴影",
+  "authors": [
+    "Slavoj Zizek"
+  ],
+  "description": "本书被公认为当代著名激进哲学家斯拉沃热·齐泽克的哲学巨著与生涯代表作。全书厚重深邃，全面贯彻了齐泽克“通过拉康回归黑格尔”的宏大纲领。齐泽克以伽利略的“然而它还在动（Eppur si muove）”为隐喻，展开对前黑格尔、黑格尔哲学及其当代回响的激进重读，提出“现实少于无”这一核心本体论命题——实在界并非充盈的实体，而是自相关匮乏与虚空本身的运动。全书横跨量子物理学、基督教神学、脑科学及全球资本主义意识形态批判，重新绘制了21世纪辩证唯物主义的哲学版图。",
+  "subjects": [
+    "马克思主义哲学",
+    "黑格尔",
+    "拉康",
+    "辩证唯物主义"
+  ],
+  "cover": "/covers/less-than-nothing/1860dacc178fd7c8a30918767ec59fddb97aae6c9ee8d81ffad6a89d0865ce13.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 2.5 pro"
+  },
+  "file": {
+    "sha256": "d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307",
+    "bytes": 2284090,
+    "filename": "少于无：黑格尔与辩证唯物主义的阴影 - Slavoj Zizek.epub"
+  },
+  "downloads": {
+    "r2Key": "books/less-than-nothing/d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/less-than-nothing/d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

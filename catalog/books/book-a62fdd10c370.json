@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-a62fdd10c370",
+  "title": "保卫马克思",
+  "authors": [
+    "Louis Althusser"
+  ],
+  "description": "本书是20世纪法国著名结构主义马克思主义哲学家路易·阿尔都塞的划时代里程碑著作（埃蒂安·巴里巴尔作序）。阿尔都塞在书中针对战后风行欧洲的黑格尔式人道主义马克思主义展开了决不妥协的理论交锋。他创造性地借用巴什拉的“认识论断裂（coupure épistémologique）”概念，论证了马克思在1845年以历史唯物主义与剩余价值科学彻底决裂于青年时期的意识形态人本学，并提出了“多元决定（Surdétermination）”、“症候阅读法”与“意识形态国家机器”雏形，彻底重构了西方当代哲学与马克思主义理论版图。",
+  "subjects": [
+    "阿尔都塞",
+    "西方马克思主义",
+    "认识论断裂",
+    "结构主义哲学"
+  ],
+  "cover": "/covers/book-a62fdd10c370/0232b75e86a1a40514138ece757bd895779c5149a0f937f0e8039042306dca7f.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125",
+    "bytes": 684495,
+    "filename": "保卫马克思 - Louis Althusser.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-a62fdd10c370/f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-a62fdd10c370/f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

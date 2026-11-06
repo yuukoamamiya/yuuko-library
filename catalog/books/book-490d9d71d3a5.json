@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-490d9d71d3a5",
+  "title": "黑格尔哲学",
+  "authors": [
+    "Walter Jaeschke"
+  ],
+  "description": "本书由国际著名黑格尔泰斗瓦尔特·耶施克（Walter Jaeschke）撰写，汇聚了作者二十余年间对黑格尔思想体系核心难题的深刻反思与专题讲演。耶施克旗帜鲜明地反驳了将黑格尔割裂为抽象思辨逻辑或庸俗普鲁士国家哲学的两极误读，系统阐明了以《逻辑科学》为“内在骨架”与以《精神哲学》为“现实完满”之间的有机统一。书中重点聚焦黑格尔庞大的“导论体系”（从《精神现象学》到《法哲学原理》的进路）、概念自我扬弃的生命力以及精神深入历史对立中实现自我具体化的辩证历程，是把握黑格尔晚期成熟体系真谛的大家力作。",
+  "subjects": [
+    "黑格尔",
+    "德国观念论",
+    "精神哲学",
+    "思辨逻辑"
+  ],
+  "cover": "/covers/book-490d9d71d3a5/f047a880b534581af7d60b0ea05c6a7456ec2112ebf0f0663882601aaefc7aa4.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa",
+    "bytes": 450995,
+    "filename": "黑格尔哲学 - Walter Jaeschke.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

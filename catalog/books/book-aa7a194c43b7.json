@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-aa7a194c43b7",
+  "title": "西方马克思：1965年以来的联邦德国新马克思阅读",
+  "authors": [
+    "Ingo Elbe"
+  ],
+  "description": "本书是当代德国马克思主义学者因戈·埃尔贝梳理“新马克思阅读”（Neue Marx-Lektüre）思想史的里程碑式巨著。著作对1965年以来在西德生发并蓬勃展开的马克思学术复兴进行了系统而严谨的学术清理。作者聚焦于对传统正统马克思列宁主义与庸俗经济主义的根本清算，深入阐明了价值形式理论、辩证叙述方法、资产阶级国家形式衍生论（国家推导辩论）以及革命理论的范式重构，深刻展现了战后德国批判理论与政治经济学批判所达到的极高思维水准。",
+  "subjects": [
+    "新马克思阅读",
+    "政治经济学批判",
+    "价值形式",
+    "西方马克思主义"
+  ],
+  "cover": "/covers/book-aa7a194c43b7/85c3e75dc7e64d9e44084811d30cb230259bd08c9d4bb7b5aa62c2df0b314dfc.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "be6e85455fce683cb31375f4dd0b4f883ea1d84d0f3e3223fe6d1aeaf860e0e4",
+    "bytes": 1042056,
+    "filename": "西方马克思：1965年以来的联邦德国新马克思阅读 - Ingo Elbe.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-aa7a194c43b7/be6e85455fce683cb31375f4dd0b4f883ea1d84d0f3e3223fe6d1aeaf860e0e4.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-aa7a194c43b7/be6e85455fce683cb31375f4dd0b4f883ea1d84d0f3e3223fe6d1aeaf860e0e4.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

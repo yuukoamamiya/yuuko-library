@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-203c0ecada35",
+  "title": "康德：著作整体简要导论",
+  "authors": [
+    "Gottfried Gabriel"
+  ],
+  "description": "本书由著名分析哲学与逻辑思想史学者戈特弗里德·加布里尔（Gottfried Gabriel）撰写，是一部篇幅精炼、架构极清晰的康德哲学通识指南。全书严格立足于科学院版《康德全集》生前出版文本，以康德哲学建筑术的宏观内在关联为主线，兼顾前批判时期的思想探索与批判时期的体系奠基。加布里尔重点精解了《纯粹理性批判》、《实践理性批判》、《判断力批判》三大批判及《道德形而上学奠基》的核心论证与概念脉络，以问题导向揭示先验唯心论的认识论革命与实践理性原则，为初学者提供了一条可靠且严谨的康德哲学入门阶梯。",
+  "subjects": [
+    "康德",
+    "三大批判",
+    "先验唯心论",
+    "德国古典哲学"
+  ],
+  "cover": "/covers/book-203c0ecada35/acfb39be9e67359f949883e6b4320df4c8401836a42171895e7d5b2fe2101984.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473",
+    "bytes": 456774,
+    "filename": "康德：著作整体简要导论 - Gottfried Gabriel.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-203c0ecada35/22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-203c0ecada35/22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

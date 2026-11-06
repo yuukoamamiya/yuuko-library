@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-4e21bad9ce22",
+  "title": "齐泽克手册",
+  "authors": [
+    "Dominik Finkelde"
+  ],
+  "description": "本书由慕尼黑哲学学院多米尼克·芬克尔德（Dominik Finkelde）教授主编，施普林格·自然（Springer Nature / J.B. Metzler）重磅出版，是国际学术界首部对当代著名哲学家斯拉沃热·齐泽克思想展开系统化谱系梳理的大型学术手册。全书汇集全球数十位顶尖激进哲学与精神分析学者，深度解析齐泽克如何将拉康精神分析视作哲学的“外密中心”，并与德国观念论（康德-谢林-黑格尔）形成高强度缝合。书中详尽剖析了其实在界本体论、流行文化意识形态批判、主体性困境与革命政治学，为深入把握齐泽克浩瀚庞杂的思想大厦提供了清晰的坐标系。",
+  "subjects": [
+    "齐泽克",
+    "拉康",
+    "当代哲学",
+    "意识形态批判"
+  ],
+  "cover": "/covers/book-4e21bad9ce22/622edbe7bdc0c062750858e2eab30e01b58e18530a252addbf36a610e4248851.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "8a7ba3a958212bbf93cc4b7b6f39e1a89aea9162d682b3077f1586303ea5161a",
+    "bytes": 2002988,
+    "filename": "齐泽克手册 - Dominik Finkelde.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-4e21bad9ce22/8a7ba3a958212bbf93cc4b7b6f39e1a89aea9162d682b3077f1586303ea5161a.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-4e21bad9ce22/8a7ba3a958212bbf93cc4b7b6f39e1a89aea9162d682b3077f1586303ea5161a.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

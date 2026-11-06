@@ -1,0 +1,42 @@
+---
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import Layout from '../../layouts/Layout.astro';
+import { editionLabel, loadBooks, sizeLabel, subjectsOf, type Book } from '../../lib/books';
+import { SITE_TITLE } from '../../lib/site';
+export async function getStaticPaths() {
+  return (await loadBooks()).map(book => ({ params: { id: book.id }, props: { book } }));
+}
+const { book } = Astro.props as { book: Book };
+const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? process.cwd(), 'catalog/preview.json'), 'utf8').then(() => true).catch(() => false);
+const available = !preview && book.downloads.r2Url?.startsWith('https://');
+---
+<Layout title={`${book.title} · ${SITE_TITLE}`} description={book.description.slice(0, 160) || book.title} preview={preview}>
+  <main class="detail-main" id="main">
+    <a class="back-link" href="/#library"><span aria-hidden="true">←</span> 返回书架</a>
+    <div class="detail-grid">
+      <aside class="detail-book">
+        <div class="detail-cover">{book.cover ? <img src={book.cover} alt={`${book.title}封面`} width="300" height="430" /> : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}</div>
+        <div class="file-summary"><span>EPUB</span><span>{sizeLabel(book.file.bytes)}</span></div>
+        {available ? <a class="download-button" href={book.downloads.r2Url!}>下载电子书 <span aria-hidden="true">↓</span></a>
+          : <div class="download-pending"><span>下载将在发布后开放</span><small>EPUB · {sizeLabel(book.file.bytes)}</small></div>}
+        <p class="download-note">{preview ? '当前为本地预览，文件尚未公开。' : '公开下载，无需登录。'}</p>
+      </aside>
+      <article class="detail-content">
+        <p class="eyebrow">AMAMIYA YUUKO LIBRARY / 书籍详情</p>
+        <h1>{book.title}</h1>
+        <p class="detail-author">{book.authors.join(' / ') || '作者未提供'}</p>
+        <div class="detail-subjects">{subjectsOf(book).map(subject => <a href={`/?subject=${encodeURIComponent(subject)}#library`}>{subject}</a>)}</div>
+        <section class="introduction" aria-labelledby="intro-heading"><h2 id="intro-heading"><span>01</span> 关于这本书</h2><div class="description">{book.description || '暂无简介'}</div></section>
+        <section class="edition-section" aria-labelledby="edition-heading"><h2 id="edition-heading"><span>02</span> 版本信息</h2>
+          <dl class="edition-table"><div><dt>版本来源</dt><dd>{book.edition.kind === 'transcription' ? '中文出版物转录' : 'AI 翻译'}</dd></div>
+            {book.edition.kind === 'ai-translation' && <div><dt>翻译模型</dt><dd><span class="edition-label"><span aria-hidden="true">✧</span> {editionLabel(book)}</span></dd></div>}
+            <div><dt>文件格式</dt><dd>EPUB <span class="muted">/ {sizeLabel(book.file.bytes)}</span></dd></div>
+            {book.updatedAt && <div><dt>最近更新</dt><dd>{new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai' }).format(new Date(book.updatedAt))}</dd></div>}
+          </dl>
+          <p class="edition-disclaimer">{book.edition.kind === 'ai-translation' ? '本书由 AI 翻译，可能存在术语、理解或表达上的偏差。阅读与引用时，请酌情参照原文。' : '本书为中文出版物的 EPUB 转录，未使用 AI 翻译。'}</p>
+        </section>
+      </article>
+    </div>
+  </main>
+</Layout>

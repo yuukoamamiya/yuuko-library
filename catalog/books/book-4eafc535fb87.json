@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-4eafc535fb87",
+  "title": "自由主义法西斯主义",
+  "authors": [
+    "Slavoj Žižek"
+  ],
+  "description": "本书是当代著名激进哲学家斯拉沃热·齐泽克的政论批判文集。齐泽克针对全球极右民粹主义崛起与自由主义秩序的崩溃，提出了极具辨证张力的核心概念——“自由主义法西斯主义”。他指出，新民粹主义与极端保守势力并非自由主义的单纯敌人，而是市场自由意志主义在推向极端后的法西斯化变体，揭示了两者宛如同一枚硬币之两面的内在共谋关系。全书横跨特朗普现象、俄乌冲突、技术封建主义巨头到全球意识形态迷雾，以一贯犀利激进的拉康-马克思视角，呼吁左翼打破对建制自由主义的虚妄幻想，直面政治破局的真实困境。",
+  "subjects": [
+    "政治哲学",
+    "齐泽克",
+    "意识形态批判",
+    "当代民粹主义"
+  ],
+  "cover": "/covers/book-4eafc535fb87/242b19eaca3ee3d376e073191d9b6428ec9e8a0f8c711a0306aa3a7a95b411ac.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88",
+    "bytes": 4624920,
+    "filename": "自由主义法西斯主义 - Slavoj Žižek.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-4eafc535fb87/e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-4eafc535fb87/e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

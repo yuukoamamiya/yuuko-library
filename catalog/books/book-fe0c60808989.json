@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-fe0c60808989",
+  "title": "罗莎·卢森堡的遗产",
+  "authors": [
+    "Norman Geras"
+  ],
+  "description": "本书是当代马克思主义学者诺曼·杰拉斯关于20世纪伟大革命家罗莎·卢森堡思想的奠基性研究。全书通过严谨的文本辨析与理论考证，深入反驳了长期以来加诸于卢森堡身上的种种曲解与神话。杰拉斯系统梳理了卢森堡关于资本主义崩溃的经济理论与群众罢工的战略构想，阐明其思想绝非盲目的“自发论”，而是旨在构建无产阶级民主与革命能动性的有机结合；同时剖析了她在1905年革命及1918年对布尔什维克的批判，澄清了其理论与社会民主主义及无政府主义的本质界限，彰显了其关于社会主义民主与反帝国主义思想的持久生命力。",
+  "subjects": [
+    "马克思主义理论",
+    "罗莎·卢森堡",
+    "社会主义民主",
+    "国际共运史"
+  ],
+  "cover": "/covers/book-fe0c60808989/8ca4ad8c31895094e5e25933c76cd9256d5003e6255d719017d3951ac649439d.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "94182ff77332f32d3fc26ecf668070a1d10a9de57400014be0e4673afd155bb4",
+    "bytes": 2343342,
+    "filename": "罗莎·卢森堡的遗产 - Norman Geras.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-fe0c60808989/94182ff77332f32d3fc26ecf668070a1d10a9de57400014be0e4673afd155bb4.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-fe0c60808989/94182ff77332f32d3fc26ecf668070a1d10a9de57400014be0e4673afd155bb4.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

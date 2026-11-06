@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "book-70bba5a29980",
+  "title": "尼采手册",
+  "authors": [
+    "Henning Ottmann"
+  ],
+  "description": "本书由著名政治哲学与思想史学者亨宁·奥特曼（Henning Ottmann）主编，梅茨勒出版社（J.B. Metzler）出版，汇集数十位国际顶尖尼采研究专家的智慧，是当代尼采哲学研究的皇皇巨著。全书分为五大部分：详尽考证尼采的生平与时代语境；按年代顺序逐部精读从《悲剧的诞生》到晚期遗稿的全系列著作；深度解析权力意志、永恒轮回、超人、重估一切价值等逾百个核心哲学概念与隐喻；系统梳理其希腊思想与近代理论渊源；全景描摹其在哲学、文学、政治、神学中的百年接受史，堪称全球尼采研究的集大成之作。",
+  "subjects": [
+    "尼采",
+    "德国哲学",
+    "哲学手册",
+    "权力意志"
+  ],
+  "cover": "/covers/book-70bba5a29980/1844dc66035ec2c155bec0217a43c57fed0586319c6111b6599613d88b54f5d6.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "c6d8d6206abf01ddc5c3e879e1d7208ae7857ba398140c159c5aaf674bf97250",
+    "bytes": 2665697,
+    "filename": "尼采手册 - Henning Ottmann.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-70bba5a29980/c6d8d6206abf01ddc5c3e879e1d7208ae7857ba398140c159c5aaf674bf97250.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-70bba5a29980/c6d8d6206abf01ddc5c3e879e1d7208ae7857ba398140c159c5aaf674bf97250.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

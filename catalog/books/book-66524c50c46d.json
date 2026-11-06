@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "book-66524c50c46d",
+  "title": "货币与金融政治经济学",
+  "authors": [
+    "Makoto Itoh",
+    "Costas Lapavitsas"
+  ],
+  "description": "本书由日本宇野学派经济学家伊藤诚与伦敦大学亚非学院教授科斯塔斯·拉帕维查斯合著，是一部从激进政治经济学视角系统阐述货币与金融不稳定性的权威专著。作者针锋相对地批判了新古典经济学与货币主义将金融视为自然中立交易媒介的幻象，立足马克思客观劳动价值论与商品经济逻辑，系统重构了由商品、货币、商业信用、银行信贷到中央银行的金融金字塔。书中深刻论证了信用扩张与金融危机对于实际资本积累的内在必然性，为分析晚期资本主义慢性萧条、滞胀与金融化提供了坚实的历史唯物主义理论基石。",
+  "subjects": [
+    "货币金融理论",
+    "政治经济学",
+    "伊藤诚",
+    "金融危机"
+  ],
+  "cover": "/covers/book-66524c50c46d/4940439cc908b50ec5c8bddeea474da50974f9c5e3f2d4eccebaf09c3ca59a3a.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e",
+    "bytes": 2363952,
+    "filename": "货币与金融政治经济学 - Makoto Itoh & Costas Lapavitsas.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-66524c50c46d/0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-66524c50c46d/0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e.epub",
+    "baidu": null
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z"
+}

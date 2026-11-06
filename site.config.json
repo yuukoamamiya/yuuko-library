@@ -1,0 +1,11 @@
+{
+  "title": "雨宫优子图书馆",
+  "description": "本网站仅供学习和交流用，请于下载后24小时内删除",
+  "siteUrl": "https://library.amamiyayuuko.com",
+  "downloadsUrl": "https://book.amamiyayuuko.com",
+  "r2Bucket": "yuuko-library-books",
+  "r2Endpoint": "https://2912ff2cbf77384d49e43048debf8287.r2.cloudflarestorage.com",
+  "pagesProject": "yuuko-library",
+  "cloudflareZone": "amamiyayuuko.com",
+  "productionBranch": "main"
+}
