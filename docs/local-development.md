@@ -4,7 +4,7 @@
 
 本阶段可提取本地 EPUB 的 metadata 和封面，生成首页和每本书的详情页，并按书名、作者、简介和 subject 检索、筛选。模型名称按输入原样展示，不查询模型服务。支持无模型的中文出版物转录。
 
-书籍工具提供 prepare、preview、validate、status；R2 工具提供连接检查、上传及公开下载校验。`--help` 显示的命令才可执行。百度分享、Pages 部署及站点发布恢复尚待实现。R2 上传不会部署网站。
+书籍工具提供 prepare、preview、validate、status；R2 工具提供连接检查、上传及公开下载校验；独立 pages 工具提供正式构建、部署、线上核验及书目同步，详见 [Pages 命令行部署](pages-deployment.md)。`--help` 显示的命令才可执行。百度分享和统一 book publish/resume 流程尚待实现。R2 上传不会自动部署网站。
 
 ## 准备环境
 

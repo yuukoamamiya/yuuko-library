@@ -8,7 +8,7 @@
 
 已实现 R2 连接检查、单本与批量上传、公开下载完整性校验，以及 Pages 正式构建、Wrangler 部署、线上核验和书目同步。百度网盘尚未接入；统一 book publish / resume / bundle 仍为后续规范，当前使用独立的 r2 和 pages 命令。
 
-2026-11-06 首批 65 本已上传 R2，逐本公开下载校验通过，总大小 108,772,188 bytes。本机下载清单见 `.local/uploads/2026-11-06-upload-summary.md`。网站已通过 CLI 部署并核验：[yuuko-library.pages.dev](https://yuuko-library.pages.dev)。自定义域名 library.amamiyayuuko.com 正在配置 DNS。
+2026-11-06 首批 65 本已上传 R2，逐本公开下载校验通过，总大小 108,772,188 bytes。本机下载清单见 `.local/uploads/2026-11-06-upload-summary.md`。网站已通过 CLI 部署：[雨宫优子图书馆](https://library.amamiyayuuko.com)。自定义域名及 HTTPS 已激活，首页、检索及 65 个详情页的下载链接均已核验；默认地址 [yuuko-library.pages.dev](https://yuuko-library.pages.dev) 同样可用。
 
 - [项目方案](docs/project-plan.md)：范围、技术选择、数据、部署和实施顺序。
 - [上架命令规范](docs/publishing-cli.md)：本地准备、预览、人工确认、发布和失败恢复。

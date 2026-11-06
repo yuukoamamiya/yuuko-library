@@ -4,7 +4,7 @@
 
 - 项目：yuuko-library，Direct Upload，生产分支 main。
 - 默认站点：https://yuuko-library.pages.dev
-- 自定义网站域名：https://library.amamiyayuuko.com（DNS 配置中）。
+- 自定义网站域名：https://library.amamiyayuuko.com（DNS、域名验证及 HTTPS 已激活）。
 - 文件下载域名：https://book.amamiyayuuko.com
 - 首次发布：65 本；线上首页、搜索索引及每本书的 R2 链接均已核验。
 - 本机发布快照：`.local/releases/r-13fc57eb-fd5b-4865-aaf3-3bc2c6ac9e86/`。
@@ -63,7 +63,9 @@ HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_EN
 HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 node --import tsx tools/pages/cloudflare.ts domain-status
 ```
 
-本项目域名已关联 Pages，尚需 CNAME：library.amamiyayuuko.com → yuuko-library.pages.dev。Wrangler 的 pages:write / zone:read 不包含 DNS 读写。若需要继续由命令行设置，在本机 .env.local 填入 CLOUDFLARE_DNS_API_TOKEN，权限限制到 amamiyayuuko.com 的 Zone DNS Edit，再执行：
+本项目域名已关联 Pages，维护者已手动配置 CNAME：library.amamiyayuuko.com → yuuko-library.pages.dev，域名与证书状态均为 active。2026-11-06 已从该域名核验发布标识、首页、索引和 65 本详情页，并通过浏览器核验搜索与 R2 下载入口。无需为此再创建 DNS Token。
+
+Wrangler 的 pages:write / zone:read 不包含 DNS 读写。将来若需要由命令行设置其他域名，在本机 .env.local 填入 CLOUDFLARE_DNS_API_TOKEN，权限限制到相应 Zone 的 DNS Edit，再执行：
 
 ```bash
 HTTPS_PROXY=http://127.0.0.1:10809 HTTP_PROXY=http://127.0.0.1:10809 NODE_USE_ENV_PROXY=1 node --import tsx tools/pages/cloudflare.ts dns-add
