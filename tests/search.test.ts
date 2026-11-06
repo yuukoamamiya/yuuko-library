@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { loadBooks, type Book } from '../src/lib/books.ts';
-import { matches } from '../src/lib/search.ts';
+import { compareByUploadDate, matches } from '../src/lib/search.ts';
 import { validateCategories } from '../src/lib/categories.ts';
 
 const entry = { id: 'example', title: '资本主义的起源：长远视角', authors: ['Ellen Meiksins Wood'], description: '历史与社会关系。', subjects: ['政治经济学'], categories: ['political-economy', 'history'] };
@@ -61,4 +61,17 @@ test('loadBooks orders by updatedAt, falls back to publishedAt, then title and I
     else process.env.BOOK_SITE_ROOT = previousRoot;
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test('upload ordering uses publishedAt only, with title and ID ties and undated books last', () => {
+  const entries = [
+    { id: 'old-updated', title: 'Old', publishedAt: '2019-01-01T00:00:00.000Z', updatedAt: '2026-01-01T00:00:00.000Z' },
+    { id: 'new-upload', title: 'New upload', publishedAt: '2025-01-01T00:00:00.000Z', updatedAt: '2025-01-01T00:00:00.000Z' },
+    { id: 'tie-title', title: 'Alpha', publishedAt: '2024-01-01T00:00:00.000Z' },
+    { id: 'tie-id-z', title: 'Same', publishedAt: '2024-01-01T00:00:00.000Z' },
+    { id: 'tie-id-a', title: 'Same', publishedAt: '2024-01-01T00:00:00.000Z' },
+    { id: 'no-date', title: 'No date', publishedAt: null },
+  ];
+  assert.deepEqual(entries.sort(compareByUploadDate).map(entry => entry.id),
+    ['new-upload', 'tie-title', 'tie-id-a', 'tie-id-z', 'old-updated', 'no-date']);
 });

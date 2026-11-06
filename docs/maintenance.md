@@ -49,6 +49,8 @@ npm run book -- status --plan PLAN
 
 常规上架流程从 EPUB metadata 准备页面，完成 R2 上传并验证公开文件的完整 SHA-256 后，再用上传报告准备 Pages 快照、部署并验证线上页面。百度分享不属于常规上架流程；只有用户另行要求时才执行百度发布。ID、版本类型、模型和分类按 EPUB metadata 与既有规则确定，资料不足时再向维护者确认，不猜测。
 
+首页“最近更新”按最近一次内容更新时间排序；“最新上传”按首次上架时间排序，更新旧书的元数据不会改变其首次上架位置。
+
 ## R2 上传与公开下载
 
 复制 `.env.example` 为 `.env.local`，配置 `R2_ACCESS_KEY_ID` 和 `R2_SECRET_ACCESS_KEY`。桶、下载域名与账号级 S3 endpoint 来自 `site.config.json`。凭据仅留在本机。

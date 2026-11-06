@@ -5,6 +5,13 @@ export interface SearchEntry {
   description: string;
   subjects: string[];
   categories: string[];
+  publishedAt?: string | null;
+}
+
+export function compareByUploadDate(a: Pick<SearchEntry, 'id' | 'title' | 'publishedAt'>,
+  b: Pick<SearchEntry, 'id' | 'title' | 'publishedAt'>): number {
+  return (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '')
+    || a.title.localeCompare(b.title, 'zh-CN') || a.id.localeCompare(b.id);
 }
 
 export const normalize = (value: string) => value.normalize('NFKC').toLocaleLowerCase();
