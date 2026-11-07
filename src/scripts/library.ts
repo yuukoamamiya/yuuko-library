@@ -23,7 +23,7 @@ async function init() {
     search.value = params.get('q') ?? (preserveTypedInput ? search.value : '');
     select.value = params.get('category') ?? '';
     tag.value = params.get('subject') ?? '';
-    sort.value = ['uploaded', 'title', 'author'].includes(params.get('sort') ?? '') ? params.get('sort')! : 'default';
+    sort.value = ['default', 'title', 'author'].includes(params.get('sort') ?? '') ? params.get('sort')! : 'uploaded';
   }
   function render(updateUrl = true) {
     const query = search.value; const subject = tag.value.trim(); const category = select.value;
@@ -39,18 +39,18 @@ async function init() {
     });
     count.textContent = query.trim() || subject || category ? `找到 ${total} 本书籍${category ? ` · ${categoryLabel(category)}` : ''}${subject ? ` · ${subject}` : ''}` : `共 ${total} 本书籍`;
     document.querySelector<HTMLElement>('#empty-state')!.hidden = total !== 0 || entries.length === 0;
-    reset.hidden = !query && !subject && !category && sort.value === 'default';
+    reset.hidden = !query && !subject && !category && sort.value === 'uploaded';
     buttons.forEach(button => { const active = button.dataset.category === category;
       button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active)); });
     if (updateUrl) {
       const url = new URL(location.href);
-      for (const [key, value] of [['q', query], ['subject', subject], ['category', category], ['sort', sort.value === 'default' ? '' : sort.value]]) {
+      for (const [key, value] of [['q', query], ['subject', subject], ['category', category], ['sort', sort.value === 'uploaded' ? '' : sort.value]]) {
         if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
       }
       history.replaceState(null, '', url);
     }
   }
-  function clear() { search.value = ''; select.value = ''; tag.value = ''; sort.value = 'default'; render(); }
+  function clear() { search.value = ''; select.value = ''; tag.value = ''; sort.value = 'uploaded'; render(); }
   search.addEventListener('input', () => render());
   tag.addEventListener('input', () => render());
   select.addEventListener('change', () => render()); sort.addEventListener('change', () => render());

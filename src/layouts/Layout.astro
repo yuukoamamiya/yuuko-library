@@ -14,6 +14,7 @@ const { title = SITE_TITLE, description = SITE_NOTICE, preview = false } = Astro
     {preview && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#f7f3ec" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE_TITLE} · 新书订阅`} href="/rss.xml" />
     <title>{title}</title>
   </head>
   <body>
@@ -29,7 +30,7 @@ const { title = SITE_TITLE, description = SITE_NOTICE, preview = false } = Astro
     <slot />
     <footer class="site-footer" id="about">
       <a class="footer-brand" href="/">{SITE_TITLE}</a>
-      <p>AI 译本可能存在翻译偏差，请参照原文。</p>
+      <p>AI 译本可能存在翻译偏差，请参照原文。 <a href="/rss.xml">RSS 订阅</a></p>
     </footer>
   </body>
 </html>
