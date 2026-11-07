@@ -40,7 +40,7 @@ const available = !preview && book.downloads.r2Url?.startsWith('https://');
             <div><dt>文件格式</dt><dd>EPUB <span class="muted">/ {sizeLabel(book.file.bytes)}</span></dd></div>
             {book.updatedAt && <div><dt>最近更新</dt><dd>{new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai' }).format(new Date(book.updatedAt))}</dd></div>}
           </dl>
-          <p class="edition-disclaimer">{book.edition.kind === 'ai-translation' ? '本书由 AI 翻译，可能存在术语、理解或表达上的偏差。阅读与引用时，请酌情参照原文。' : '本书为中文出版物的 EPUB 转录，未使用 AI 翻译。'}</p>
+          <p class="edition-disclaimer">{book.edition.kind === 'ai-translation' ? <>{book.edition.model === 'gemini 3.8 flash' ? <>翻译时挂载了 <a href="https://github.com/yuukoamamiya/pdf2epub-for-antigravity/tree/main/glossaries" target="_blank" rel="noreferrer">术语表</a>。</> : ['gemini 3.1 pro preview', 'gemini 2.5 pro'].includes(book.edition.model) ? '翻译时未挂载术语表。' : null} 本书由 AI 翻译，可能存在术语、理解或表达上的偏差。阅读与引用时，请酌情参照原文。</> : '本书为中文出版物的 EPUB 转录，未使用 AI 翻译。'}</p>
         </section>
         <BookComments bookId={book.id} preview={preview} />
       </article>

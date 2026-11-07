@@ -25,7 +25,6 @@ const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? proces
       <div class="hero-aside" aria-label="书架统计">
         <p class="aside-label">馆藏概览 <span>COLLECTION</span></p>
         <div class="hero-stats"><div><strong>{books.length.toString().padStart(2, '0')}</strong><span>本电子书</span></div><div><strong>{models.size.toString().padStart(2, '0')}</strong><span>种翻译模型</span></div></div>
-        <span class="aside-caption">AI 翻译 · 中文出版物转录 · EPUB</span>
       </div>
     </section>
     <section class="library-section" id="library" aria-labelledby="library-heading">
