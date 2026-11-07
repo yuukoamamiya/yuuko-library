@@ -1,12 +1,17 @@
 ---
 import { editionLabel } from '../lib/books';
+import { coverSources } from '../lib/cover-variants';
 import type { Book } from '../lib/book';
 import { categoryLabel } from '../lib/categories';
 const { book, index = 0 } = Astro.props as { book: Book; index?: number };
+const sources = coverSources(book.cover, '180px');
 ---
 <article class="book-card" data-book-id={book.id}>
   <a href={`/books/${book.id}/`} class="cover-stage" style={`--book-hue: ${[40, 100, 20, 175, 220][index % 5]}`} tabindex="-1" aria-hidden="true">
-    {book.cover ? <img src={book.cover} alt="" loading={index < 5 ? 'eager' : 'lazy'} decoding="async" width="180" height="260" />
+    {book.cover ? <picture>
+      {sources && <source type="image/webp" srcset={sources.srcset} sizes={sources.sizes} />}
+      <img src={book.cover} alt="" loading={index < 5 ? 'eager' : 'lazy'} decoding="async" width="180" height="260" />
+    </picture>
       : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}
     <span class="cover-arrow" aria-hidden="true">↗</span>
   </a>

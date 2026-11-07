@@ -55,6 +55,12 @@ npm run book -- status --plan PLAN
 
 首页“最近更新”按最近一次内容更新时间排序；“最新上传”按首次上架时间排序，更新旧书的元数据不会改变其首次上架位置。
 
+## 封面与缓存
+
+正式封面的原件在 `public/covers/<ID>/<SHA>.<ext>`，由书目中的 `cover` 字段引用；文件名带内容哈希，同名文件不得覆盖，更换封面只新增文件。构建时会按正式书目自动在 `dist` 生成 `<SHA>-180.webp`、`<SHA>-360.webp` 和 `<SHA>-540.webp` 三个缩略图变体，不写入 Git；书架卡片和详情页通过 `<picture>` 优先加载 WebP，变体缺失或浏览器不支持时回退原图。生成逻辑在 `astro.config.mjs`，依赖 `sharp`。
+
+`public/_headers` 对 `/covers/*` 和 `/_astro/*` 设置一年 `immutable` 缓存；因为路径由内容哈希决定，文件内容变化会得到新 URL。新增或更换封面后照常构建、部署即可，不需要单独运行生成命令；验证时确认构建日志出现 `generated N cover variants`，且线上封面响应带 `immutable`。
+
 ## R2 上传与公开下载
 
 复制 `.env.example` 为 `.env.local`，配置 `R2_ACCESS_KEY_ID` 和 `R2_SECRET_ACCESS_KEY`。桶、下载域名与账号级 S3 endpoint 来自 `site.config.json`。凭据仅留在本机。

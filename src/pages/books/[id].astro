@@ -5,6 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 import BookComments from '../../components/BookComments.astro';
 import BaiduDownload from '../../components/BaiduDownload.astro';
 import { editionLabel, loadBooks, sizeLabel, subjectsOf } from '../../lib/books';
+import { coverSources } from '../../lib/cover-variants';
 import type { Book } from '../../lib/book';
 import { SITE_TITLE } from '../../lib/site';
 import { categoryLabel } from '../../lib/categories';
@@ -12,6 +13,7 @@ export async function getStaticPaths() {
   return (await loadBooks()).map(book => ({ params: { id: book.id }, props: { book } }));
 }
 const { book } = Astro.props as { book: Book };
+const sources = coverSources(book.cover, '230px');
 const preview = await readFile(path.resolve(process.env.BOOK_SITE_ROOT ?? process.cwd(), 'catalog/preview.json'), 'utf8').then(() => true).catch(() => false);
 const available = !preview && book.downloads.r2Url?.startsWith('https://');
 ---
@@ -20,7 +22,10 @@ const available = !preview && book.downloads.r2Url?.startsWith('https://');
     <a class="back-link" href="/#library"><span aria-hidden="true">←</span> 返回书架</a>
     <div class="detail-grid">
       <aside class="detail-book">
-        <div class="detail-cover">{book.cover ? <img src={book.cover} alt={`${book.title}封面`} width="300" height="430" /> : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}</div>
+        <div class="detail-cover">{book.cover ? <picture>
+          {sources && <source type="image/webp" srcset={sources.srcset} sizes={sources.sizes} />}
+          <img src={book.cover} alt={`${book.title}封面`} width="300" height="430" fetchpriority="high" />
+        </picture> : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}</div>
         <div class="file-summary"><span>EPUB</span><span>{sizeLabel(book.file.bytes)}</span></div>
         {available ? <a class="download-button" href={book.downloads.r2Url!}>直链下载 <span aria-hidden="true">↓</span></a>
           : <div class="download-pending"><span>下载将在发布后开放</span><small>EPUB · {sizeLabel(book.file.bytes)}</small></div>}
