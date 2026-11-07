@@ -15,7 +15,7 @@
   "cover": "/covers/book-6d6ff83a4ad4/7321d76dc7c8258a5d6a1214c34f350de5550fc2b3a4d5af1725231ebbd62658.jpg",
   "edition": {
     "kind": "ai-translation",
-    "model": "gemini 3.8 flash"
+    "model": "gemini 3.1 pro preview"
   },
   "file": {
     "sha256": "e7f6e2ba86d67935c6ae5f57912213a9b3cb985387f244f6fa8cea18e533740f",
@@ -37,7 +37,7 @@
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
-  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "updatedAt": "2026-11-07T01:06:41.119Z",
   "categories": [
     "philosophy"
   ]
