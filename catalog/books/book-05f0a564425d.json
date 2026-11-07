@@ -12,7 +12,7 @@
     "劳动与传播",
     "社会理论"
   ],
-  "cover": "/covers/book-05f0a564425d/f1b3df1e8e3662f59ea1de617277b2819fae6854a673f8c276ccbda74d3106e2.jpg",
+  "cover": "/covers/book-05f0a564425d/0abd57ca0e2787f9ea5dd2c0ed866cfb4637d2c7d5ba5bb34d9e055570e7cd20.jpg",
   "edition": {
     "kind": "ai-translation",
     "model": "gemini 3.8 flash"
@@ -37,7 +37,7 @@
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
-  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "updatedAt": "2026-11-07T01:13:00.564Z",
   "categories": [
     "culture-media"
   ]
