@@ -26,5 +26,5 @@ export async function readNoIsbnIds(root: string): Promise<Set<string>> {
 
 export function assertBookId(id: string, noIsbnIds: Set<string>): void {
   if (isIsbn13(id) || noIsbnIds.has(id)) return;
-  throw new Error('书籍 ID 必须为 ISBN-13；无 ISBN 的条目需先登记到 catalog/no-isbn.json 并使用原文标题的英文 slug');
+  throw new Error('书籍 ID 必须为 ISBN-13；无 ISBN 的条目需先登记到 catalog/no-isbn.json 并使用原文标题的 slug');
 }

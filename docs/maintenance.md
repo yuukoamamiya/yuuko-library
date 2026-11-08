@@ -22,7 +22,7 @@ npm run verify
 
 ## 新增或更新图书
 
-每本图书使用 ISBN-13 作为 ID（13 位数字且校验位有效）；没有 ISBN 的作品先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的英文 slug，不得根据中文书名自拟描述性 ID。历史 ID 迁移只改变详情页地址；已上传的 R2/百度对象路径保持不变，避免重复上传和分享失效，旧详情页地址由 `public/_redirects` 301 跳转。AI 译本需填维护者提供的模型名；中文出版物转录用 `transcription`，不填模型。新增图书须选择 1–2 个 `src/lib/categories.ts` 中定义的分类。原始 EPUB subjects 会作为标签保留。
+每本图书使用 ISBN-13 作为 ID（13 位数字且校验位有效）；没有 ISBN 的作品先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的 slug（保持原文语种，转写为小写 ASCII），不得根据中文书名自拟描述性 ID。历史 ID 迁移只改变详情页地址；已上传的 R2/百度对象路径保持不变，避免重复上传和分享失效，旧详情页地址由 `public/_redirects` 301 跳转。AI 译本需填维护者提供的模型名；中文出版物转录用 `transcription`，不填模型。新增图书须选择 1–2 个 `src/lib/categories.ts` 中定义的分类。原始 EPUB subjects 会作为标签保留。
 
 ```bash
 npm run book -- prepare --id 9787305231148 --epub 'D:/Books/example.epub' --model '模型名称' --category philosophy

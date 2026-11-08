@@ -7,7 +7,7 @@
 - 维护 Astro 静态个人图书馆；不引入站点后端、数据库或未讨论的平台。
 - 域名、R2/Pages 项目配置以 `site.config.json` 和线上 `release.json` 为准，不在此复制易过期的发布数字。
 - 书目在 `catalog/books/`，封面在 `public/covers/`；分类 ID 以 `src/lib/categories.ts` 为准，EPUB `subjects` 作为标签保留。
-- 图书 ID 使用 ISBN-13（13 位数字且校验位有效）；无 ISBN 的条目先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的英文 slug。不得根据中文书名自拟描述性 ID。同名不同作者不合并；更新现有图书显式使用 `--update`。
+- 图书 ID 使用 ISBN-13（13 位数字且校验位有效）；无 ISBN 的条目先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的 slug。不得根据中文书名自拟描述性 ID。同名不同作者不合并；更新现有图书显式使用 `--update`。
 - AI 译本用 `edition.kind=ai-translation` 和维护者提供的模型名；中文出版物转录用 `transcription`，模型为 null。不得补写或擅自改正来源信息。
 - 一书只记录一个当前 EPUB。不得让旧 R2/百度下载地址指向新文件。
 - 电子书原件由维护者手动保存在 Calibre；本仓库不集成 Calibre。
