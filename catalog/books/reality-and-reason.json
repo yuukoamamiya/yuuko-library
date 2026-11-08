@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "reality-and-reason",
+  "title": "现实与理性：黑格尔与客观精神",
+  "authors": [
+    "让·弗朗索瓦·科维纲"
+  ],
+  "description": "《现实与理性——黑格尔与客观精神》一书是享誉世界的黑格尔法哲学专家让-弗朗索瓦·科维纲（Jean-Fran?ois Kervégan）的学术力作，此书集中展示了他在当代哲学语境下诠释黑格尔经典的努力成果。 在书的第一部分，作者主要探讨黑格尔为“法”这一概念所赋予的特殊的哲学含义，并指出这种重新定义与黑格尔对实定法（乃至法治国家）的合理性及其界限的认识有关。 书的第二部分勾勒出近代市民社会作为实定法的实现条件所蕴含的现代生活的活力及其缺陷。 作者在第三部分以对黑格尔与托克维尔之间的无声对话的构建为导引，展示了黑格尔版本的“超越民主”的国家建构。 书的最后部分以西方制度主义的热点讨论为背景，探究了黑格尔法哲学中个体、规范与制度之间的辩证关系。",
+  "subjects": [
+    "黑格尔",
+    "德国古典哲学",
+    "法哲学",
+    "黑格尔-法哲学"
+  ],
+  "categories": [
+    "philosophy",
+    "politics-society"
+  ],
+  "cover": "/covers/reality-and-reason/6f170aabc428dc3e675f6ac49d648caae262e77915cf585ade791eb879479867.jpg",
+  "edition": {
+    "kind": "transcription",
+    "model": null
+  },
+  "file": {
+    "sha256": "5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2",
+    "bytes": 827527,
+    "filename": "现实与理性：黑格尔与客观精神 - 让·弗朗索瓦·科维纲.epub"
+  },
+  "downloads": {
+    "r2Key": "books/reality-and-reason/5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/reality-and-reason/5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/14jkABnDhdLGzlEbfISk4Eg",
+      "code": "nn53",
+      "fileSha256": "5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2",
+      "fsId": "325413105104168",
+      "shareId": "20384985549",
+      "path": "/yuuko-library/books/reality-and-reason/5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2/现实与理性：黑格尔与客观精神 - 让·弗朗索瓦·科维纲.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-08T11:42:04.611Z"
+    }
+  },
+  "publishedAt": "2026-11-08T11:38:41.616Z",
+  "updatedAt": "2026-11-08T11:38:41.616Z"
+}
