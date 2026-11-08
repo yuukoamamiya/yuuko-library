@@ -1,16 +1,22 @@
 ---
 import { editionLabel } from '../lib/books';
-import { coverSources } from '../lib/cover-variants';
+import { coverPlaceholder, coverSources } from '../lib/cover-variants';
 import type { Book } from '../lib/book';
 import { categoryLabel } from '../lib/categories';
 const { book, index = 0 } = Astro.props as { book: Book; index?: number };
-const sources = coverSources(book.cover, '180px');
+const sources = coverSources(book.cover, '(max-width: 680px) 120px, 170px');
+const placeholder = await coverPlaceholder(book.cover);
+const stageStyle = [
+  `--book-hue: ${[40, 100, 20, 175, 220][index % 5]}`,
+  placeholder && `background-image: url(${placeholder.src}); background-size: contain; background-position: center; background-repeat: no-repeat; background-origin: content-box`,
+].filter(Boolean).join('; ');
 ---
 <article class="book-card" data-book-id={book.id}>
-  <a href={`/books/${book.id}/`} class="cover-stage" style={`--book-hue: ${[40, 100, 20, 175, 220][index % 5]}`} tabindex="-1" aria-hidden="true">
+  <a href={`/books/${book.id}/`} class="cover-stage" style={stageStyle} tabindex="-1" aria-hidden="true">
     {book.cover ? <picture>
-      {sources && <source type="image/webp" srcset={sources.srcset} sizes={sources.sizes} />}
-      <img src={book.cover} alt="" loading={index < 5 ? 'eager' : 'lazy'} decoding="async" width="180" height="260" />
+      {sources && <source type="image/avif" srcset={sources.avif} sizes={sources.sizes} />}
+      {sources && <source type="image/webp" srcset={sources.webp} sizes={sources.sizes} />}
+      <img src={book.cover} alt="" loading={index < 4 ? 'eager' : 'lazy'} decoding="async" fetchpriority={index === 0 ? 'high' : undefined} width={placeholder?.width ?? 180} height={placeholder?.height ?? 260} />
     </picture>
       : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}
     <span class="cover-arrow" aria-hidden="true">↗</span>

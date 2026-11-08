@@ -61,7 +61,7 @@ npm run book -- status --plan PLAN
 
 ## 封面与缓存
 
-正式封面的原件在 `public/covers/<ID>/<SHA>.<ext>`，由书目中的 `cover` 字段引用；文件名带内容哈希，同名文件不得覆盖，更换封面只新增文件。构建时会按正式书目自动在 `dist` 生成 `<SHA>-180.webp`、`<SHA>-360.webp` 和 `<SHA>-540.webp` 三个缩略图变体，不写入 Git；书架卡片和详情页通过 `<picture>` 优先加载 WebP，变体缺失或浏览器不支持时回退原图。生成逻辑在 `astro.config.mjs`，依赖 `sharp`。
+正式封面的原件在 `public/covers/<ID>/<SHA>.<ext>`，由书目中的 `cover` 字段引用；文件名带内容哈希，同名文件不得覆盖，更换封面只新增文件。构建时会按正式书目自动在 `dist` 生成 `<SHA>-180`、`<SHA>-360`、`<SHA>-540` 三档 WebP 和 AVIF 变体，不写入 Git；书架卡片和详情页通过 `<picture>` 依次尝试 AVIF、WebP，最后回退原图。书架卡片还会内联一张 24px 的高斯模糊 WebP 占位图（构建时由原图生成，不落盘），真实封面使用原生 `loading="lazy"`，未加载时显示模糊占位，加载完成后覆盖。缩略图生成逻辑在 `astro.config.mjs`，占位图在 `src/lib/cover-variants.ts`，均依赖 `sharp`。
 
 `public/_headers` 对 `/covers/*` 和 `/_astro/*` 设置一年 `immutable` 缓存；因为路径由内容哈希决定，文件内容变化会得到新 URL。新增或更换封面后照常构建、部署即可，不需要单独运行生成命令；验证时确认构建日志出现 `generated N cover variants`，且线上封面响应带 `immutable`。
 

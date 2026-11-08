@@ -23,7 +23,8 @@ const available = !preview && book.downloads.r2Url?.startsWith('https://');
     <div class="detail-grid">
       <aside class="detail-book">
         <div class="detail-cover">{book.cover ? <picture>
-          {sources && <source type="image/webp" srcset={sources.srcset} sizes={sources.sizes} />}
+          {sources && <source type="image/avif" srcset={sources.avif} sizes={sources.sizes} />}
+          {sources && <source type="image/webp" srcset={sources.webp} sizes={sources.sizes} />}
           <img src={book.cover} alt={`${book.title}封面`} width="300" height="430" fetchpriority="high" />
         </picture> : <div class="cover-fallback"><span>馆藏书籍</span><strong>{book.title}</strong><small>{book.authors.join(' / ')}</small></div>}</div>
         <div class="file-summary"><span>EPUB</span><span>{sizeLabel(book.file.bytes)}</span></div>
