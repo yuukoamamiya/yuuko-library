@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE } from '../lib/site';
+---
+<Layout title={`关于本站 · ${SITE_TITLE}`} description="关于雨宫优子图书馆：个人 EPUB 图书分享站点、翻译方向与制作方式。" nav="about">
+  <main class="about-main" id="main">
+    <a class="back-link" href="/"><span aria-hidden="true">←</span> 返回书架</a>
+    <article class="about-article">
+      <p class="eyebrow">AMAMIYA YUUKO LIBRARY / 关于本站</p>
+      <h1>关于本站</h1>
+      <div class="about-body">
+        <p>这是一个个人使用的图书分享站点，用于分享一些个人机翻或者扫描的电子书。</p>
+        <p>分享的图书都是 epub 格式，安卓手机推荐使用静读天下进行阅读，PC 和苹果手机推荐使用微信读书，kindle 推荐使用 calibre 传输到设备。</p>
+        <p>机翻的都是一些个人比较感兴趣的图书，主要感兴趣的方向包括德国古典哲学（主要为战后黑格尔研究）、拉康派精神分析、新马克思阅读、宇野学派、政治的马克思主义、阿尔都塞与普兰查斯等。</p>
+        <p>使用本项目（<a href="https://github.com/yuukoamamiya/pdf2epub-for-antigravity" target="_blank" rel="noreferrer">pdf2epub-for-antigravity</a>）进行翻译，一般来说使用 gemini 3.8 flash 作为主力的翻译模型，挂载术语表（<a href="https://github.com/yuukoamamiya/pdf2epub-for-antigravity/tree/main/glossaries" target="_blank" rel="noreferrer">glossaries</a>）。其中有一些老书为 gemini 3.1 pro preview 进行翻译，那些书是没有挂载术语表的。</p>
+      </div>
+      <figure class="about-figure">
+        <img src="/about/worldview.jpg" alt="某些人的世界观 be like 的梗图" width="640" height="508" loading="lazy" />
+      </figure>
+    </article>
+  </main>
+</Layout>
