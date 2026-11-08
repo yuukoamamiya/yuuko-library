@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9780333289303",
+  "title": "尼科斯·普兰查斯：马克思主义理论与政治策略",
+  "authors": [
+    "Bob Jessop"
+  ],
+  "description": "本书是当代著名国家理论家鲍勃·杰索普（Bob Jessop）为希腊马克思主义思想大师尼科斯·普兰查斯撰写的一部系统性批判评传。全书基于作者与普兰查斯生前的深入交流及一手档案，全面重构了普兰查斯从《政治权力与社会阶级》、《法西斯主义与独裁》到《国家、权力与社会主义》的思想演进轨迹。杰索普深入反思了著名的“米利班德-普兰查斯论战”，澄清了外界对其所谓“极端结构主义”的长期误读，详尽评估了其关于国家机器、阶级划分以及向民主社会主义过渡策略的理论得失，确立了战略关系进路在当代马克思主义政治学中的显赫地位。",
+  "subjects": [
+    "普兰查斯",
+    "杰索普",
+    "国家理论",
+    "马克思主义政治学"
+  ],
+  "cover": "/covers/9780333289303/e3b8ec8182e30ecb662c820d61f09327dfd2bd23c4b06d6142b25cb43f3901a3.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d",
+    "bytes": 900756,
+    "filename": "尼科斯·普兰查斯：马克思主义理论与政治策略 - Bob Jessop.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-f0326f9673b4/b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-f0326f9673b4/b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1stuWeSDWkiDaUI-io0dACQ",
+      "code": "twd6",
+      "fileSha256": "b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d",
+      "fsId": "19888104829220",
+      "shareId": "32154711226",
+      "path": "/yuuko-library/books/book-f0326f9673b4/b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d/尼科斯·普兰查斯：马克思主义理论与政治策略 - Bob Jessop.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:57:45.628Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society"
+  ]
+}

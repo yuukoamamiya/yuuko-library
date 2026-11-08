@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9783110703658",
+  "title": "真理的形式：黑格尔的哲学逻辑",
+  "authors": [
+    "Elena Ficara"
+  ],
+  "description": "本书是意大利哲学家埃莱娜·菲卡拉探索黑格尔思辨逻辑与当代分析哲学及哲学逻辑交叉对话的开拓性专著。作者提出核心论点：对于黑格尔乃至亚里士多德与弗雷格而言，逻辑学本质上是对“真理的形式”而非单纯主观思维形式的研究。本书破除了将黑格尔逻辑等同于心理主义或泛形而上学混淆的传统误读，结合黑格尔《哲学史讲演录》与早期耶拿手稿，系统论证辩证逻辑作为一种严格的非形式主义有效推论理论，为当代哲学逻辑在真理、矛盾、形式与本体论中立性等核心辩题上提供了重要启发。",
+  "subjects": [
+    "黑格尔",
+    "哲学逻辑",
+    "德国观念论",
+    "真理理论"
+  ],
+  "cover": "/covers/9783110703658/75afb3f77da851ae6da6f2db7b71b8fabdd1c9b3a7a95316993de4d633cfa7d5.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "9f56e386896e48fb2d690a8007e5ba63840227ad462f00c74550e96954d32f08",
+    "bytes": 457908,
+    "filename": "真理的形式：黑格尔的哲学逻辑 - Elena Ficara.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-ad5f39b0398f/9f56e386896e48fb2d690a8007e5ba63840227ad462f00c74550e96954d32f08.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-ad5f39b0398f/9f56e386896e48fb2d690a8007e5ba63840227ad462f00c74550e96954d32f08.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1Bm25Zytkl9FaDd5looVurA",
+      "code": "nte2",
+      "fileSha256": "9f56e386896e48fb2d690a8007e5ba63840227ad462f00c74550e96954d32f08",
+      "fsId": "187162511486603",
+      "shareId": "44659853901",
+      "path": "/yuuko-library/books/book-ad5f39b0398f/9f56e386896e48fb2d690a8007e5ba63840227ad462f00c74550e96954d32f08/真理的形式：黑格尔的哲学逻辑 - Elena Ficara.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:07:24.637Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "philosophy"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "9780993369933",
+  "title": "尾注4：分离中的统一",
+  "authors": [
+    "Endnotes"
+  ],
+  "description": "本书是当代激进共产化理论期刊《尾注》（Endnotes）第四期。本辑重点反思了1883年至1982年传统工人运动的兴起与终结，解构了左翼思想中长期存在的“背叛与革命纯粹意志”历史叙事神话。作者群通过对二战后全球资本积累长期减速、去工业化与劳动生产率转型的详实考察，指出维系传统产业工人先锋队地位的物质基础已经彻底瓦解，资本主义在深度市场化与债务积累中将广大年轻一代转化为岌岌可危的过剩人口与分离碎化的无产者，为理解当代无阶级同一性的全新抗争提供了深刻理论透视。",
+  "subjects": [
+    "尾注",
+    "共产化理论",
+    "工人运动",
+    "危机理论"
+  ],
+  "cover": "/covers/9780993369933/5e415396c85a7f1339df2c08a68c5cdba8cc448261edfff1194ada733e85438e.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8",
+    "bytes": 623988,
+    "filename": "尾注4：分离中的统一 - Endnotes.epub"
+  },
+  "downloads": {
+    "r2Key": "books/endnotes-4/effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/endnotes-4/effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1o9WF4FEhStElbncd6wJLkw",
+      "code": "a9oo",
+      "fileSha256": "effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8",
+      "fsId": "248025916286501",
+      "shareId": "5590720283",
+      "path": "/yuuko-library/books/endnotes-4/effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8/尾注4：分离中的统一 - Endnotes.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:05:27.906Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society",
+    "political-economy"
+  ]
+}

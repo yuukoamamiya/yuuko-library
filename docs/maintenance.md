@@ -22,24 +22,24 @@ npm run verify
 
 ## 新增或更新图书
 
-每本图书使用稳定 ID。AI 译本需填维护者提供的模型名；中文出版物转录用 `transcription`，不填模型。新增图书须选择 1–2 个 `src/lib/categories.ts` 中定义的分类。原始 EPUB subjects 会作为标签保留。
+每本图书使用 ISBN-13 作为 ID（13 位数字且校验位有效）；没有 ISBN 的作品先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的英文 slug，不得根据中文书名自拟描述性 ID。历史 ID 迁移只改变详情页地址；已上传的 R2/百度对象路径保持不变，避免重复上传和分享失效，旧详情页地址由 `public/_redirects` 301 跳转。AI 译本需填维护者提供的模型名；中文出版物转录用 `transcription`，不填模型。新增图书须选择 1–2 个 `src/lib/categories.ts` 中定义的分类。原始 EPUB subjects 会作为标签保留。
 
 ```bash
-npm run book -- prepare --id example-book --epub 'D:/Books/example.epub' --model '模型名称' --category philosophy
-npm run book -- prepare --id example-book --update --epub 'D:/Books/example-new.epub' --model '模型名称' --category philosophy
-npm run book -- prepare --id chinese-book --epub 'D:/Books/chinese.epub' --kind transcription --category history
+npm run book -- prepare --id 9787305231148 --epub 'D:/Books/example.epub' --model '模型名称' --category philosophy
+npm run book -- prepare --id 9787305231148 --update --epub 'D:/Books/example-new.epub' --model '模型名称' --category philosophy
+npm run book -- prepare --id 9787532182862 --epub 'D:/Books/chinese.epub' --kind transcription --category history
 ```
 
 更新既有 ID 必须用 `--update`；同名但不同作者的书保留不同 ID。批量上架使用 JSON manifest：
 
 ```json
 [
-  {"id":"example-book","epub":"D:/Books/example.epub","model":"模型名称","categories":["philosophy"]},
-  {"id":"chinese-book","epub":"D:/Books/chinese.epub","kind":"transcription","update":true}
+  {"id":"9787305231148","epub":"D:/Books/example.epub","model":"模型名称","categories":["philosophy"]},
+  {"id":"9787532182862","epub":"D:/Books/chinese.epub","kind":"transcription","update":true}
 ]
 ```
 
-保存后运行 `npm run book -- prepare --manifest FILE`。更新条目省略 `categories` 时沿用正式书目中的现有分类；清单其他字段和规则见 `npm run book -- --help`。百度分享由独立命令管理。
+保存后运行 `npm run book -- prepare --manifest FILE`。更新条目省略 `categories` 时沿用正式书目中的现有分类；清单其他字段和规则见 `npm run book -- --help`。无 ISBN 的例外 ID 以 `catalog/no-isbn.json` 为准。百度分享由独立命令管理。
 
 `prepare` 生成冻结的本地审核计划，不修改正式书目，也不上传云端：
 

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9780674245136",
+  "title": "阶级矩阵：文化转向之后的社会理论",
+  "authors": [
+    "Vivek Chibber"
+  ],
+  "description": "本书由哈佛大学出版社出版，是著名学者维韦克·奇伯（Vivek Chibber）直面当代社会理论在“文化转向”后对唯物主义阶级分析的质疑所作的重大理论重构。奇伯深入反思了新左翼过分夸大文化话语与偶然性的倾向，系统剖析了阶级结构、阶级形成以及工人的反抗与顺从机制。作者有力论证了在市场依附与维持生存的硬性物质约束下，阶级结构具有无可替代的因果自主性，为资本主义何以在去政治化与被动顺从中存续、以及当代阶级政治的可能性提供了坚实的社会理论奠基。",
+  "subjects": [
+    "阶级理论",
+    "社会理论",
+    "政治经济学",
+    "维韦克·奇伯"
+  ],
+  "cover": "/covers/9780674245136/3bd45eceba8e89f472c38e17f425c0da1593f99fa80d77a4bf1dfc4cc605efae.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "077359e2ab3da9420e4a5f0d57855af23e04430d535713da8c52d75c1068f003",
+    "bytes": 442342,
+    "filename": "阶级矩阵：文化转向之后的社会理论 - Vivek Chibber.epub"
+  },
+  "downloads": {
+    "r2Key": "books/class-matrix/077359e2ab3da9420e4a5f0d57855af23e04430d535713da8c52d75c1068f003.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/class-matrix/077359e2ab3da9420e4a5f0d57855af23e04430d535713da8c52d75c1068f003.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1Ea8o5TgP9Rc_BNTHYA_mLw",
+      "code": "h5x2",
+      "fileSha256": "077359e2ab3da9420e4a5f0d57855af23e04430d535713da8c52d75c1068f003",
+      "fsId": "934350464427519",
+      "shareId": "46543696606",
+      "path": "/yuuko-library/books/class-matrix/077359e2ab3da9420e4a5f0d57855af23e04430d535713da8c52d75c1068f003/阶级矩阵：文化转向之后的社会理论 - Vivek Chibber.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:51:33.753Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "9787532182862",
+  "title": "读我的欲望：拉康与历史主义者的对抗",
+  "authors": [
+    "琼·柯普洁"
+  ],
+  "description": "本书是拉康派文化理论家琼·柯普洁的代表作。作者让拉康的精神分析与福柯的历史主义正面交锋，反驳历史主义者关于精神分析无视历史的指责，主张拉康对历史过程及其生成原则的解释更具优越性。她围绕凝视、性、主体等核心概念，分析电影、文学和哲学文本，力图建立一种“通晓欲望”的文化批评，读出文化叙述中那些未被言说之物。",
+  "subjects": [
+    "精神分析",
+    "文化研究",
+    "拉康",
+    "福柯",
+    "历史主义"
+  ],
+  "categories": [
+    "philosophy",
+    "culture-media"
+  ],
+  "cover": "/covers/9787532182862/f9591453eaafd75774e5d969a03d832c2ff1696c9e9fdafaecd4643c53babf30.jpg",
+  "edition": {
+    "kind": "transcription",
+    "model": null
+  },
+  "file": {
+    "sha256": "25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e",
+    "bytes": 2387041,
+    "filename": "读我的欲望：拉康与历史主义者的对抗 - 琼·柯普洁.epub"
+  },
+  "downloads": {
+    "r2Key": "books/read-my-desire/25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/read-my-desire/25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1oWygeYQknZuaMzHuZ_47ng",
+      "code": "m78e",
+      "fileSha256": "25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e",
+      "fsId": "677914716740080",
+      "shareId": "44569355472",
+      "path": "/yuuko-library/books/read-my-desire/25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e/读我的欲望：拉康与历史主义者的对抗 - 琼·柯普洁.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-08T11:41:38.961Z"
+    }
+  },
+  "publishedAt": "2026-11-08T11:38:41.616Z",
+  "updatedAt": "2026-11-08T11:38:41.616Z"
+}

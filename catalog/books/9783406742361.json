@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9783406742361",
+  "title": "黑格尔：自由哲学家",
+  "authors": [
+    "Klaus Vieweg"
+  ],
+  "description": "本书是当代著名黑格尔学者克劳斯·菲韦格（Klaus Vieweg）历时多年打造的里程碑式黑格尔思想传记（德国C.H. Beck出版社出版）。作者基于大量最新发掘的一手档案手稿，彻底粉碎了将黑格尔污蔑为普鲁士反动国家哲学家的陈腐神话，生动还原了一位终生在每年7月14日饮香槟纪念法国大革命的激进思想家。菲韦格以“自由”作为贯穿黑格尔全部哲学与生活的主导动机，全面生动地展现了这位世界哲学家在图宾根、耶拿、纽伦堡、海德堡与柏林的波澜人生及其体系的磅礴诞生。",
+  "subjects": [
+    "黑格尔传记",
+    "自由哲学",
+    "德国古典哲学",
+    "思想史"
+  ],
+  "cover": "/covers/9783406742361/0aeaffcaeac9acdc7a9510f9c247d389041cb071d4ce4efb2c72312968d02162.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8",
+    "bytes": 7096820,
+    "filename": "黑格尔：自由哲学家 - Klaus Vieweg.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-313f29f3bc21/aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-313f29f3bc21/aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/10l3EC-R8w2fviwEis7UF0Q",
+      "code": "x446",
+      "fileSha256": "aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8",
+      "fsId": "876704788843667",
+      "shareId": "11816726685",
+      "path": "/yuuko-library/books/book-313f29f3bc21/aa8cb3e28607a8c7142729a7b7e1e36165f649b1e0e02ec743ff36c19003bdd8/黑格尔：自由哲学家 - Klaus Vieweg.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:43:10.751Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "philosophy"
+  ]
+}

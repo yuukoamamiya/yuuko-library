@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9781784782306",
+  "title": "价值",
+  "authors": [
+    "Diane Elson"
+  ],
+  "description": "本书由著名政治经济学家黛安·埃尔森（Diane Elson）主编，收录了社会主义经济学家联合会（CSE）关于马克思价值理论方法论争论的经典论文。全书针对西方主流经济学及传统经验论对马克思价值理论的质疑，旗帜鲜明地指出马克思的价值理论不是机械的价格计算模型，而是关于“资本主义中劳动的社会表现形式”的批判理论。书中汇集了克里斯·阿瑟、贾伊鲁斯·巴纳吉、伊藤诚等国际顶尖学者的重磅论文，深入辨析了黑格尔逻辑学渊源、具体劳动与抽象劳动、货币作为价值必然形式等核心难题，是当代西方马克思主义价值形式学派的标杆文献。",
+  "subjects": [
+    "价值形式理论",
+    "马克思主义政治经济学",
+    "劳动价值论",
+    "CSE学派"
+  ],
+  "cover": "/covers/9781784782306/09a36bf5ccd03b087255c69ca260195dde4f9f1eee29d7b34632ee3e3beff78a.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "06501c4530387fa99905eedb2a6d4fc92f0d7562f058c590c78a1fa947241bba",
+    "bytes": 468014,
+    "filename": "价值 - Diane Elson.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-b4efdf1af85b/06501c4530387fa99905eedb2a6d4fc92f0d7562f058c590c78a1fa947241bba.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-b4efdf1af85b/06501c4530387fa99905eedb2a6d4fc92f0d7562f058c590c78a1fa947241bba.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1R0rnMJSaKr8KWlvoxLWSqw",
+      "code": "kqcv",
+      "fileSha256": "06501c4530387fa99905eedb2a6d4fc92f0d7562f058c590c78a1fa947241bba",
+      "fsId": "389217215591377",
+      "shareId": "61586689229",
+      "path": "/yuuko-library/books/book-b4efdf1af85b/06501c4530387fa99905eedb2a6d4fc92f0d7562f058c590c78a1fa947241bba/价值 - Diane Elson.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:50:37.037Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "political-economy"
+  ]
+}

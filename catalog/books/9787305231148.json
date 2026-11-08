@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "9787305231148",
+  "title": "政治经济学批判：马克思《资本论》导论",
+  "authors": [
+    "米夏埃尔·海因里希"
+  ],
+  "description": "本书是德国“新马克思阅读”代表人物米夏埃尔·海因里希的《资本论》导论，在德国多次再版，被广泛用作马克思主义研讨班的入门教材。作者系统梳理《资本论》三卷的基本结构，阐明马克思政治经济学批判的核心范畴与方法，并突出价值的货币性，以回应当代金融危机。书中还讨论阶级、国家与共产主义等问题，兼具文本考据与理论辨析。",
+  "subjects": [
+    "马克思主义政治经济学",
+    "政治经济学批判",
+    "价值形式",
+    "资本论",
+    "新马克思阅读"
+  ],
+  "categories": [
+    "political-economy",
+    "philosophy"
+  ],
+  "cover": "/covers/9787305231148/905c0b14e5863d4d35fa1e0e6fcf1c2dce12b68495757a58408aec6543ec485b.jpg",
+  "edition": {
+    "kind": "transcription",
+    "model": null
+  },
+  "file": {
+    "sha256": "1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623",
+    "bytes": 1710397,
+    "filename": "政治经济学批判：马克思《资本论》导论 - 米夏埃尔·海因里希.epub"
+  },
+  "downloads": {
+    "r2Key": "books/critique-of-political-economy/1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/critique-of-political-economy/1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1_YojWvxbkkH0Zt7S_y3H_g",
+      "code": "ejpc",
+      "fileSha256": "1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623",
+      "fsId": "958364971482324",
+      "shareId": "34358252147",
+      "path": "/yuuko-library/books/critique-of-political-economy/1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623/政治经济学批判：马克思《资本论》导论 - 米夏埃尔·海因里希.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-08T11:40:51.953Z"
+    }
+  },
+  "publishedAt": "2026-11-08T11:38:41.616Z",
+  "updatedAt": "2026-11-08T11:38:41.616Z"
+}

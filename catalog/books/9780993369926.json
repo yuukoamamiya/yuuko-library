@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9780993369926",
+  "title": "尾注3：性别、种族、阶级及其他不幸",
+  "authors": [
+    "Endnotes"
+  ],
+  "description": "本书是当代激进理论期刊《尾注》（Endnotes）第三期。本辑立足于后金融危机时期的全球局势，深入探讨性别分工、种族统治与资本主义阶级构成三者交织的内在逻辑。书中系统重构了社会再生产理论，分析了家务与繁衍劳动的性别化隔离及其在当代紧缩政策下的恶化；结合2011年英国骚乱与全球广场占领运动，深入剖析了物流资本主义（logistics capitalism）的节点运作与反物流斗争，重新界定了种族化过剩人口在资本积累界限处的生存困境与共产主义断裂前景。",
+  "subjects": [
+    "尾注",
+    "共产化理论",
+    "社会再生产",
+    "阶级与种族"
+  ],
+  "cover": "/covers/9780993369926/de94a6666153aee89e4f53a372e0060d49e20461d816ad592fc5ea8573df0a11.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "b1b2987cb61c5b144b612e9f0c92119449f8354052ba0fe9445d120a4547d103",
+    "bytes": 639508,
+    "filename": "尾注3：性别、种族、阶级及其他不幸 - Endnotes.epub"
+  },
+  "downloads": {
+    "r2Key": "books/endnotes-3/b1b2987cb61c5b144b612e9f0c92119449f8354052ba0fe9445d120a4547d103.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/endnotes-3/b1b2987cb61c5b144b612e9f0c92119449f8354052ba0fe9445d120a4547d103.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1XOCuZBpjUnp_GiVDLqXVFA",
+      "code": "4dtl",
+      "fileSha256": "b1b2987cb61c5b144b612e9f0c92119449f8354052ba0fe9445d120a4547d103",
+      "fsId": "273848261337503",
+      "shareId": "28268358804",
+      "path": "/yuuko-library/books/endnotes-3/b1b2987cb61c5b144b612e9f0c92119449f8354052ba0fe9445d120a4547d103/尾注3：性别、种族、阶级及其他不幸 - Endnotes.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:05:08.436Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society"
+  ]
+}

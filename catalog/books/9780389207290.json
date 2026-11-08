@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9780389207290",
+  "title": "资本主义的基础理论：资本主义经济的形式与实体",
+  "authors": [
+    "Makoto Itoh"
+  ],
+  "description": "本书是享誉国际的日本著名马克思主义经济学家伊藤诚（Makoto Itoh）教授推进宇野学派政治经济学基础理论的代表作。全书围绕“形式与实体”这一唯物辩证法核心线索，深入探讨了商品经济的价值形式如何与物质生产的社会实体相互规定。伊藤诚深入考察了简单商品流通、货币向资本的转化、相对过剩人口机制、利润率趋向下降规律以及信贷与经济危机的内在发生过程，对国际学界关于“转形问题”与市场价值决定的激烈争论作出了令人瞩目的独创性澄清，展现了当代日本马克思主义经济学的高超学术造诣。",
+  "subjects": [
+    "伊藤诚",
+    "宇野学派",
+    "马克思主义政治经济学",
+    "资本辩证法"
+  ],
+  "cover": "/covers/9780389207290/f20c6a52e171efd97000195c0114f08a482d7be31e1bfb1b58667651fd7bb1d4.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b",
+    "bytes": 1388751,
+    "filename": "资本主义的基础理论：资本主义经济的形式与实体 - Makoto Itoh.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-59da6273df7b/356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-59da6273df7b/356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1R3aIArwFmVGhVJzwHBVr3g",
+      "code": "d0l0",
+      "fileSha256": "356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b",
+      "fsId": "906519322755130",
+      "shareId": "2080053961",
+      "path": "/yuuko-library/books/book-59da6273df7b/356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b/资本主义的基础理论：资本主义经济的形式与实体 - Makoto Itoh.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:08:56.784Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "political-economy"
+  ]
+}

@@ -9,12 +9,13 @@ import { CliError } from './errors.ts';
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const jsonRead = async (file: string) => JSON.parse(await readFile(file, 'utf8'));
 const HELP = `本地上架工具（尚未实现云发布）
-  prepare --id ID --epub FILE --model MODEL [--category ID] [--update]
-  prepare --id ID --epub FILE --kind transcription [--category ID]
+  prepare --id ISBN13 --epub FILE --model MODEL [--category ID] [--update]
+  prepare --id ISBN13 --epub FILE --kind transcription [--category ID]
   prepare --manifest FILE  # JSON 数组；批量准备为一个审核计划
   preview --plan PLAN [--port 4321]
   validate --plan PLAN
   status --plan PLAN
+  ID 必须是 ISBN-13（13 位数字且校验位有效）；无 ISBN 的条目先登记 catalog/no-isbn.json 再用原文标题的英文 slug。
   新增书籍必须指定 --category 分类ID，可重复一次；更新未指定时保留原分类。
   分类ID：philosophy / politics-society / political-economy / history / culture-media / language-translation。
   所有命令可附加 --json；只有本地文件操作，不上传或部署。`;

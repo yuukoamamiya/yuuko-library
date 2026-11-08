@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9780745329338",
+  "title": "资本主义与辩证法：马克思主义政治经济学的宇野-关根进路",
+  "authors": [
+    "John R. Bell"
+  ],
+  "description": "本书是加拿大宇野学派学者约翰·R·贝尔为英语学界系统介绍日本“宇野学派（Uno School）”马克思主义政治经济学理论的权威专著。全书系统阐述了由宇野弘藏开创、关根友彦发展的“三层次分析法”——纯粹资本主义理论、资本主义发展阶段论与经验现状分析。作者深入结合黑格尔思辨辩证法，严谨证明了价值规律、相对过剩人口规律以及转形难题在纯粹资本逻辑空间内的自洽性，不仅极大补全了马克思《资本论》未竟的理论逻辑，更为探究后资本主义与生态社会主义转型提供了开创性的分析框架。",
+  "subjects": [
+    "宇野学派",
+    "马克思主义政治经济学",
+    "资本辩证法",
+    "日本马克思主义"
+  ],
+  "cover": "/covers/9780745329338/2d7b266ca7e999aa93185bff0dcefb1ca744f04386516fb42ebe90bd70cddfd2.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7",
+    "bytes": 430656,
+    "filename": "资本主义与辩证法：马克思主义政治经济学的宇野-关根进路 - John R. Bell.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-f697a8b16505/82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-f697a8b16505/82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1bZ1M8miWNHzeNj4rpaJ7kg",
+      "code": "7h2r",
+      "fileSha256": "82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7",
+      "fsId": "542107893855630",
+      "shareId": "15387343358",
+      "path": "/yuuko-library/books/book-f697a8b16505/82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7/资本主义与辩证法：马克思主义政治经济学的宇野-关根进路 - John R. Bell.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:09:50.769Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "political-economy"
+  ]
+}

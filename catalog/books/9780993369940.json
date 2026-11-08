@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9780993369940",
+  "title": "尾注5：激情与利益",
+  "authors": [
+    "Endnotes"
+  ],
+  "description": "本书是当代激进理论期刊《尾注》（Endnotes）第五期。本辑聚焦于资本实质统治（Real Subsumption）深层确立下的主体性构建与解放空间。文章广泛吸纳意大利战后激进理论遗产（如卡马特与“不变性”小组、富里奥·迪·保拉、激进女性主义批判），并探讨神话、仪式、身体技术与人与自然代谢关系的变迁。全书旨在反思在政党、工会及极左运动历史性溃散之后，革命理论如何超越“共产主义忧郁”，以无主体的“废黜”（Entsetzung）形式彻底解除财产、国家与资本化个人的律法纽带。",
+  "subjects": [
+    "尾注",
+    "共产化理论",
+    "批判理论",
+    "政治哲学"
+  ],
+  "cover": "/covers/9780993369940/e500bff2db83a64445d989280f4b7e9d08f2e42bfacefbcbf9b740f3b75ef76e.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4",
+    "bytes": 283864,
+    "filename": "尾注5：激情与利益 - Endnotes.epub"
+  },
+  "downloads": {
+    "r2Key": "books/endnotes-5/9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/endnotes-5/9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1nt-Im3z-fH4XujfaXEgB1A",
+      "code": "ccbp",
+      "fileSha256": "9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4",
+      "fsId": "51223165218942",
+      "shareId": "43370865791",
+      "path": "/yuuko-library/books/endnotes-5/9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4/尾注5：激情与利益 - Endnotes.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:05:43.069Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society"
+  ]
+}

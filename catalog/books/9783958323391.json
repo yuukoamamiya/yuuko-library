@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9783958323391",
+  "title": "《精神现象学》的语言与呈现",
+  "authors": [
+    "Simon Waskow"
+  ],
+  "description": "本书以语言与呈现的关联为线索，重新考察黑格尔《精神现象学》的精神理论。瓦斯科认为，语言既是精神获得客观存在的媒介，也是哲学检验显现知识、表达真理的条件。全书结合布兰顿与德里达的解释，依次分析感性确定性、教化、良知、宗教和绝对知识中的语言问题，揭示语言的认知、交往与世界开启功能如何贯穿意识的经验历程。研究将具体文本阐释与体系问题结合，为理解思辨命题、语言的历史性以及哲学批判的可能性提供了相互贯通的视角。",
+  "subjects": [
+    "德国观念论",
+    "黑格尔",
+    "语言哲学",
+    "精神现象学"
+  ],
+  "cover": "/covers/9783958323391/9cac760f9d34ee746333f7254402731eb718850a9d491258f637b11fb9445b00.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c",
+    "bytes": 714847,
+    "filename": "精神现象学》的语言与呈现 - Simon Waskow.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-b58da23795d8/0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-b58da23795d8/0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1n9djukVZkpWC7HY4bbVCqQ",
+      "code": "3vpe",
+      "fileSha256": "0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c",
+      "fsId": "1043198591166442",
+      "shareId": "20873941536",
+      "path": "/yuuko-library/books/book-b58da23795d8/0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c/精神现象学》的语言与呈现 - Simon Waskow.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:34:55.024Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "philosophy"
+  ]
+}

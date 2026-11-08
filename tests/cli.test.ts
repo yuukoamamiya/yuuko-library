@@ -24,7 +24,7 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
     zip.addBuffer(Buffer.from('<package xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata><dc:title>同名书籍</dc:title><dc:creator>作者</dc:creator><dc:description>简介</dc:description></metadata></package>'), 'book.opf');
     zip.end(); await done; await writeFile(epub, Buffer.concat(chunks));
     const manifest = path.join(dir, 'manifest.json');
-    await writeFile(manifest, JSON.stringify([{ id: 'test-translation', epub, model: '用户指定模型', categories: ['philosophy'] }, { id: 'test-transcription', epub, kind: 'transcription', categories: ['history'] }]));
+    await writeFile(manifest, JSON.stringify([{ id: '9780000000002', epub, model: '用户指定模型', categories: ['philosophy'] }, { id: '9780000000019', epub, kind: 'transcription', categories: ['history'] }]));
     const prepared = run(['prepare', '--manifest', manifest]);
     assert.equal(prepared.status, 0, prepared.stderr + prepared.stdout);
     const output = JSON.parse(prepared.stdout); const id = output.planId;
@@ -33,7 +33,7 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
     assert.equal(plan.books.length, 2);
     assert.deepEqual(plan.books[1].edition, { kind: 'transcription', model: null });
     assert.deepEqual(plan.books[1].categories, ['history']);
-    const invalid = run(['prepare', '--id', 'test-invalid-category', '--epub', epub, '--model', '模型', '--category', 'unknown']);
+    const invalid = run(['prepare', '--id', '9780000000026', '--epub', epub, '--model', '模型', '--category', 'unknown']);
     assert.equal(invalid.status, 2);
     const existing = JSON.parse(await readFile(path.join(ROOT, 'catalog/books', beforeCatalog.find(name => name.endsWith('.json'))!), 'utf8'));
     const updated = run(['prepare', '--id', existing.id, '--update', '--epub', epub, '--model', '模型']);
@@ -49,7 +49,7 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
     assert.equal(run(['publish', '--plan', id]).status, 2);
     const index = await readFile(path.join(planDir, 'site/dist/index.html'), 'utf8');
     assert.match(index, /同名书籍/u); assert.match(index, /中文出版物转录/u);
-    const transcription = await readFile(path.join(planDir, 'site/dist/books/test-transcription/index.html'), 'utf8');
+    const transcription = await readFile(path.join(planDir, 'site/dist/books/9780000000019/index.html'), 'utf8');
     assert.doesNotMatch(transcription, /<dt>翻译模型<\/dt>/u);
     await writeFile(path.join(planDir, 'site/dist/index.html'), 'modified');
     const stale = run(['status', '--plan', id]);

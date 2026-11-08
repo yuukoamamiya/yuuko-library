@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "9783050043821",
+  "title": "马克思&恩格斯的《德意志意识形态》",
+  "authors": [
+    "Harald Bluhm"
+  ],
+  "description": "本书由德国政治思想史学者哈拉尔德·布卢姆主编，是一部针对马克思与恩格斯奠基性文献《德意志意识形态》手稿的当代经典研究与评注集。全书摆脱了传统教条主义将该书视作完备唯物史观体系的预设立场，依托最新的《马克思恩格斯全集》历史考证版（MEGA2）文献学成果，将手稿还原至19世纪“三月革命前”青年黑格尔派激辩的“思想实验室”语境中。书中详细考证了马克思恩格斯在同施蒂纳、鲍威尔、费尔巴哈的论战中构建全新历史唯物主义话语的曲折过程，展现了其思想从开放探索走向教条定型的历史张力。",
+  "subjects": [
+    "历史唯物主义",
+    "马克思主义文献学",
+    "德意志意识形态",
+    "青年黑格尔派"
+  ],
+  "cover": "/covers/9783050043821/927c4173d093b635a2eee438dbd0b6a8d6df6291b96af6429fcbf32c78d872f7.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "fbf0c74abce2e5401cc0572b7034cd707f39960aa5a1cd73712b9eee58f7848f",
+    "bytes": 479085,
+    "filename": "马克思&恩格斯的《德意志意识形态》 - Harald Bluhm.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-f90a74a89230/fbf0c74abce2e5401cc0572b7034cd707f39960aa5a1cd73712b9eee58f7848f.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-f90a74a89230/fbf0c74abce2e5401cc0572b7034cd707f39960aa5a1cd73712b9eee58f7848f.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1XdeVQ3Fg8MHfvIXW8bnHxg",
+      "code": "1cn7",
+      "fileSha256": "fbf0c74abce2e5401cc0572b7034cd707f39960aa5a1cd73712b9eee58f7848f",
+      "fsId": "539904399358308",
+      "shareId": "28372542118",
+      "path": "/yuuko-library/books/book-f90a74a89230/fbf0c74abce2e5401cc0572b7034cd707f39960aa5a1cd73712b9eee58f7848f/马克思&恩格斯的《德意志意识形态》 - Harald Bluhm.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:56:05.233Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "philosophy",
+    "politics-society"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9781583678985",
+  "title": "价值与危机：日本马克思主义经济学论集",
+  "authors": [
+    "Makoto Itoh"
+  ],
+  "description": "本书是日本宇野学派马克思主义经济学家伊藤诚（Makoto Itoh）面向国际学界的开山代表作（Monthly Review Press 出版）。全书向西方世界系统引介了二战后日本马克思主义经济学论战的丰硕成果，并开创性地推进了价值论与经济危机理论。伊藤诚在书中详尽论述了马克思劳动价值论在资本主义纯粹理论中的客观基础、转形问题的辩证解决、市场价值的形成机制，并深入剖析了战后资本主义在1970年代陷入“滞胀”与信贷过度扩张的内在危机机理，成为西方学界理解日本马克思主义政治经济学最富盛名的桥梁纽带。",
+  "subjects": [
+    "伊藤诚",
+    "宇野学派",
+    "价值理论",
+    "危机理论"
+  ],
+  "cover": "/covers/9781583678985/ba846b28e74ea8697a1af710f52ad5e7c6116ca2e9574d5456e00a6671293652.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65",
+    "bytes": 1194527,
+    "filename": "价值与危机：日本马克思主义经济学论集 - Makoto Itoh.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-caa49fc704b7/95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-caa49fc704b7/95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1FBkO6q6sfL_DgzaX-Bh_Rw",
+      "code": "xf7d",
+      "fileSha256": "95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65",
+      "fsId": "988464464751925",
+      "shareId": "23106785442",
+      "path": "/yuuko-library/books/book-caa49fc704b7/95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65/价值与危机：日本马克思主义经济学论集 - Makoto Itoh.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:51:20.966Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "political-economy"
+  ]
+}

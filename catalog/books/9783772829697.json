@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9783772829697",
+  "title": "谢林的时间理论：《世界时代》哲学背后隐藏的体系",
+  "authors": [
+    "Alexander Schmidt"
+  ],
+  "description": "本书是当代德国谢林研究的力作，由学者亚历山大·施密特基于详尽文献考证写就。全书以“时间与永恒”为主线，系统重构了晚期谢林在《世界时代》中未竟的宏大形而上学体系。作者深入辨析了谢林从早期的自然哲学与同一性哲学，经由雅可比的泛神论论战与人生危机，向以“自由”与“历史时间性”为核心的圣经救赎论框架的根本转向，打破了将谢林视为纯粹唯心主义思辨者的传统偏见，揭示了其对西方传统形而上学排斥时间性的深刻批判，是把握德国观念论晚期演进的标杆专著。",
+  "subjects": [
+    "德国观念论",
+    "谢林",
+    "时间哲学",
+    "形而上学"
+  ],
+  "cover": "/covers/9783772829697/c803a5e9e274ed6b8417b5e523d4fee0966b30501799abbf952207310cfab2f4.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "0cd323da393b7c54cd0c04f71858687efea0b92dc806796e8484d1cb9eb85738",
+    "bytes": 988322,
+    "filename": "谢林的时间理论：《世界时代》哲学背后隐藏的体系 - Alexander Schmidt.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-9573ceedc1fc/0cd323da393b7c54cd0c04f71858687efea0b92dc806796e8484d1cb9eb85738.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-9573ceedc1fc/0cd323da393b7c54cd0c04f71858687efea0b92dc806796e8484d1cb9eb85738.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1A67UEyqzzI-O6xNh-lsf1w",
+      "code": "03pu",
+      "fileSha256": "0cd323da393b7c54cd0c04f71858687efea0b92dc806796e8484d1cb9eb85738",
+      "fsId": "881741334202486",
+      "shareId": "61067275038",
+      "path": "/yuuko-library/books/book-9573ceedc1fc/0cd323da393b7c54cd0c04f71858687efea0b92dc806796e8484d1cb9eb85738/谢林的时间理论：《世界时代》哲学背后隐藏的体系 - Alexander Schmidt.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:06:47.675Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "philosophy"
+  ]
+}

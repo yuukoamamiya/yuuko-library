@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "9783476025142",
+  "title": "弗洛伊德手册",
+  "authors": [
+    "Hans-Martin Lohmann",
+    "Joachim Pfeiffer"
+  ],
+  "description": "本书由著名精神分析思想史学者汉斯-马丁·洛曼与约阿希姆·普法伊弗主编，J.B. Metzler出版社出品。全书作为当代德语学界对西格蒙德·弗洛伊德精神分析思想进行全面总结的权威指南，严格依据权威的《弗洛伊德全集》（GW）年代顺序，逐一深度解构了从早期癔症研究、《梦的解析》、《性学三论》到《超越唯乐原则》、《自我与本我》及晚期文明论的全部著述。手册不仅系统阐发了潜意识、本能理论、移情与防御机制等核心概念，更全面评估了精神分析对20世纪哲学、文艺理论、社会学与临床医学的颠覆性重构。",
+  "subjects": [
+    "弗洛伊德",
+    "精神分析",
+    "心理学史",
+    "潜意识理论"
+  ],
+  "cover": "/covers/9783476025142/3f5cbc6bfd0b43ed093a83da497dbeabec588fcf175dbe225aa47aa0bdd60175.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5",
+    "bytes": 1301910,
+    "filename": "弗洛伊德手册 - Hans-Martin Lohmann & Joachim Pfeiffer.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-a47f76440942/284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-a47f76440942/284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/14uL0Y6BVpDEa_Rmv6Q098Q",
+      "code": "klf5",
+      "fileSha256": "284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5",
+      "fsId": "976587385606081",
+      "shareId": "62932229764",
+      "path": "/yuuko-library/books/book-a47f76440942/284854f51359fb2e630718d4345485e06b5c33e041bb792568f1ee867a0dc3f5/弗洛伊德手册 - Hans-Martin Lohmann & Joachim Pfeiffer.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:40:45.458Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-07T01:06:41.119Z",
+  "categories": [
+    "philosophy"
+  ]
+}

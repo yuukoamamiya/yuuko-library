@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9781781681480",
+  "title": "国家、权力与社会主义",
+  "authors": [
+    "Nicos Poulantzas"
+  ],
+  "description": "本书是20世纪著名希腊-法国马克思主义国家理论家尼科斯·普兰查斯生前出版的最后一部也是最具影响力的代表作（Verso经典出版，斯图亚特·霍尔作序）。全书系统总结并升华了其一生的政治哲学思考，彻底告别了早期阿尔都塞结构主义的僵化倾向，提出了里程碑式的核心论断——“国家并非孤立的实体或中立工具，而是统治阶级内部联盟与被统治阶级之间阶级斗争的物质凝聚”。普兰查斯深入揭示了晚期资本主义国家向“威权国家主义”蜕变的危险趋势，创造性地构想了结合代议民主与基层大众自治的民主社会主义道路，是战后西方马克思主义政治理论的绝响之作。",
+  "subjects": [
+    "普兰查斯",
+    "国家理论",
+    "威权国家主义",
+    "民主社会主义"
+  ],
+  "cover": "/covers/9781781681480/eb3f545ae06633871d05b010fed0f3a0781ecfdd5e74fa6c859229c10da4b834.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "be7d2358764d5354178b6f8ee88c08154bc61fb230a55fd12f5f5f3c408ead8b",
+    "bytes": 382135,
+    "filename": "国家、权力与社会主义 - Nicos Poulantzas.epub"
+  },
+  "downloads": {
+    "r2Key": "books/state-power-socialism/be7d2358764d5354178b6f8ee88c08154bc61fb230a55fd12f5f5f3c408ead8b.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/state-power-socialism/be7d2358764d5354178b6f8ee88c08154bc61fb230a55fd12f5f5f3c408ead8b.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1Q95LECGFR0SQIFKWwlHZUg",
+      "code": "4jb2",
+      "fileSha256": "be7d2358764d5354178b6f8ee88c08154bc61fb230a55fd12f5f5f3c408ead8b",
+      "fsId": "880137291028761",
+      "shareId": "62601130085",
+      "path": "/yuuko-library/books/state-power-socialism/be7d2358764d5354178b6f8ee88c08154bc61fb230a55fd12f5f5f3c408ead8b/国家、权力与社会主义 - Nicos Poulantzas.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:41:32.655Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society"
+  ]
+}

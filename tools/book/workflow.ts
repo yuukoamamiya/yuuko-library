@@ -8,6 +8,7 @@ import type { Book } from '../../src/lib/books.ts';
 import { validateCategories, categoryLabel } from '../../src/lib/categories.ts';
 import { type Input, type Plan, SOURCE_PATHS, planDir, inventory, exists, sourceFingerprint, inspectPlan } from './plan.ts';
 import { CliError } from './errors.ts';
+import { assertBookId, readNoIsbnIds } from './id.ts';
 import { readCatalogBook } from '../catalog.ts';
 const jsonRead = async (file: string) => JSON.parse(await readFile(file, 'utf8'));
 async function jsonWrite(file: string, data: unknown) { await mkdir(path.dirname(file), { recursive: true }); await writeFile(file, JSON.stringify(data, null, 2) + '\n', 'utf8'); }
@@ -50,6 +51,11 @@ export async function prepareBooks(root:string,inputs:Input[],onProgress:(messag
 
   if (!inputs.length || inputs.length > 200) throw new CliError('每批应包含 1–200 本书');
   inputs.forEach(checkInput);
+  const noIsbnIds = await readNoIsbnIds(root);
+  for (const input of inputs) {
+    try { assertBookId(input.id, noIsbnIds); }
+    catch (error) { throw new CliError((error as Error).message); }
+  }
   if (new Set(inputs.map(input => input.id)).size !== inputs.length) throw new CliError('本批包含重复 id');
   const id = `p-${randomUUID()}`;
   const dir = planDir(root, id);

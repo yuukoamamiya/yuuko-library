@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9783896914545",
+  "title": "价值的科学",
+  "authors": [
+    "Michael Heinrich"
+  ],
+  "description": "本书是国际当代著名马克思学家米夏埃尔·海因里希的经典奠基专著《价值的科学》（Die Wissenschaft vom Wert）。海因里希依据第二版《马克思恩格斯全集》历史考订版（MEGA）的原始手稿与文献，对马克思政治经济学批判的基本概念展开了严密的体系性重构。作者深入指出了马克思在与古典经济学断裂过程中遗留的概念双重性与张力，澄清了商品拜物教、抽象劳动与货币形式的内在联结，并推进了关于信用、利息与危机理论的现代解读，是新马克思阅读与当代资本论研究的必读典范。",
+  "subjects": [
+    "米夏埃尔·海因里希",
+    "政治经济学批判",
+    "价值形式",
+    "资本论研究"
+  ],
+  "cover": "/covers/9783896914545/cffb9e449105df25440abfffcfc6b30fdf6b7fba4b7061ec822cd78fbb6945c5.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2",
+    "bytes": 658994,
+    "filename": "价值的科学 - Michael Heinrich.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-2700d6883dec/641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-2700d6883dec/641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/19Mec86yDSZn92N-2uh6kgA",
+      "code": "urs9",
+      "fileSha256": "641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2",
+      "fsId": "650114997735480",
+      "shareId": "27963184714",
+      "path": "/yuuko-library/books/book-2700d6883dec/641225515ee9c6595e2b9f9741fe095ce5ed8f4b336f1cedd5efe745b19504c2/价值的科学 - Michael Heinrich.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:50:56.373Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "political-economy"
+  ]
+}

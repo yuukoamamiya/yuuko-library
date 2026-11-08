@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "9783476023322",
+  "title": "马克思手册：生平、著作与影响",
+  "authors": [
+    "Michael Quante",
+    "David P. Schweikard"
+  ],
+  "description": "本书由著名分析进路黑格尔/马克思学者米夏埃尔·匡特（Michael Quante）与戴维·施魏卡德主编，德国权威学术出版社J.B. Metzler出版。全书立足国际权威的《马克思恩格斯全集》历史考证版（MEGA2）最新文献学进展，全景式呈现了卡尔·马克思的生平轨迹、著作脉络与全球思想影响。手册极为严谨地梳理了从早期《博士论文》、《1844年经济学哲学手稿》到《资本论》各卷及其庞大手稿群的文献生成史与文本类型学，澄清了后世关于马克思思想封闭同质化的教条误读，是当代马克思研究不可或缺的基础性文献指南。",
+  "subjects": [
+    "马克思",
+    "MEGA2",
+    "马克思主义文献学",
+    "思想史"
+  ],
+  "cover": "/covers/9783476023322/c07f89c7e926d2af5cea4d57cafab52898199619cb0d4f2feca7c59163a47951.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68",
+    "bytes": 1590531,
+    "filename": "马克思手册：生平、著作与影响 - Michael Quante & David P. Schweikard.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-3a9a90de8b74/4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-3a9a90de8b74/4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1kNjA9jm-OXBDaxfDeJ3_XA",
+      "code": "hwoy",
+      "fileSha256": "4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68",
+      "fsId": "143140426742219",
+      "shareId": "40391467251",
+      "path": "/yuuko-library/books/book-3a9a90de8b74/4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68/马克思手册：生平、著作与影响 - Michael Quante & David P. Schweikard.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:56:37.945Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-07T01:06:41.119Z",
+  "categories": [
+    "philosophy"
+  ]
+}

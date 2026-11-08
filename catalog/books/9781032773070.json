@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "9781032773070",
+  "title": "人工智能时代的翻译研究",
+  "authors": [
+    "Sanjun Sun",
+    "Kanglong Liu",
+    "Riccardo Moratto"
+  ],
+  "description": "本书由孙三军、刘康龙、莫冉联合编著，劳特利奇（Routledge）权威出版，是深入探讨生成式人工智能（LLM/ChatGPT/DeepSeek）与神经机器翻译对当代翻译学科颠覆性重构的前沿学术专著。全书跨越技术、教学与伦理三大维度，系统剖析了翻译对象的多模态演进、翻译工作流程的人机协同再造、译后编辑质量评估以及人工智能对翻译教学法和译者主体性身份带来的深远冲击。作者深入探讨了数据隐私、算法偏见与人机共生伦理，为全球语言服务行业与翻译学研究者提供了应对AI范式转换的全面路标。",
+  "subjects": [
+    "翻译研究",
+    "生成式AI",
+    "机器翻译",
+    "语言学"
+  ],
+  "cover": "/covers/9781032773070/4077c61785c77db6370d51c0368eb376457ce453cc9f893f9c5b6da6f83cf4bc.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240",
+    "bytes": 4119033,
+    "filename": "人工智能时代的翻译研究 - Sanjun Sun & Kanglong Liu & Riccardo Moratto.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-5cce456525fe/11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-5cce456525fe/11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1dedHaK_mHTsCLNMIIKVAcg",
+      "code": "flr2",
+      "fileSha256": "11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240",
+      "fsId": "1048968632962064",
+      "shareId": "10370869693",
+      "path": "/yuuko-library/books/book-5cce456525fe/11ccd58fdc4986b62ebb1a9610da6c791c43964dd559088d10487fc9dd89b240/人工智能时代的翻译研究 - Sanjun Sun & Kanglong Liu & Riccardo Moratto.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:00:44.483Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "language-translation"
+  ]
+}

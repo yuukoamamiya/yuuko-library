@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9781786632418",
+  "title": "独裁政权的危机",
+  "authors": [
+    "Nicos Poulantzas"
+  ],
+  "description": "本书是尼科斯·普兰查斯针对20世纪70年代中叶欧洲南部三大威权独裁政权（希腊军政府、葡萄牙萨拉查-卡埃塔诺政权、西班牙弗朗哥政权）崩溃与民主转型展开的经典政治社会学剖析。全书从全球帝国主义链条与国内阶级力量对比的动态演变出发，重点考察了由跨国垄断资本渗透所引发的本土“买办资产阶级”与“内部资产阶级”之间的深刻分裂，以及国家机器自身武装力量与官僚机构的内部危机，展现了唯物主义国家理论在诊断历史转折时刻的巨大解释力。",
+  "subjects": [
+    "民主转型",
+    "普兰查斯",
+    "威权政权",
+    "政治社会学"
+  ],
+  "cover": "/covers/9781786632418/40096fd6bdb9cb6b56a90fccd698051ac032ce30f531e485073c14c67a6e407a.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176",
+    "bytes": 290769,
+    "filename": "独裁政权的危机 - Nicos Poulantzas.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-3acd82072f85/81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-3acd82072f85/81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1yEYnsPgiama_yEVX4QfhCA",
+      "code": "4o9z",
+      "fileSha256": "81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176",
+      "fsId": "1014886564607325",
+      "shareId": "14132849062",
+      "path": "/yuuko-library/archives/book-3acd82072f85/81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176/e83854585d5a908048ef99fde3e12646b776c68bae503f95164c49567b184083/普兰查斯著作01.rar",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:00:47.052028Z",
+      "archive": {
+        "filename": "普兰查斯著作01.rar",
+        "sha256": "e83854585d5a908048ef99fde3e12646b776c68bae503f95164c49567b184083",
+        "bytes": 290414,
+        "password": "114514"
+      }
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society"
+  ]
+}

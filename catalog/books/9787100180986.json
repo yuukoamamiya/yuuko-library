@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "9787100180986",
+  "title": "在康德与黑格尔之间：德国观念论讲座",
+  "authors": [
+    "迪特·亨利希"
+  ],
+  "description": "《在康德与黑格尔之间：德国观念论讲座》是著名学者迪特·亨利希的一部重要著作，在这部著作中，作者讨论了德国哲学史上重要的哲学家的思想观念，包括康德、雅各比、赖因霍尔德、舒尔策、费希特、荷尔德林、黑格尔等。作者关注的主题是从康德的先验哲学到黑格尔的观念论的转变过程，准确地说，是关注那个时代出现的不同的主体概念，以及这些概念之间的传承、批判关系。",
+  "subjects": [
+    "黑格尔",
+    "德国古典哲学",
+    "讲演录",
+    "康德",
+    "亨利希"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9787100180986/70f40e1b259342a4d64b40f0c710ee0621974dbe6b6318b0700a2c9eb7729ce3.jpg",
+  "edition": {
+    "kind": "transcription",
+    "model": null
+  },
+  "file": {
+    "sha256": "8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9",
+    "bytes": 942244,
+    "filename": "在康德与黑格尔之间：德国观念论讲座 - 迪特·亨利希.epub"
+  },
+  "downloads": {
+    "r2Key": "books/between-kant-and-hegel/8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/between-kant-and-hegel/8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/13A-5KLn9YwUtdIHZLJsCiw",
+      "code": "5i8f",
+      "fileSha256": "8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9",
+      "fsId": "170466958070778",
+      "shareId": "256933402",
+      "path": "/yuuko-library/books/between-kant-and-hegel/8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9/在康德与黑格尔之间：德国观念论讲座 - 迪特·亨利希.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-07T01:00:28.968Z"
+    }
+  },
+  "publishedAt": "2026-11-07T00:59:14.659Z",
+  "updatedAt": "2026-11-07T00:59:14.659Z"
+}

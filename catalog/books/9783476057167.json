@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "9783476057167",
+  "title": "福柯手册",
+  "authors": [
+    "Clemens Kammler",
+    "Rolf Parr",
+    "Ulrich Johannes Schneider"
+  ],
+  "description": "本书由克莱门斯·卡姆勒、罗尔夫·帕尔与乌尔里希·约翰内斯·施耐德联合主编，梅茨勒出版社出版，是当代国际米歇尔·福柯研究领域最权威、最详备的百科全书式研究手册。全书结构宏阔，全面覆盖福柯的生平轨迹、法兰西公学院讲座录与《言与文》全部著作；系统解构了知识型、话语形成、规训权力、生命政治、治理术、自我技术等核心范畴；并详尽梳理了他与康德、黑格尔、尼采、马克思的思想互文，以及对巴特勒、阿甘本、奈格里等当代思潮的深远影响，是后结构主义与权力哲学研究的必备案头书。",
+  "subjects": [
+    "福柯",
+    "权力谱系学",
+    "生命政治",
+    "知识考古学"
+  ],
+  "cover": "/covers/9783476057167/a6fb3d3adb1a673a79ed0836410335cef778972ce6a56b4308e2cdedd422341e.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122",
+    "bytes": 1261945,
+    "filename": "福柯手册 - Clemens Kammler & Rolf Parr & Ulrich Johannes Schneider.epub"
+  },
+  "downloads": {
+    "r2Key": "books/book-1830d9387077/cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/book-1830d9387077/cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1gHMNQaYAe7_YZ2Q0H_NndQ",
+      "code": "6ras",
+      "fileSha256": "cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122",
+      "fsId": "636749489089222",
+      "shareId": "28933687485",
+      "path": "/yuuko-library/books/book-1830d9387077/cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122/福柯手册 - Clemens Kammler & Rolf Parr & Ulrich Johannes Schneider.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T10:41:07.677Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-07T01:06:41.119Z",
+  "categories": [
+    "philosophy",
+    "politics-society"
+  ]
+}

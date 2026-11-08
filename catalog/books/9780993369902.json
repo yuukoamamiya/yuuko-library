@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "9780993369902",
+  "title": "尾注1：20世纪资产负债表初步材料",
+  "authors": [
+    "Endnotes"
+  ],
+  "description": "本书是当代激进理论刊物《尾注》（Endnotes）创刊号，旨在对20世纪的革命史展开彻底的“资产负债清算”。本辑通过深入分析一战以来的国际工人运动、布列斯特和约、意大利与西班牙内战革命实践以及1968年法国五月风暴，系统批判了以“熟练劳动的乌托邦”和工人自主管理为特征的传统纲领主义（programmatism）。作者群指出，共产主义绝非工人阶级夺取生产资料并让“劳动称王”，而必须是一场直接扬弃雇佣劳动、商品交换与阶级关系本身的“共产化”革命。",
+  "subjects": [
+    "尾注",
+    "共产化理论",
+    "工人运动",
+    "革命理论"
+  ],
+  "cover": "/covers/9780993369902/7f2929e6125a67c328e7a642ffa0e07e76b32e39e4ca8b4de14a36faafb6209b.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.1 pro preview"
+  },
+  "file": {
+    "sha256": "f5d97dd2a70c471053f2a23fc1b2018f2a8b3ed72933dbc307a4a19499bd3875",
+    "bytes": 478277,
+    "filename": "尾注1：20世纪资产负债表初步材料 - Endnotes.epub"
+  },
+  "downloads": {
+    "r2Key": "books/endnotes-1/f5d97dd2a70c471053f2a23fc1b2018f2a8b3ed72933dbc307a4a19499bd3875.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/endnotes-1/f5d97dd2a70c471053f2a23fc1b2018f2a8b3ed72933dbc307a4a19499bd3875.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1opWn0T26Zo-3QOyN43ZoAw",
+      "code": "0yth",
+      "fileSha256": "f5d97dd2a70c471053f2a23fc1b2018f2a8b3ed72933dbc307a4a19499bd3875",
+      "fsId": "130833342831428",
+      "shareId": "6920019440",
+      "path": "/yuuko-library/books/endnotes-1/f5d97dd2a70c471053f2a23fc1b2018f2a8b3ed72933dbc307a4a19499bd3875/尾注1：20世纪资产负债表初步材料 - Endnotes.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-06T11:04:50.052Z"
+    }
+  },
+  "publishedAt": "2026-11-06T07:17:10.755Z",
+  "updatedAt": "2026-11-06T07:26:32.749Z",
+  "categories": [
+    "politics-society"
+  ]
+}
