@@ -3,8 +3,9 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import BookComments from '../../components/BookComments.astro';
-import BaiduDownload from '../../components/BaiduDownload.astro';
+import MirrorDownload from '../../components/MirrorDownload.astro';
 import { editionLabel, loadBooks, sizeLabel, subjectsOf } from '../../lib/books';
+import { mirrorList } from '../../lib/mirrors';
 import { coverSources } from '../../lib/cover-variants';
 import type { Book } from '../../lib/book';
 import { SITE_TITLE } from '../../lib/site';
@@ -30,7 +31,7 @@ const available = !preview && book.downloads.r2Url?.startsWith('https://');
         <div class="file-summary"><span>EPUB</span><span>{sizeLabel(book.file.bytes)}</span></div>
         {available ? <a class="download-button" href={book.downloads.r2Url!}>直链下载 <span aria-hidden="true">↓</span></a>
           : <div class="download-pending"><span>下载将在发布后开放</span><small>EPUB · {sizeLabel(book.file.bytes)}</small></div>}
-        {book.downloads.baidu && <BaiduDownload record={book.downloads.baidu} preview={preview} />}
+        {Object.keys(book.downloads.mirrors).length > 0 && <MirrorDownload mirrors={mirrorList(book.downloads.mirrors)} preview={preview} />}
         {preview && <p class="download-note">当前为本地预览，下载尚未开放。</p>}
       </aside>
       <article class="detail-content">

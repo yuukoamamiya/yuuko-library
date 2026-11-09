@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-203c0ecada35/22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-203c0ecada35/22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/11ysF0vUyYTvD-flInmX0uw",
-      "code": "zsyx",
-      "fileSha256": "22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473",
-      "fsId": "1097753478544641",
-      "shareId": "24516561706",
-      "path": "/yuuko-library/books/book-203c0ecada35/22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473/康德：著作整体简要导论 - Gottfried Gabriel.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:53:58.329Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/11ysF0vUyYTvD-flInmX0uw",
+        "code": "zsyx",
+        "fileSha256": "22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473",
+        "verifiedAt": "2026-11-06T10:53:58.329Z",
+        "meta": {
+          "fsId": "1097753478544641",
+          "shareId": "24516561706",
+          "path": "/yuuko-library/books/book-203c0ecada35/22324d315be4735c27984417b48e71b9e449ec22e23b5c97b853c19c42063473/康德：著作整体简要导论 - Gottfried Gabriel.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

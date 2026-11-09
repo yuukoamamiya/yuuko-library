@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-89c5597a9426/3273fbb1ac03152fe870c4501d5e5991ed490337a53809b6b0846fe462491780.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-89c5597a9426/3273fbb1ac03152fe870c4501d5e5991ed490337a53809b6b0846fe462491780.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1mZx5IelSeFCBhVky7V-jmQ",
-      "code": "s668",
-      "fileSha256": "3273fbb1ac03152fe870c4501d5e5991ed490337a53809b6b0846fe462491780",
-      "fsId": "747979671690342",
-      "shareId": "25972860737",
-      "path": "/yuuko-library/books/book-89c5597a9426/3273fbb1ac03152fe870c4501d5e5991ed490337a53809b6b0846fe462491780/数字崇高：神话、权力与赛博空间 - Vincent Mosco.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:04:12.530Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1mZx5IelSeFCBhVky7V-jmQ",
+        "code": "s668",
+        "fileSha256": "3273fbb1ac03152fe870c4501d5e5991ed490337a53809b6b0846fe462491780",
+        "verifiedAt": "2026-11-06T11:04:12.530Z",
+        "meta": {
+          "fsId": "747979671690342",
+          "shareId": "25972860737",
+          "path": "/yuuko-library/books/book-89c5597a9426/3273fbb1ac03152fe870c4501d5e5991ed490337a53809b6b0846fe462491780/数字崇高：神话、权力与赛博空间 - Vincent Mosco.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

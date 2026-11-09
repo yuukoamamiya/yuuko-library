@@ -2,14 +2,15 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import os from 'node:os'; import path from 'node:path';
-import type { Book, BaiduDownload } from '../src/lib/books.ts';
+import type { Book } from '../src/lib/books.ts';
+import { readBaidu, writeBaidu, type BaiduDownload } from '../src/lib/baidu.ts';
 import { archiveVersionKey, prepareArchive, publishArchive, recoverUnknownArchiveShare, type ArchiveManifest, type RarRunner } from '../tools/baidu/archive.ts';
 import { digest, runPublish, type Runner } from '../tools/baidu/transfer.ts';
 
 const epub = Buffer.from('source epub bytes'); const epubSha = digest(epub); const rarBytes = Buffer.from('mock encrypted rar bytes');
 function book(id = 'sample'): Book { return { schemaVersion: 1, id, title: '书', authors: [], description: '', subjects: [], categories: ['history'], cover: null,
   edition: { kind: 'transcription', model: null }, file: { sha256: epubSha, bytes: epub.length, filename: '书.epub' },
-  downloads: { r2Key: `books/${id}/${epubSha}.epub`, r2Url: 'https://download.example/file.epub', baidu: null }, publishedAt: null, updatedAt: null }; }
+  downloads: { r2Key: `books/${id}/${epubSha}.epub`, r2Url: 'https://download.example/file.epub', mirrors: {} }, publishedAt: null, updatedAt: null }; }
 async function setup() {
   const root = await mkdtemp(path.join(os.tmpdir(), 'baidu-archive-')); const b = book();
   await mkdir(path.join(root, 'catalog/books'), { recursive: true }); await mkdir(path.join(root, '.local/plans/p1/inputs'), { recursive: true });
@@ -47,9 +48,9 @@ test('same source can explicitly prepare a second named RAR while preserving the
   const t = await setup(); const rar = rarMock();
   try {
     const archive = { filename: 'published.rar', sha256: digest(rarBytes), bytes: rarBytes.length, password: '114514' };
-    t.b.downloads.baidu = { url: 'https://pan.baidu.com/s/AbCdEF12', code: '4o9z', fileSha256: epubSha,
+    writeBaidu(t.b, { url: 'https://pan.baidu.com/s/AbCdEF12', code: '4o9z', fileSha256: epubSha,
       fsId: '12345', shareId: '23456', path: `/yuuko-library/archives/sample/${epubSha}/${archive.sha256}/${archive.filename}`,
-      expiresAt: null, verifiedAt: '2026-11-06T11:00:47.052Z', archive };
+      expiresAt: null, verifiedAt: '2026-11-06T11:00:47.052Z', archive });
     const next = await prepareArchive(t.root, t.b, 'new-random-salt.rar', '114514', rar.runner);
     assert.notEqual(next.manifest.archive.filename, archive.filename);
     assert.equal(next.manifest.archive.sha256, digest(rarBytes));
@@ -77,7 +78,7 @@ test('unknown RAR share recovery checks entity SHA and exact share row before up
     const result = await recoverUnknownArchiveShare(t.root, [t.b], manifestPath, runner, '456789', '7x9q');
     assert.equal(result.status, 'recovered');
     const current = JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book;
-    assert.equal(current.downloads.baidu?.archive?.sha256, archive.sha256);
+    assert.equal(readBaidu(current)?.archive?.sha256, archive.sha256);
   } finally { await t.cleanup(); }
 });
 test('new EPUB SHA gets a separate RAR archive share while the older archive record stays intact', async () => {
@@ -113,7 +114,7 @@ test('new EPUB SHA gets a separate RAR archive share while the older archive rec
     const nextEpub = Buffer.from('replacement source epub'); const nextSha = digest(nextEpub);
     const current = JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book;
     const next: Book = { ...current, title: '新版', file: { sha256: nextSha, bytes: nextEpub.length, filename: '新版.epub' },
-      downloads: { ...current.downloads, r2Key: `books/sample/${nextSha}.epub`, baidu: null } };
+      downloads: { ...current.downloads, r2Key: `books/sample/${nextSha}.epub`, mirrors: {} } };
     await writeFile(path.join(t.root, 'catalog/books/sample.json'), JSON.stringify(next));
     const inputDir = path.join(t.root, '.local/plans/p2/inputs'); await mkdir(inputDir, { recursive: true }); await writeFile(path.join(inputDir, 'sample.epub'), nextEpub);
     const secondRar = makeRar(nextEpub, '新版.epub');
@@ -125,7 +126,7 @@ test('new EPUB SHA gets a separate RAR archive share while the older archive rec
     assert.equal(journal.entries[firstKey].state, 'complete'); assert.equal(journal.entries[secondKey].state, 'complete');
     assert.notEqual(journal.entries[firstKey].baidu.path, journal.entries[secondKey].baidu.path);
     const final = JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book;
-    assert.equal(final.downloads.baidu?.fileSha256, nextSha); assert.equal(final.downloads.baidu?.archive?.filename, 'v2.rar');
+    assert.equal(readBaidu(final)?.fileSha256, nextSha); assert.equal(readBaidu(final)?.archive?.filename, 'v2.rar');
   } finally { await t.cleanup(); }
 });
 test('an unresolved raw share blocks RAR publishing for the same stable book ID', async () => {
@@ -163,7 +164,7 @@ test('verified archive manifest imports after remote meta, full download, inner 
     const result = await publishArchive(t.root, [t.b], manifestPath, cloud, rar.runner);
     assert.equal(result.status, 'complete'); assert.equal(writes, 0);
     const current = JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book;
-    assert.deepEqual(current.downloads.baidu, baidu);
+    assert.deepEqual(readBaidu(current), baidu);
     const archiveJournal = JSON.parse(await readFile(path.join(t.root, '.local/baidu/archive-journal.json'), 'utf8'));
     assert.equal(archiveJournal.entries[`sample@${epubSha}@${archive.sha256}@${digest(archive.filename).slice(0, 12)}`].state, 'complete');
     current.title = '归档同SHA展示元数据更新'; await writeFile(path.join(t.root, 'catalog/books/sample.json'), JSON.stringify(current));

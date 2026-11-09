@@ -11,25 +11,31 @@ const sha = 'a'.repeat(64);
 function book(id = 'sample'): Book {
   return { schemaVersion: 1, id, title: '书', authors: [], description: '', subjects: [], categories: ['history'], cover: null,
     edition: { kind: 'transcription', model: null }, file: { sha256: sha, bytes: 1, filename: 'book.epub' },
-    downloads: { r2Key: `books/${id}/${sha}.epub`, r2Url: null, baidu: null }, publishedAt: null, updatedAt: null };
+    downloads: { r2Key: `books/${id}/${sha}.epub`, r2Url: null, mirrors: {} }, publishedAt: null, updatedAt: null };
 }
+const mirror = (overrides: Record<string, unknown> = {}) => ({
+  provider: 'baidu', url: 'https://pan.baidu.com/s/Abcde_12', code: 'a1b2', fileSha256: sha,
+  verifiedAt: '2026-01-01T00:00:00Z',
+  meta: { fsId: '1', shareId: '2', path: '/yuuko-library/file.epub', expiresAt: null }, ...overrides,
+});
 async function setup() {
   const root = await mkdtemp(path.join(os.tmpdir(), 'catalog-'));
   await mkdir(path.join(root, 'catalog/books'), { recursive: true });
   return { root, cleanup: () => rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }) };
 }
 
-test('rendering drops malformed Baidu data while raw catalog retains it', async () => {
+test('rendering drops invalid and unknown mirrors while raw catalog retains them', async () => {
   const t = await setup(); const pathBook = path.join(t.root, 'catalog/books/sample.json');
   try {
-    const malformed = { ...book(), downloads: { ...book().downloads, baidu: { url: 'http://example.invalid' } } };
+    const unknown = { provider: 'unknown', url: 'https://example.invalid/s/1', code: 'abcd', fileSha256: sha, verifiedAt: '2026-01-01T00:00:00Z' };
+    const malformed = { ...book(), downloads: { ...book().downloads, mirrors: { baidu: mirror({ url: 'http://example.invalid' }), unknown } } };
     await writeFile(pathBook, JSON.stringify(malformed));
     const raw = await readCatalog(t.root);
-    assert.deepEqual(raw[0].downloads.baidu, malformed.downloads.baidu);
+    assert.deepEqual(raw[0].downloads.mirrors, malformed.downloads.mirrors);
     const prior = process.env.BOOK_SITE_ROOT; process.env.BOOK_SITE_ROOT = t.root;
-    try { assert.equal((await loadBooks())[0].downloads.baidu, null); }
+    try { assert.deepEqual((await loadBooks())[0].downloads.mirrors, {}); }
     finally { if (prior === undefined) delete process.env.BOOK_SITE_ROOT; else process.env.BOOK_SITE_ROOT = prior; }
-    assert.deepEqual(JSON.parse(await readFile(pathBook, 'utf8')).downloads.baidu, malformed.downloads.baidu);
+    assert.deepEqual(JSON.parse(await readFile(pathBook, 'utf8')).downloads.mirrors, malformed.downloads.mirrors);
   } finally { await t.cleanup(); }
 });
 
@@ -57,14 +63,16 @@ test('render reader rejects filename identity mismatches and linked catalog dire
   }
 });
 
-test('catalog writes enforce expected hash, strict Baidu shape, and exclusive new-book creation', async () => {
+test('catalog writes enforce expected hash, strict mirror shape, and exclusive new-book creation', async () => {
   const t = await setup();
   try {
     const initial = book(); const firstHash = await writeCatalogBook(t.root, initial, null);
     await assert.rejects(writeCatalogBook(t.root, { ...initial, title: 'overwrite' }, null), /冲突/);
     await assert.rejects(writeCatalogBook(t.root, { ...initial, title: 'stale' }, 'b'.repeat(64)), /冲突/);
-    const invalid = { ...initial, downloads: { ...initial.downloads, baidu: { url: 'https://example.invalid' } } } as unknown as Book;
+    const invalid = { ...initial, downloads: { ...initial.downloads, mirrors: { baidu: mirror({ url: 'https://example.invalid/s/1' }) } } } as unknown as Book;
     await assert.rejects(writeCatalogBook(t.root, invalid, firstHash), /百度/);
+    const unknown = { ...initial, downloads: { ...initial.downloads, mirrors: { other: mirror({ provider: 'other' }) } } } as unknown as Book;
+    await assert.rejects(writeCatalogBook(t.root, unknown, firstHash), /未知下载镜像/u);
     const nextHash = await writeCatalogBook(t.root, { ...initial, title: '更新' }, firstHash);
     assert.notEqual(nextHash, firstHash);
     assert.equal((await readCatalogBook(t.root, 'sample'))?.book.title, '更新');

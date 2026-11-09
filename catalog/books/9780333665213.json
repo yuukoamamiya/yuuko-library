@@ -26,15 +26,20 @@
   "downloads": {
     "r2Key": "books/book-66524c50c46d/0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-66524c50c46d/0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1Qw3uGyUHgERI2koaXhO1qQ",
-      "code": "zmzb",
-      "fileSha256": "0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e",
-      "fsId": "374449203180884",
-      "shareId": "22231140201",
-      "path": "/yuuko-library/books/book-66524c50c46d/0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e/货币与金融政治经济学 - Makoto Itoh & Costas Lapavitsas.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:50:24.532Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1Qw3uGyUHgERI2koaXhO1qQ",
+        "code": "zmzb",
+        "fileSha256": "0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e",
+        "verifiedAt": "2026-11-06T10:50:24.532Z",
+        "meta": {
+          "fsId": "374449203180884",
+          "shareId": "22231140201",
+          "path": "/yuuko-library/books/book-66524c50c46d/0be4ca6c2dab2e8d7ed6f39e2c9c2bdc3a9025056a57da93dbc35d71d83c884e/货币与金融政治经济学 - Makoto Itoh & Costas Lapavitsas.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

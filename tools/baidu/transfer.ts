@@ -3,8 +3,8 @@ import { readFile, readdir, stat, mkdir, copyFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { constants as fsConstants } from 'node:fs';
-import type { Book, BaiduDownload } from '../../src/lib/book.ts';
-import { validateBaiduDownload } from '../../src/lib/baidu.ts';
+import type { Book } from '../../src/lib/book.ts';
+import { readBaidu, validateBaiduDownload, writeBaidu, type BaiduDownload } from '../../src/lib/baidu.ts';
 import { isCatalogCasConflict, readCatalogBook, writeCatalogBook } from '../catalog.ts';
 import { acquireJournalLocks, persistSchema1Migration, saveJournalJson } from './journal.ts';
 
@@ -115,7 +115,7 @@ export function getJournalEntry(journal: Journal, id: string, sha256: string) {
   return journal.entries[versionKey(id, sha256)] ?? Object.values(journal.entries).find(entry => entry.id === id && entry.sha256 === sha256) ?? null;
 }
 async function archiveJournalConfirms(root: string, book: Book, current: Book, currentCatalogHash: string) {
-  const download = current.downloads.baidu;
+  const download = readBaidu(current);
   if (!download?.archive) return false;
   validateBaiduDownload(download, book.file.sha256);
   let journal: { entries?: Record<string, { id?: string; state?: string; sourceSha256?: string; sha256?: string; archiveSha256?: string; remotePath?: string; catalogHash?: string; catalogGuard?: { file: Book['file']; downloads: Book['downloads'] }; baidu?: BaiduDownload }> };
@@ -127,7 +127,7 @@ async function archiveJournalConfirms(root: string, book: Book, current: Book, c
   const metadataOnly = Boolean(record?.catalogGuard && current.file.sha256 === record.sourceSha256
     && current.file.bytes === record.catalogGuard.file.bytes && current.file.filename === record.catalogGuard.file.filename
     && current.downloads.r2Key === record.catalogGuard.downloads.r2Key && current.downloads.r2Url === record.catalogGuard.downloads.r2Url
-    && JSON.stringify(current.downloads.baidu) === JSON.stringify(record.baidu));
+    && JSON.stringify(readBaidu(current)) === JSON.stringify(record.baidu));
   return record?.state === 'complete' && record.sourceSha256 === book.file.sha256
     && record.archiveSha256 === download.archive.sha256 && record.remotePath === download.path
     && (catalogMatches || metadataOnly) && JSON.stringify(record.baidu) === JSON.stringify(download);
@@ -168,31 +168,32 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       if (Object.values(archiveHistory.entries ?? {}).some(entry => entry.id === book.id && entry.state === 'uncertain')) {
         throw new BaiduError(`${book.id}: 有未确认的历史 RAR 分享结果；先通过 recover 诊断恢复，禁止新版本绕过`);
       }
-      if (current.downloads.baidu?.archive) {
+      const currentShare = readBaidu(current);
+      if (currentShare?.archive) {
         if (!await archiveJournalConfirms(root, book, current, beforeHash)) throw new BaiduError(`${book.id}: RAR 记录缺少匹配的完整 archive journal，拒绝按旧 raw 分享覆盖`);
         completed++;
         continue;
       }
       if (previous?.state === 'unavailable') {
-        if (current.downloads.baidu !== null || beforeHash !== previous.catalogHash) throw new BaiduError(`${book.id}: unavailable 记录对应的书目已变化，拒绝覆盖`);
+        if (currentShare !== null || beforeHash !== previous.catalogHash) throw new BaiduError(`${book.id}: unavailable 记录对应的书目已变化，拒绝覆盖`);
         unavailable.push({ id: book.id, error: previous.error ?? '百度分享经人工核查不可用' });
         continue;
       }
       if (previous?.state === 'complete' && previous.baidu) {
         validateBaiduDownload(previous.baidu, book.file.sha256);
-        if (JSON.stringify(current.downloads.baidu) !== JSON.stringify(previous.baidu)) {
+        if (JSON.stringify(currentShare) !== JSON.stringify(previous.baidu)) {
           throw new BaiduError(`${book.id}: 已验证分享字段已变化，拒绝覆盖`);
         }
         if (beforeHash !== previous.catalogHash) {
           const guard = previous.catalogGuard;
           if (current.file.sha256 !== previous.sha256 || current.file.bytes !== previous.bytes || !guard
             || current.file.filename !== guard.file.filename || current.downloads.r2Key !== guard.downloads.r2Key
-            || current.downloads.r2Url !== guard.downloads.r2Url || current.downloads.baidu?.fileSha256 !== previous.sha256) {
+            || current.downloads.r2Url !== guard.downloads.r2Url || currentShare?.fileSha256 !== previous.sha256) {
             throw new BaiduError(`${book.id}: 文件或下载字段已变化，拒绝刷新 journal fingerprint`);
           }
           previous.catalogHash = beforeHash; previous.catalogGuard = { file: current.file, downloads: current.downloads };
           journal.entries[key] = previous; await saveJournal(journalFile, journal);
-        } else if (!previous.catalogGuard && JSON.stringify(current.downloads.baidu) === JSON.stringify(previous.baidu)) {
+        } else if (!previous.catalogGuard && JSON.stringify(currentShare) === JSON.stringify(previous.baidu)) {
           previous.catalogGuard = { file: current.file, downloads: current.downloads };
           journal.entries[key] = previous; await saveJournal(journalFile, journal);
         }
@@ -205,10 +206,10 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       if (otherVersions.some(entry => entry.state === 'uncertain')) throw new BaiduError(`${book.id}: 旧版本仍有未确认分享结果；先用 recover 诊断恢复，禁止新版本绕过`);
       if (record.state === 'uncertain' && !record.baidu) throw new BaiduError(`${book.id}: 该版本分享结果未知；先用 recover 诊断并接续，禁止自动创建新分享`);
       if (previous && beforeHash !== previous.catalogHash) {
-        if (previous.state === 'shared' && previous.baidu && JSON.stringify(current.downloads.baidu) === JSON.stringify(previous.baidu)) {
+        if (previous.state === 'shared' && previous.baidu && JSON.stringify(currentShare) === JSON.stringify(previous.baidu)) {
           record.catalogHash = beforeHash; record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal); continue;
         }
-        if (previous.state === 'shared' && previous.baidu && current.downloads.baidu === null && previous.catalogGuard
+        if (previous.state === 'shared' && previous.baidu && currentShare === null && previous.catalogGuard
           && current.file.sha256 === previous.catalogGuard.file.sha256 && current.file.bytes === previous.catalogGuard.file.bytes
           && current.file.filename === previous.catalogGuard.file.filename && current.downloads.r2Key === previous.catalogGuard.downloads.r2Key
           && current.downloads.r2Url === previous.catalogGuard.downloads.r2Url) {
@@ -296,7 +297,7 @@ export async function runPublish(root: string, selected: Book[], run: Runner, op
       }
       if (!['complete', 'shared'].includes(record.state) || !record.baidu) throw new BaiduError(`${book.id}: 状态 ${record.state} 需要人工恢复`);
       validateBaiduDownload(record.baidu, book.file.sha256);
-      current.downloads.baidu = record.baidu;
+      writeBaidu(current, record.baidu);
       record.catalogHash = await writeCatalogBook(root, current, beforeHash).catch(error => { if (isCatalogCasConflict(error)) throw new BaiduError(`${book.id}: catalog 在流程中变化，拒绝覆盖`, { cause: error }); throw error; }); record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);
       completed++;
@@ -324,7 +325,7 @@ export async function recoverUnknownShare(root: string, book: Book, run: Runner,
     const loaded = await readCatalogBook(root, book.id); if (!loaded) throw new BaiduError('待恢复书目不存在');
     const current = loaded.book; const catalogHashBefore = loaded.hash;
     const activeVersion = current.file.sha256 === sourceSha256;
-    if (activeVersion && (current.file.bytes !== record.bytes || current.file.filename !== filename || current.downloads.baidu !== null)) throw new BaiduError('当前书目已变化或已有百度记录，拒绝恢复覆盖');
+    if (activeVersion && (current.file.bytes !== record.bytes || current.file.filename !== filename || readBaidu(current) !== null)) throw new BaiduError('当前书目已变化或已有百度记录，拒绝恢复覆盖');
     const meta = parseMeta(await call(run, ['meta', record.remotePath]), record.remotePath);
     if (meta.bytes !== record.bytes || (record.fsId && meta.fsId !== record.fsId)) throw new BaiduError('远端文件 meta 与未知分享 journal 不匹配');
     const roundtripDir = path.join(options.roundtripRoot ?? path.join(root, '.local/baidu/recovery'), `${book.id}-${sourceSha256}-${randomUUID()}`);
@@ -346,7 +347,7 @@ export async function recoverUnknownShare(root: string, book: Book, run: Runner,
     confirmShareList(listing, baidu);
     record.fsId = meta.fsId; record.shareId = shareId; record.baidu = baidu; record.state = 'shared'; journal.entries[key] = record; await saveJournal(journalFile, journal);
     if (activeVersion) {
-      current.downloads.baidu = baidu;
+      writeBaidu(current, baidu);
       record.catalogHash = await writeCatalogBook(root, current, catalogHashBefore).catch(error => { if (isCatalogCasConflict(error)) throw new BaiduError('恢复期间 catalog 发生竞态变化；已保存分享恢复 checkpoint，可安全续跑', { cause: error }); throw error; });
       record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveJournal(journalFile, journal);

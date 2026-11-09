@@ -8,7 +8,7 @@ import type { Book } from '../../src/lib/books.ts';
 import { validateCategories, categoryLabel } from '../../src/lib/categories.ts';
 import { type Input, type Plan, SOURCE_PATHS, planDir, inventory, exists, sourceFingerprint, inspectPlan } from './plan.ts';
 import { CliError } from './errors.ts';
-import { assertBookId, readNoIsbnIds } from './id.ts';
+import { assertBookId, isIsbn13, readNoIsbnIds } from './id.ts';
 import { readCatalogBook } from '../catalog.ts';
 const jsonRead = async (file: string) => JSON.parse(await readFile(file, 'utf8'));
 async function jsonWrite(file: string, data: unknown) { await mkdir(path.dirname(file), { recursive: true }); await writeFile(file, JSON.stringify(data, null, 2) + '\n', 'utf8'); }
@@ -89,6 +89,7 @@ export async function prepareBooks(root:string,inputs:Input[],onProgress:(messag
       }
       const previous = previousBooks.get(input.id) ?? null;
       const r2Key = `books/${input.id}/${metadata.sha256}.epub`;
+      const sameFile = Boolean(previous && previous.file.sha256 === metadata.sha256 && previous.file.bytes === metadata.bytes);
       const book: Book = { schemaVersion: 1, id: input.id,
         title: metadata.title, authors: metadata.authors, description: metadata.description, subjects: metadata.subjects,
         categories: input.categories ?? previous!.categories,
@@ -98,10 +99,14 @@ export async function prepareBooks(root:string,inputs:Input[],onProgress:(messag
           filename: previous?.file.sha256 === metadata.sha256 && previous.file.bytes === metadata.bytes
             ? previous.file.filename : path.basename(input.epub) },
         downloads: { r2Key, r2Url: config.downloadsUrl ? new URL(r2Key, config.downloadsUrl.replace(/\/?$/u, '/')).href : null,
-          baidu: previous?.file.sha256 === metadata.sha256 ? previous.downloads.baidu : null },
+          mirrors: sameFile ? previous!.downloads.mirrors : {} },
         publishedAt: previous?.publishedAt ?? null, updatedAt: previous?.updatedAt ?? null };
       const warnings = [...metadata.warnings];
-      if (previous?.downloads.baidu && previous.file.sha256 !== metadata.sha256) warnings.push('新文件不沿用原百度分享链接');
+      if (isIsbn13(input.id)) {
+        if (!metadata.isbns.length) warnings.push('EPUB metadata 未包含 ISBN，请核对 ID 来源');
+        else if (!metadata.isbns.includes(input.id)) warnings.push(`EPUB metadata ISBN 与 ID 不一致：${metadata.isbns.join('、')}`);
+      }
+      if (previous && Object.keys(previous.downloads.mirrors).length > 0 && !sameFile) warnings.push('新文件不沿用原网盘分享链接');
       changes.push({ id: book.id, operation: input.update ? 'update' : 'add', warnings });
       books.push(book);
       await jsonWrite(path.join(site, 'catalog/books', `${input.id}.json`), book);

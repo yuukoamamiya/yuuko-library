@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-4eafc535fb87/e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-4eafc535fb87/e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/146P8TYpGcaG9T_qA4S6zSw",
-      "code": "sqsw",
-      "fileSha256": "e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88",
-      "fsId": "272341209476750",
-      "shareId": "42207747937",
-      "path": "/yuuko-library/books/book-4eafc535fb87/e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88/自由主义法西斯主义 - Slavoj Žižek.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:11:01.995Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/146P8TYpGcaG9T_qA4S6zSw",
+        "code": "sqsw",
+        "fileSha256": "e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88",
+        "verifiedAt": "2026-11-06T11:11:01.995Z",
+        "meta": {
+          "fsId": "272341209476750",
+          "shareId": "42207747937",
+          "path": "/yuuko-library/books/book-4eafc535fb87/e9d6fd7c2b5bf24716cf1bb1df1419772a0345f524ce93839718a3afea2aea88/自由主义法西斯主义 - Slavoj Žižek.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

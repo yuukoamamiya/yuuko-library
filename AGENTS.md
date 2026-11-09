@@ -9,20 +9,20 @@
 - 书目在 `catalog/books/`，封面在 `public/covers/`；分类 ID 以 `src/lib/categories.ts` 为准，EPUB `subjects` 作为标签保留。
 - 图书 ID 使用 ISBN-13（13 位数字且校验位有效）；无 ISBN 的条目先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的 slug。不得根据中文书名自拟描述性 ID。同名不同作者不合并；更新现有图书显式使用 `--update`。
 - AI 译本用 `edition.kind=ai-translation` 和维护者提供的模型名；中文出版物转录用 `transcription`，模型为 null。不得补写或擅自改正来源信息。
-- 一书只记录一个当前 EPUB。不得让旧 R2/百度下载地址指向新文件。
+- 一书只记录一个当前 EPUB。不得让旧 R2/网盘下载地址指向新文件。
 - 电子书原件由维护者手动保存在 Calibre；本仓库不集成 Calibre。
 - 正式书目写入统一经 `tools/catalog.ts` 的 CAS writer；plan 校验与 inventory 复用 `tools/book/plan.ts` API，不在 CLI 或业务服务中另行实现。
 
 ## 操作边界
 
-- 先完成本地改动并给出可审阅结果。上传 R2、创建分享、Pages 部署和文件清理都需要本次会话明确授权；已有授权不重复询问。
+- 先完成本地改动并给出可审阅结果。上传 R2、创建网盘分享/发布镜像、Pages 部署和文件清理都需要本次会话明确授权；已有授权不重复询问。
 - 用户明确要求 push，且本次待推送内容影响站点产物时，该要求同时授权构建、部署和线上验证：push 前 `pages prepare --site-only` 并核对快照；push 后 deploy、verify 并同步正式书目。纯文档变更不触发部署。
 - `book` prepare/preview/validate/status 是本地步骤；R2 upload 会公开文件；Pages deploy 会发布网页。每个阶段分别验证，不以本地成功代替线上完成。
-- 正常上架从 EPUB metadata 生成页面，依次完成 R2 上传与公开文件完整校验，再经 Pages 发布与线上验证。百度分享不属于常规上架流程；仅在用户另行要求时执行。书籍 ID、版本类型、模型和分类依据 metadata 与既有规则确定；信息不足时向维护者确认，不捏造。
+- 正常上架从 EPUB metadata 生成页面，依次完成 R2 上传与公开文件完整校验，再经 Pages 发布与线上验证；常规流程不包含网盘镜像。镜像通过 `downloads.mirrors` 的 provider 记录，百度只是已注册 provider 之一；镜像发布仅在用户另行授权时执行，发布后统一重建一次站点（`pages prepare --site-only`、deploy、verify）。书籍 ID、版本类型、模型和分类依据 metadata 与既有规则确定；信息不足时向维护者确认，不捏造。
 - R2 上传后核对公开 GET 的完整 SHA-256、大小、MIME 和文件名；multipart ETag 不是 SHA-256。
 - plan 可能因源码、依赖、配置、书目或冻结输入变化而 stale；重新 prepare，不绕过校验。未知的云端/远端状态先查 status、日志和远端事实，不能盲目重试。
-- `.env.local`、Wrangler/百度凭据、EPUB、`.local/` 和构建产物不进 Git；不得输出原始凭据、签名请求或密钥。
-- 百度流程使用 Windows 原生工具，不使用或安装 WSL。前端只用可能预装的字体，不安装字体包或外部字体服务。
+- `.env.local`、Wrangler/网盘凭据、EPUB、`.local/` 和构建产物不进 Git；不得输出原始凭据、签名请求或密钥。
+- 百度等 Windows 原生镜像流程使用原生工具，不使用或安装 WSL。前端只用可能预装的字体，不安装字体包或外部字体服务。
 - 网站保留“雨宫优子图书馆”和首页小字“本网站仅供学习和交流用，请于下载后24小时内删除”；保持简洁，避免功能自述与宣传文案。
 
 ## 实施与验收

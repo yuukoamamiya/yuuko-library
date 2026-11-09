@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-5975b07fcb3c/2f96a8b789aed062a727b4aadedc94864d413fd041e446317ba8d7ab7cda84f5.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-5975b07fcb3c/2f96a8b789aed062a727b4aadedc94864d413fd041e446317ba8d7ab7cda84f5.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1_Iwc0A6B3NJBmXTJPugnfg",
-      "code": "f0jb",
-      "fileSha256": "2f96a8b789aed062a727b4aadedc94864d413fd041e446317ba8d7ab7cda84f5",
-      "fsId": "374271370386719",
-      "shareId": "15524426398",
-      "path": "/yuuko-library/books/book-5975b07fcb3c/2f96a8b789aed062a727b4aadedc94864d413fd041e446317ba8d7ab7cda84f5/如何解读唐老鸭 - Ariel Dorfman.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:01:37.477Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1_Iwc0A6B3NJBmXTJPugnfg",
+        "code": "f0jb",
+        "fileSha256": "2f96a8b789aed062a727b4aadedc94864d413fd041e446317ba8d7ab7cda84f5",
+        "verifiedAt": "2026-11-06T11:01:37.477Z",
+        "meta": {
+          "fsId": "374271370386719",
+          "shareId": "15524426398",
+          "path": "/yuuko-library/books/book-5975b07fcb3c/2f96a8b789aed062a727b4aadedc94864d413fd041e446317ba8d7ab7cda84f5/如何解读唐老鸭 - Ariel Dorfman.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

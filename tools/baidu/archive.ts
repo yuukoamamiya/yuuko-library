@@ -4,8 +4,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { constants as fsConstants } from 'node:fs';
-import type { BaiduDownload, Book } from '../../src/lib/book.ts';
-import { validateBaiduDownload } from '../../src/lib/baidu.ts';
+import type { Book } from '../../src/lib/book.ts';
+import { readBaidu, validateBaiduDownload, writeBaidu, type BaiduDownload } from '../../src/lib/baidu.ts';
 import { isCatalogCasConflict, readCatalogBook, writeCatalogBook } from '../catalog.ts';
 import { replaceFileAtomically } from '../atomic.ts';
 import { acquireJournalLocks, persistSchema1Migration, saveJournalJson } from './journal.ts';
@@ -212,7 +212,7 @@ export async function publishArchive(root: string, books: Book[], manifestPath: 
     } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
     const reusedVerifiedRecord = Boolean(previous?.state === 'complete' && previous.baidu);
     if (reusedVerifiedRecord && previous?.baidu) {
-      if (JSON.stringify(current.downloads.baidu) !== JSON.stringify(previous.baidu)) throw new BaiduError('已验证 RAR 分享字段已变化，拒绝覆盖');
+      if (JSON.stringify(readBaidu(current)) !== JSON.stringify(previous.baidu)) throw new BaiduError('已验证 RAR 分享字段已变化，拒绝覆盖');
       if (beforeHash !== previous.catalogHash) {
         const guard = previous.catalogGuard;
         if (!guard || current.file.sha256 !== previous.sourceSha256 || current.file.bytes !== guard.file.bytes
@@ -220,7 +220,7 @@ export async function publishArchive(root: string, books: Book[], manifestPath: 
           || current.downloads.r2Url !== guard.downloads.r2Url) throw new BaiduError('文件或下载字段已变化，拒绝刷新 RAR fingerprint');
         previous.catalogHash = beforeHash; previous.catalogGuard = { file: current.file, downloads: current.downloads };
         journal.entries[key] = previous; await saveArchiveJournal(journalFile, journal);
-      } else if (!previous.catalogGuard && JSON.stringify(current.downloads.baidu) === JSON.stringify(previous.baidu)) {
+      } else if (!previous.catalogGuard && JSON.stringify(readBaidu(current)) === JSON.stringify(previous.baidu)) {
         previous.catalogGuard = { file: current.file, downloads: current.downloads };
         journal.entries[key] = previous; await saveArchiveJournal(journalFile, journal);
       }
@@ -292,7 +292,7 @@ export async function publishArchive(root: string, books: Book[], manifestPath: 
       const listed = await call(run, ['share', 'list']); confirmShareList(listed, record.baidu); record.state = 'shared';
     }
     if (!record.baidu) throw new BaiduError('归档分享未确认，状态暂停');
-    current.downloads.baidu = record.baidu;
+    writeBaidu(current, record.baidu);
     record.catalogHash = await writeCatalogBook(root, current, beforeHash); record.catalogGuard = { file: current.file, downloads: current.downloads };
     record.state = 'complete'; journal.entries[key] = record;
     await saveArchiveJournal(journalFile, journal);
@@ -340,8 +340,8 @@ export async function recoverUnknownArchiveShare(root: string, books: Book[], ma
     const loaded = await readCatalogBook(root, book.id); if (!loaded) throw new BaiduError('RAR 恢复书目不存在');
     const current = loaded.book; const originalHash = loaded.hash;
     if (current.file.sha256 === manifest.sourceSha256) {
-      if (current.downloads.baidu && JSON.stringify(current.downloads.baidu) !== JSON.stringify(baidu)) throw new BaiduError('当前版本已有另一百度分享；历史恢复 checkpoint 已保留，拒绝覆盖');
-      current.downloads.baidu = baidu;
+      if (readBaidu(current) && JSON.stringify(readBaidu(current)) !== JSON.stringify(baidu)) throw new BaiduError('当前版本已有另一百度分享；历史恢复 checkpoint 已保留，拒绝覆盖');
+      writeBaidu(current, baidu);
       record.catalogHash = await writeCatalogBook(root, current, originalHash).catch(error => { if (isCatalogCasConflict(error)) throw new BaiduError('RAR 恢复期间 catalog 发生竞态变化', { cause: error }); throw error; }); record.catalogGuard = { file: current.file, downloads: current.downloads };
       record.state = 'complete'; journal.entries[key] = record; await saveArchiveJournal(journalFile, journal);
       return { status: 'recovered', id: book.id, sourceSha256: manifest.sourceSha256, archiveSha256: manifest.archive.sha256 };

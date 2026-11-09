@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-7321a5c127ad/07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-7321a5c127ad/07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1IA82EfCKU4FG0LvtnRAyMQ",
-      "code": "tq2e",
-      "fileSha256": "07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab",
-      "fsId": "452492890050628",
-      "shareId": "35700776244",
-      "path": "/yuuko-library/books/book-7321a5c127ad/07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab/黑格尔的《法哲学原理》 - Ludwig Siep.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:47:18.334Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1IA82EfCKU4FG0LvtnRAyMQ",
+        "code": "tq2e",
+        "fileSha256": "07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab",
+        "verifiedAt": "2026-11-06T10:47:18.334Z",
+        "meta": {
+          "fsId": "452492890050628",
+          "shareId": "35700776244",
+          "path": "/yuuko-library/books/book-7321a5c127ad/07885f9888146d3bb47971f6a57eef82c3229eb4a74c677dadaec44b186d7aab/黑格尔的《法哲学原理》 - Ludwig Siep.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

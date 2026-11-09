@@ -3,6 +3,7 @@ import path from 'node:path';
 import { access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { readCatalog } from '../catalog.ts';
+import { readBaidu } from '../../src/lib/baidu.ts';
 import { createRunner, getJournalEntry, loadJournal, locateInputs, recoverUnknownShare, runPublish, BaiduError } from './transfer.ts';
 import { createRarRunner, loadArchiveJournal, prepareArchive, publishArchive, recoverUnknownArchiveShare, type RarRunner } from './archive.ts';
 
@@ -34,6 +35,7 @@ async function main() {
     help: { type: 'boolean' }, id: { type: 'string' }, all: { type: 'boolean' }, password: { type: 'string' },
     'share-id': { type: 'string' }, code: { type: 'string' }, 'source-sha': { type: 'string' },
     name: { type: 'string' }, 'archive-password': { type: 'string' }, manifest: { type: 'string' },
+    json: { type: 'boolean' },
   } });
   const command = positionals[0];
   if (!command || values.help) { console.log(help); return; }
@@ -89,7 +91,7 @@ async function main() {
     const archiveJournal = await loadArchiveJournal(path.join(root, '.local/baidu/archive-journal.json'));
     console.log(JSON.stringify({ mode: 'read-only', journals: { rawSchemaVersion: journal.schemaVersion, rawMigrationPending: journal.schemaVersion === 1,
       archiveSchemaVersion: archiveJournal.schemaVersion, archiveMigrationPending: archiveJournal.schemaVersion === 1 }, books: selected.map(book => ({ id: book.id, sha256: book.file.sha256,
-      bytes: book.file.bytes, source: inputs.get(book.id)?.file ?? null, catalogBaidu: book.downloads.baidu,
+      bytes: book.file.bytes, source: inputs.get(book.id)?.file ?? null, catalogBaidu: readBaidu(book),
       journal: getJournalEntry(journal, book.id, book.file.sha256), journalHistory: Object.values(journal.entries).filter(entry => entry.id === book.id),
       archiveJournal: Object.values(archiveJournal.entries).filter(entry => entry.id === book.id) })) }, null, 2)); return;
   }

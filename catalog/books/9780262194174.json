@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-8f9c2860611c/2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-8f9c2860611c/2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1e8t1amM8fAPYG8c3kymjtQ",
-      "code": "lxlq",
-      "fileSha256": "2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c",
-      "fsId": "865596164586779",
-      "shareId": "58018623127",
-      "path": "/yuuko-library/books/book-8f9c2860611c/2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c/数字资本主义 - Dan Schiller.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:04:35.518Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1e8t1amM8fAPYG8c3kymjtQ",
+        "code": "lxlq",
+        "fileSha256": "2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c",
+        "verifiedAt": "2026-11-06T11:04:35.518Z",
+        "meta": {
+          "fsId": "865596164586779",
+          "shareId": "58018623127",
+          "path": "/yuuko-library/books/book-8f9c2860611c/2f97f78cbe73606a7ef40b04e9bd2d894a96cb4feffc1109337a7dade78f953c/数字资本主义 - Dan Schiller.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

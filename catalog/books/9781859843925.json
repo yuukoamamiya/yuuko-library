@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/origin-of-capitalism/89e828f01c27251276c8f0fa7231690fe7b564bc85f7b6e8ea37b2a35f6f041b.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/origin-of-capitalism/89e828f01c27251276c8f0fa7231690fe7b564bc85f7b6e8ea37b2a35f6f041b.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1qJ7_hXsy9ftAi5GYFCypGQ",
-      "code": "npmu",
-      "fileSha256": "89e828f01c27251276c8f0fa7231690fe7b564bc85f7b6e8ea37b2a35f6f041b",
-      "fsId": "731978670720425",
-      "shareId": "4661727771",
-      "path": "/yuuko-library/books/origin-of-capitalism/89e828f01c27251276c8f0fa7231690fe7b564bc85f7b6e8ea37b2a35f6f041b/资本主义的起源：长远视角 - Ellen Meiksins Wood.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:09:13.092Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1qJ7_hXsy9ftAi5GYFCypGQ",
+        "code": "npmu",
+        "fileSha256": "89e828f01c27251276c8f0fa7231690fe7b564bc85f7b6e8ea37b2a35f6f041b",
+        "verifiedAt": "2026-11-06T11:09:13.092Z",
+        "meta": {
+          "fsId": "731978670720425",
+          "shareId": "4661727771",
+          "path": "/yuuko-library/books/origin-of-capitalism/89e828f01c27251276c8f0fa7231690fe7b564bc85f7b6e8ea37b2a35f6f041b/资本主义的起源：长远视角 - Ellen Meiksins Wood.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

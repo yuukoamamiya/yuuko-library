@@ -13,7 +13,7 @@ const book = (id: string, title: string) => {
   const data = Buffer.from(`epub-${id}`), sha = hash(data), filename = `${title}.epub`;
   return { schemaVersion: 1, id, title, authors: ['作者'], description: '说明', subjects: ['主题'], categories: ['politics'], cover: null,
     edition: { kind: 'transcription', model: null }, file: { sha256: sha, bytes: data.length, filename },
-    downloads: { r2Key: `books/${id}/${sha}.epub`, r2Url: `https://download.example/books/${id}/${sha}.epub`, baidu: null },
+    downloads: { r2Key: `books/${id}/${sha}.epub`, r2Url: `https://download.example/books/${id}/${sha}.epub`, mirrors: {} },
     publishedAt: null, updatedAt: null, _bytes: data } as any;
 };
 const clean = (books: any[]) => books.map(({ _bytes, ...b }) => b);

@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-0c25eec68622/9586a32167b1febeca37c23d70d416f3643b61800b61df0361c53adafc4f443c.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-0c25eec68622/9586a32167b1febeca37c23d70d416f3643b61800b61df0361c53adafc4f443c.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1ByORsD21fa5nUJ9qWPq73Q",
-      "code": "hr8q",
-      "fileSha256": "9586a32167b1febeca37c23d70d416f3643b61800b61df0361c53adafc4f443c",
-      "fsId": "1029396606065186",
-      "shareId": "44990100356",
-      "path": "/yuuko-library/books/book-0c25eec68622/9586a32167b1febeca37c23d70d416f3643b61800b61df0361c53adafc4f443c/康德：思想的革命 - Marcus Willaschek.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:53:45.452Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1ByORsD21fa5nUJ9qWPq73Q",
+        "code": "hr8q",
+        "fileSha256": "9586a32167b1febeca37c23d70d416f3643b61800b61df0361c53adafc4f443c",
+        "verifiedAt": "2026-11-06T10:53:45.452Z",
+        "meta": {
+          "fsId": "1029396606065186",
+          "shareId": "44990100356",
+          "path": "/yuuko-library/books/book-0c25eec68622/9586a32167b1febeca37c23d70d416f3643b61800b61df0361c53adafc4f443c/康德：思想的革命 - Marcus Willaschek.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

@@ -11,7 +11,7 @@ import { inventory as planInventory, sourceFingerprint } from '../tools/book/pla
 
 const book: Book = { schemaVersion: 1, id: 'sample', title: '示例', authors: [], description: '', subjects: [], categories: ['philosophy'], cover: null,
   edition: { kind: 'transcription', model: null }, file: { sha256: 'a'.repeat(64), bytes: 100, filename: 'sample.epub' },
-  downloads: { r2Key: 'books/sample/file.epub', r2Url: 'https://books.example.com/file.epub', baidu: null }, publishedAt: null, updatedAt: null };
+  downloads: { r2Key: 'books/sample/file.epub', r2Url: 'https://books.example.com/file.epub', mirrors: {} }, publishedAt: null, updatedAt: null };
 const report = { status: 'verified', expected: 1, failures: [], verified: [{ id: book.id, sha256: book.file.sha256, bytes: 100, key: book.downloads.r2Key, url: book.downloads.r2Url! }] };
 test('正式书目只接受完整且一致的上传验证；保留转录本类型', () => {
   const books = verifiedBooks([book], report, '2026-11-06T00:00:00.000Z');

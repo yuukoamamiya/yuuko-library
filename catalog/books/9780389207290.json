@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-59da6273df7b/356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-59da6273df7b/356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1R3aIArwFmVGhVJzwHBVr3g",
-      "code": "d0l0",
-      "fileSha256": "356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b",
-      "fsId": "906519322755130",
-      "shareId": "2080053961",
-      "path": "/yuuko-library/books/book-59da6273df7b/356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b/资本主义的基础理论：资本主义经济的形式与实体 - Makoto Itoh.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:08:56.784Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1R3aIArwFmVGhVJzwHBVr3g",
+        "code": "d0l0",
+        "fileSha256": "356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b",
+        "verifiedAt": "2026-11-06T11:08:56.784Z",
+        "meta": {
+          "fsId": "906519322755130",
+          "shareId": "2080053961",
+          "path": "/yuuko-library/books/book-59da6273df7b/356d28818581299c8dfad4f919fd80393c701b4b0001c25d184dc639ba161e6b/资本主义的基础理论：资本主义经济的形式与实体 - Makoto Itoh.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

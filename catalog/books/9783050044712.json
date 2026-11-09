@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-fd57f77e953e/4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-fd57f77e953e/4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1p5TlZa65v7qJCVLv4XxFYQ",
-      "code": "odfu",
-      "fileSha256": "4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25",
-      "fsId": "840932340766502",
-      "shareId": "30299711440",
-      "path": "/yuuko-library/books/book-fd57f77e953e/4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25/黑格尔的《美学讲演录》 - Birgit Sandkaulen-Bock.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:48:18.939Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1p5TlZa65v7qJCVLv4XxFYQ",
+        "code": "odfu",
+        "fileSha256": "4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25",
+        "verifiedAt": "2026-11-06T10:48:18.939Z",
+        "meta": {
+          "fsId": "840932340766502",
+          "shareId": "30299711440",
+          "path": "/yuuko-library/books/book-fd57f77e953e/4af5c76af428650bb4b9166dab4ef6ae2e83dbba84da5b508479ceb950a05e25/黑格尔的《美学讲演录》 - Birgit Sandkaulen-Bock.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

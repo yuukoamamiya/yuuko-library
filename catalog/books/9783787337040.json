@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1epI7Y3QBnq3RfFVi2O9Uww",
-      "code": "ccso",
-      "fileSha256": "a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa",
-      "fsId": "1000558520604975",
-      "shareId": "27665101132",
-      "path": "/yuuko-library/books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa/黑格尔哲学 - Walter Jaeschke.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:49:00.903Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1epI7Y3QBnq3RfFVi2O9Uww",
+        "code": "ccso",
+        "fileSha256": "a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa",
+        "verifiedAt": "2026-11-06T10:49:00.903Z",
+        "meta": {
+          "fsId": "1000558520604975",
+          "shareId": "27665101132",
+          "path": "/yuuko-library/books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa/黑格尔哲学 - Walter Jaeschke.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

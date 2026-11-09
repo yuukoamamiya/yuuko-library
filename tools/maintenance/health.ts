@@ -3,11 +3,13 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { convert } from 'html-to-text';
 import type { Book } from '../../src/lib/book.ts';
+import { mirrorLabel } from '../../src/lib/mirrors.ts';
 import { canonical, catalogDigest, digest } from '../catalog.ts';
-import { checkBaiduShare } from './baidu-health.ts';
+import { MIRROR_HEALTH } from './mirror-health.ts';
 
 type Failure = { check: string; target: string; reason: string };
-type CheckResult = { status: 'passed' | 'failed'; checks: number; failures: Failure[]; warnings: string[]; baidu?: { checked: number; passed: number; unavailable: number; unconfirmed: number; notConfigured: number }; provenance?: unknown };
+type MirrorStats = { checked: number; passed: number; unavailable: number; unconfirmed: number; notConfigured: number };
+type CheckResult = { status: 'passed' | 'failed'; checks: number; failures: Failure[]; warnings: string[]; mirrors?: Record<string, MirrorStats>; provenance?: unknown };
 const safeReason = (e: unknown) => e instanceof Error && e.name === 'TimeoutError' ? '请求超时' : '请求失败或响应格式无效';
 const parseAttrs = (html: string) => [...html.matchAll(/([\w:-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/gu)]
   .map(m => [m[1].toLowerCase(), m[2] ?? m[3] ?? m[4] ?? ''] as const);
@@ -23,14 +25,18 @@ function checkBookShape(book: any): string | null {
   if (!book || typeof book !== 'object' || typeof book.id !== 'string' || !/^[a-z0-9][a-z0-9-]{0,79}$/u.test(book.id)) return '书目结构或 ID 无效';
   if (typeof book.title !== 'string' || !book.file || !Number.isSafeInteger(book.file.bytes) || book.file.bytes < 0
     || !/^[a-f0-9]{64}$/u.test(book.file.sha256 ?? '') || typeof book.file.filename !== 'string'
-    || !book.downloads || typeof book.downloads !== 'object') return '书目文件元数据无效';
+    || !book.downloads || typeof book.downloads !== 'object'
+    || !book.downloads.mirrors || typeof book.downloads.mirrors !== 'object' || Array.isArray(book.downloads.mirrors)) return '书目文件元数据无效';
   return null;
 }
 
 export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl?: string, full = false, timeout = 20000,
-  request: typeof fetch = fetch, allBooks: Book[] = selectedBooks, options: { baidu?: boolean } = {}): Promise<CheckResult> {
+  request: typeof fetch = fetch, allBooks: Book[] = selectedBooks, options: { mirrors?: boolean; skipProviders?: string[] } = {}): Promise<CheckResult> {
   const failures: Failure[] = [], warnings: string[] = []; let checks = 0; let provenance: unknown;
-  const baidu = { checked: 0, passed: 0, unavailable: 0, unconfirmed: 0, notConfigured: 0 };
+  const mirrorsEnabled = options.mirrors ?? false;
+  const skipProviders = new Set(options.skipProviders ?? []);
+  const mirrors: Record<string, MirrorStats> = {};
+  const statsFor = (provider: string) => mirrors[provider] ??= { checked: 0, passed: 0, unavailable: 0, unconfirmed: 0, notConfigured: 0 };
   const fail = (check: string, target: string, reason: string) => failures.push({ check, target, reason });
   const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8')) as { siteUrl: string; downloadsUrl: string; title: string };
   const site = new URL(suppliedUrl ?? config.siteUrl);
@@ -89,11 +95,14 @@ export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl
         const anchors = [...html.matchAll(/<a\b([^>]*)>/giu)].map(m => Object.fromEntries(parseAttrs(m[1])));
         const expectedUrl = book.downloads.r2Url;
         if (!anchors.some(a => a.href === expectedUrl && /(?:^|\s)download-button(?:\s|$)/u.test(a.class ?? ''))) fail('detail-download', id, '缺少匹配 URL 的 download-button 链接');
-        if (options.baidu && book.downloads.baidu) {
-          const bd = book.downloads.baidu as any;
+        if (mirrorsEnabled) {
           const inputs = [...html.matchAll(/<input\b([^>]*)>/giu)].map(m => Object.fromEntries(parseAttrs(m[1])));
-          if (!anchors.some(a => a.href === bd.url) || !inputs.some(a => a.value === bd.code && 'data-baidu-code' in a)) fail('detail-baidu', id, '详情页缺少匹配的百度链接或提取码');
-          if (bd.archive && (!html.includes(bd.archive.filename) || !inputs.some(a => a.value === bd.archive.password && 'data-baidu-password' in a))) fail('detail-baidu-archive', id, '详情页缺少匹配的 RAR 文件名或解压密码引用');
+          for (const [provider, mirror] of Object.entries(book.downloads.mirrors ?? {}) as Array<[string, any]>) {
+            if (skipProviders.has(provider) || !mirror || typeof mirror !== 'object') continue;
+            const label = mirrorLabel(provider);
+            if (!anchors.some(a => a.href === mirror.url) || !inputs.some(a => a.value === mirror.code && 'data-mirror-code' in a)) fail('detail-mirror', id, `详情页缺少匹配的${label}链接或提取码`);
+            if (mirror.archive && (!html.includes(mirror.archive.filename) || !inputs.some(a => a.value === mirror.archive.password && 'data-mirror-password' in a))) fail('detail-mirror-archive', id, `详情页缺少匹配的${label}RAR 文件名或解压密码引用`);
+          }
         }
         if (book.cover && !html.includes(book.cover)) fail('detail-cover-reference', id, '详情页封面引用不匹配');
       } catch (e) { fail('detail', id, e instanceof Error ? e.message : '详情页响应无效'); }
@@ -111,13 +120,24 @@ export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl
         }
       }
       // Public-share checking is independent of the configured R2 URL.
-      if (options.baidu) {
-        checks++; baidu.checked++;
-        const result = await checkBaiduShare(book, request as any, timeout);
-        baidu[result.status === 'not-configured' ? 'notConfigured' : result.status]++;
-        if (result.status === 'unavailable') fail('baidu-unavailable', id, result.reason ?? '百度分享不可用');
-        else if (result.status === 'unconfirmed') { fail('baidu-unconfirmed', id, result.reason ?? '百度分享状态未能确认'); warnings.push(`${id}: 百度公开访问未能确认`); }
-        else if (result.status === 'not-configured') warnings.push(`${id}: 百度分享未配置`);
+      if (mirrorsEnabled) {
+        for (const [provider, mirror] of Object.entries(book.downloads.mirrors ?? {}) as Array<[string, any]>) {
+          if (skipProviders.has(provider)) continue;
+          const label = mirrorLabel(provider);
+          const stats = statsFor(provider);
+          const check = MIRROR_HEALTH[provider];
+          if (!check) {
+            checks++; stats.checked++; stats.notConfigured++;
+            warnings.push(`${id}: ${label} 缺少健康检查实现，未检查`);
+            continue;
+          }
+          checks++; stats.checked++;
+          const result = await check(book, mirror, request as any, timeout);
+          stats[result.status === 'not-configured' ? 'notConfigured' : result.status]++;
+          if (result.status === 'unavailable') fail('mirror-unavailable', `${id}:${provider}`, result.reason ?? `${label}分享不可用`);
+          else if (result.status === 'unconfirmed') { fail('mirror-unconfirmed', `${id}:${provider}`, result.reason ?? `${label}分享状态未能确认`); warnings.push(`${id}: ${label}公开访问未能确认`); }
+          else if (result.status === 'not-configured') warnings.push(`${id}: ${label}分享未配置`);
+        }
       }
       let download: URL;
       try {
@@ -142,5 +162,5 @@ export async function runHealth(root: string, selectedBooks: Book[], suppliedUrl
       } catch (e) { fail('download', id, e instanceof Error ? e.message : '下载响应无效'); }
     }
   }));
-  return { status: failures.length ? 'failed' : 'passed', checks, failures, warnings, ...(options.baidu ? { baidu } : {}), ...(provenance === undefined ? {} : { provenance }) };
+  return { status: failures.length ? 'failed' : 'passed', checks, failures, warnings, ...(mirrorsEnabled ? { mirrors } : {}), ...(provenance === undefined ? {} : { provenance }) };
 }

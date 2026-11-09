@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-f0326f9673b4/b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-f0326f9673b4/b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1stuWeSDWkiDaUI-io0dACQ",
-      "code": "twd6",
-      "fileSha256": "b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d",
-      "fsId": "19888104829220",
-      "shareId": "32154711226",
-      "path": "/yuuko-library/books/book-f0326f9673b4/b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d/尼科斯·普兰查斯：马克思主义理论与政治策略 - Bob Jessop.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:57:45.628Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1stuWeSDWkiDaUI-io0dACQ",
+        "code": "twd6",
+        "fileSha256": "b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d",
+        "verifiedAt": "2026-11-06T10:57:45.628Z",
+        "meta": {
+          "fsId": "19888104829220",
+          "shareId": "32154711226",
+          "path": "/yuuko-library/books/book-f0326f9673b4/b06e9402df9c7e85672ce6988c54a788a61802aa376b3556aed46eb946754d6d/尼科斯·普兰查斯：马克思主义理论与政治策略 - Bob Jessop.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

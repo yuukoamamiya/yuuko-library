@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/endnotes-2/4471412d4dd641e12f3c915de9b8c2da51251147facff907d0834d280507b888.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/endnotes-2/4471412d4dd641e12f3c915de9b8c2da51251147facff907d0834d280507b888.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/17KNM-iioe3IV0T-7MN3_1w",
-      "code": "ysqx",
-      "fileSha256": "4471412d4dd641e12f3c915de9b8c2da51251147facff907d0834d280507b888",
-      "fsId": "630426207141040",
-      "shareId": "4713549165",
-      "path": "/yuuko-library/books/endnotes-2/4471412d4dd641e12f3c915de9b8c2da51251147facff907d0834d280507b888/尾注2：悲惨与价值形式理论 - Endnotes.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:15:16.033951Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/17KNM-iioe3IV0T-7MN3_1w",
+        "code": "ysqx",
+        "fileSha256": "4471412d4dd641e12f3c915de9b8c2da51251147facff907d0834d280507b888",
+        "verifiedAt": "2026-11-06T10:15:16.033951Z",
+        "meta": {
+          "fsId": "630426207141040",
+          "shareId": "4713549165",
+          "path": "/yuuko-library/books/endnotes-2/4471412d4dd641e12f3c915de9b8c2da51251147facff907d0834d280507b888/尾注2：悲惨与价值形式理论 - Endnotes.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

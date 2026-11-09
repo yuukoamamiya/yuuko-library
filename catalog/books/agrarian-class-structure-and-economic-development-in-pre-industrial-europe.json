@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-75aac88a4006/65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-75aac88a4006/65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1LF0oxdjgAPNZtKFGYlJz6Q",
-      "code": "u7k1",
-      "fileSha256": "65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d",
-      "fsId": "745411474648776",
-      "shareId": "4384256559",
-      "path": "/yuuko-library/books/book-75aac88a4006/65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d/前工业化欧洲的农业阶级结构与经济发展 - Robert Brenner.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:59:40.675Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1LF0oxdjgAPNZtKFGYlJz6Q",
+        "code": "u7k1",
+        "fileSha256": "65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d",
+        "verifiedAt": "2026-11-06T10:59:40.675Z",
+        "meta": {
+          "fsId": "745411474648776",
+          "shareId": "4384256559",
+          "path": "/yuuko-library/books/book-75aac88a4006/65ed9290e500c343c0eb5ac5c55fea727ae0ae410a2f5a67e9b42c17909fea7d/前工业化欧洲的农业阶级结构与经济发展 - Robert Brenner.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

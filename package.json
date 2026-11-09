@@ -16,6 +16,7 @@
     "pages": "tsx tools/pages/cli.ts",
     "maintenance": "tsx tools/maintenance/cli.ts",
     "baidu": "tsx tools/baidu/cli.ts",
+    "mirror": "tsx tools/mirrors/cli.ts",
     "verify": "tsx tools/maintenance/cli.ts verify"
   },
   "dependencies": {

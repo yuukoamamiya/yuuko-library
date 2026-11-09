@@ -26,15 +26,20 @@
   "downloads": {
     "r2Key": "books/book-553e4749ea1c/6988e22a592c0ec3bb6d7b68c8f443b54ddd110cce7985d8850f884c6f2c05bb.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-553e4749ea1c/6988e22a592c0ec3bb6d7b68c8f443b54ddd110cce7985d8850f884c6f2c05bb.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1NAwltWaVUjZbOW_xNqqcyg",
-      "code": "hazr",
-      "fileSha256": "6988e22a592c0ec3bb6d7b68c8f443b54ddd110cce7985d8850f884c6f2c05bb",
-      "fsId": "144354337396953",
-      "shareId": "68294591913",
-      "path": "/yuuko-library/books/book-553e4749ea1c/6988e22a592c0ec3bb6d7b68c8f443b54ddd110cce7985d8850f884c6f2c05bb/黑格尔的《精神现象学》 - Dietmar Köhler & Otto Pöggeler.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:47:45.133Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1NAwltWaVUjZbOW_xNqqcyg",
+        "code": "hazr",
+        "fileSha256": "6988e22a592c0ec3bb6d7b68c8f443b54ddd110cce7985d8850f884c6f2c05bb",
+        "verifiedAt": "2026-11-06T10:47:45.133Z",
+        "meta": {
+          "fsId": "144354337396953",
+          "shareId": "68294591913",
+          "path": "/yuuko-library/books/book-553e4749ea1c/6988e22a592c0ec3bb6d7b68c8f443b54ddd110cce7985d8850f884c6f2c05bb/黑格尔的《精神现象学》 - Dietmar Köhler & Otto Pöggeler.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

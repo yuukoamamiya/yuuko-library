@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/endnotes-5/9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/endnotes-5/9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1nt-Im3z-fH4XujfaXEgB1A",
-      "code": "ccbp",
-      "fileSha256": "9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4",
-      "fsId": "51223165218942",
-      "shareId": "43370865791",
-      "path": "/yuuko-library/books/endnotes-5/9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4/尾注5：激情与利益 - Endnotes.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:05:43.069Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1nt-Im3z-fH4XujfaXEgB1A",
+        "code": "ccbp",
+        "fileSha256": "9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4",
+        "verifiedAt": "2026-11-06T11:05:43.069Z",
+        "meta": {
+          "fsId": "51223165218942",
+          "shareId": "43370865791",
+          "path": "/yuuko-library/books/endnotes-5/9c4c519a0d9f48b11d2b0cbd4514c16b6b5b10de90bd87ea13b2df85987405f4/尾注5：激情与利益 - Endnotes.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

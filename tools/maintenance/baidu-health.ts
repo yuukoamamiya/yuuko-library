@@ -1,4 +1,5 @@
-import type { Book } from '../../src/lib/book.ts';
+import type { Book, DownloadMirror } from '../../src/lib/book.ts';
+import { validateBaiduMirror } from '../../src/lib/baidu.ts';
 
 export type BaiduHealthResult = { status: 'passed' | 'unavailable' | 'unconfirmed' | 'not-configured'; reason?: string };
 type AnonymousRequest = (url: URL, init: RequestInit) => Promise<Response>;
@@ -10,16 +11,17 @@ const htmlText = (html: string) => html.replace(/<script\b[^>]*>[\s\S]*?<\/scrip
   .replace(/<[^>]*>/gu, ' ').replace(/&(?:nbsp|#160);/giu, ' ').replace(/&amp;/giu, '&').replace(/&quot;/giu, '"').replace(/&#39;|&apos;/giu, "'").replace(/&lt;/giu, '<').replace(/&gt;/giu, '>');
 
 /** Anonymous, read-only check. The cookie jar exists only for this one book. */
-export async function checkBaiduShare(book: Book, request: AnonymousRequest = fetch as AnonymousRequest, timeout = 20000): Promise<BaiduHealthResult> {
-  const b = book as any, share = b?.downloads?.baidu;
-  if (share === null || share === undefined) return { status: 'not-configured' };
-  if (typeof share !== 'object' || Array.isArray(share)) return { status: 'unconfirmed', reason: '百度分享记录格式无效' };
-  if (share.fileSha256 !== b.file?.sha256) return { status: 'unconfirmed', reason: '分享记录与当前文件 SHA-256 不匹配' };
+export async function checkBaiduShare(book: Book, mirror: DownloadMirror, request: AnonymousRequest = fetch as AnonymousRequest, timeout = 20000): Promise<BaiduHealthResult> {
+  if (mirror === null || mirror === undefined) return { status: 'not-configured' };
+  if (typeof mirror !== 'object' || Array.isArray(mirror)) return { status: 'unconfirmed', reason: '百度分享记录格式无效' };
+  if (mirror.fileSha256 !== book.file?.sha256) return { status: 'unconfirmed', reason: '分享记录与当前文件 SHA-256 不匹配' };
   let shareUrl: URL;
   try {
-    shareUrl = new URL(share.url);
+    shareUrl = new URL(mirror.url);
     if (shareUrl.protocol !== 'https:' || shareUrl.hostname !== 'pan.baidu.com' || shareUrl.username || shareUrl.password || shareUrl.port || shareUrl.search || shareUrl.hash || !/^\/s\/[\w-]+\/?$/u.test(shareUrl.pathname)) throw Error();
   } catch { return { status: 'unconfirmed', reason: '百度分享链接不符合安全格式' }; }
+  try { validateBaiduMirror(mirror, book.file.sha256); }
+  catch (error) { return { status: 'unconfirmed', reason: (error as Error).message }; }
 
   const jar = new Map<string, string>();
   const call = async (target: URL, method: string, body?: string, referer?: string, redirects = 0): Promise<{ text: string; finalUrl: URL }> => {
@@ -72,7 +74,7 @@ export async function checkBaiduShare(book: Book, request: AnonymousRequest = fe
 
     // Baidu expects surl in the endpoint query; the form contains only challenge fields.
     const verifyUrl = new URL('/share/verify', 'https://pan.baidu.com'); verifyUrl.searchParams.set('surl', surl);
-    const raw = await call(verifyUrl, 'POST', new URLSearchParams({ pwd: String(share.code), vcode: '', vcode_str: '' }).toString(), challenge.finalUrl.href);
+    const raw = await call(verifyUrl, 'POST', new URLSearchParams({ pwd: String(mirror.code), vcode: '', vcode_str: '' }).toString(), challenge.finalUrl.href);
     let json: any; try { json = JSON.parse(raw.text); } catch { return { status: 'unconfirmed', reason: '提取码挑战返回非预期响应或验证码' }; }
     if (json.errno === -9) return { status: 'unavailable', reason: '百度确认提取码无效或分享不可用' };
     if (json.errno !== 0) return { status: 'unconfirmed', reason: '百度未确认提取码挑战' };
@@ -81,7 +83,7 @@ export async function checkBaiduShare(book: Book, request: AnonymousRequest = fe
     const visiblePage = htmlText(finalPage.text);
     if (/链接不存在|分享已取消|分享已失效|文件已被删除/u.test(visiblePage)) return { status: 'unavailable', reason: '百度公开页确认分享不存在或已取消' };
     if (/请输入提取码|提取码输入|请输入验证码|安全验证|登录后继续/iu.test(visiblePage) || /\/share\/init(?:\?|$)/u.test(finalPage.finalUrl.pathname + finalPage.finalUrl.search)) return { status: 'unconfirmed', reason: '挑战后仍停留在验证页' };
-    const expectedFilename = share.archive?.filename ?? b.file?.filename;
+    const expectedFilename = mirror.archive?.filename ?? book.file.filename;
     if (typeof expectedFilename !== 'string' || !visiblePage.includes(expectedFilename)) return { status: 'unconfirmed', reason: '公开文件页未显示与书目一致的文件名' };
     return { status: 'passed' };
   } catch (e) { return { status: 'unconfirmed', reason: safe(e) }; }

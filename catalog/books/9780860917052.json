@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-052f608079b3/08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-052f608079b3/08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1fqQbL7GtdBcf4igMsH_prQ",
-      "code": "msnb",
-      "fileSha256": "08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6",
-      "fsId": "321164494410511",
-      "shareId": "13957832680",
-      "path": "/yuuko-library/books/book-052f608079b3/08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6/政治权力与社会阶级 - Nicos Poulantzas.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:08:27.208Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1fqQbL7GtdBcf4igMsH_prQ",
+        "code": "msnb",
+        "fileSha256": "08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6",
+        "verifiedAt": "2026-11-06T11:08:27.208Z",
+        "meta": {
+          "fsId": "321164494410511",
+          "shareId": "13957832680",
+          "path": "/yuuko-library/books/book-052f608079b3/08967d374a655c8a724b79c500818eedcdc255b41a3934ae6782e94c3d340ae6/政治权力与社会阶级 - Nicos Poulantzas.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

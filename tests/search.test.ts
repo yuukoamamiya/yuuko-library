@@ -37,7 +37,7 @@ test('loadBooks orders by updatedAt, falls back to publishedAt, then title and I
   const makeBook = (id: string, title: string, publishedAt: string | null, updatedAt?: string): Book => ({
     schemaVersion: 1, id, title, authors: [], description: '', subjects: [], categories: ['history'], cover: null,
     edition: { kind: 'transcription', model: null }, file: { sha256: 'a'.repeat(64), bytes: 1, filename: `${id}.epub` },
-    downloads: { r2Key: `books/${id}/a.epub`, r2Url: null, baidu: null }, publishedAt, updatedAt: updatedAt ?? null,
+    downloads: { r2Key: `books/${id}/a.epub`, r2Url: null, mirrors: {} }, publishedAt, updatedAt: updatedAt ?? null,
   });
   try {
     await mkdir(dir, { recursive: true });

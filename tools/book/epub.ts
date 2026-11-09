@@ -5,6 +5,7 @@ import yauzl, { type Entry, type ZipFile } from 'yauzl';
 import { XMLParser } from 'fast-xml-parser';
 import { SyntaxValidator } from 'fast-xml-validator';
 import { convert } from 'html-to-text';
+import { extractIsbns } from './id.ts';
 
 const XML_LIMIT = 4 * 1024 * 1024;
 const COVER_LIMIT = 20 * 1024 * 1024;
@@ -90,6 +91,7 @@ export async function extractEpub(filename: string) {
       selectors: [{ selector: 'script', format: 'skip' }, { selector: 'style', format: 'skip' },
         { selector: 'a', options: { ignoreHref: true } }, { selector: 'img', format: 'skip' }] })).join('\n\n');
     const subjects = [...new Set(values('subject'))];
+    const isbns = [...new Set(array(metadata.identifier).map(text).flatMap(extractIsbns))];
     const warnings: string[] = [];
     if (!authors.length) warnings.push('作者未提供');
     if (!description) warnings.push('简介未提供');
@@ -105,6 +107,6 @@ export async function extractEpub(filename: string) {
       if (extension) cover = { bytes: image, extension };
       else warnings.push('封面不是支持的位图格式，使用占位封面');
     } else warnings.push('封面未提供');
-    return { title, authors, description, subjects, cover, warnings, bytes: bytes.length, sha256: sha256(bytes) };
+    return { title, authors, description, subjects, isbns, cover, warnings, bytes: bytes.length, sha256: sha256(bytes) };
   } finally { zip.close(); }
 }

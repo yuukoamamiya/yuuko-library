@@ -30,15 +30,20 @@
   "downloads": {
     "r2Key": "books/read-my-desire/25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/read-my-desire/25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1oWygeYQknZuaMzHuZ_47ng",
-      "code": "m78e",
-      "fileSha256": "25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e",
-      "fsId": "677914716740080",
-      "shareId": "44569355472",
-      "path": "/yuuko-library/books/read-my-desire/25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e/读我的欲望：拉康与历史主义者的对抗 - 琼·柯普洁.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-08T11:41:38.961Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1oWygeYQknZuaMzHuZ_47ng",
+        "code": "m78e",
+        "fileSha256": "25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e",
+        "verifiedAt": "2026-11-08T11:41:38.961Z",
+        "meta": {
+          "fsId": "677914716740080",
+          "shareId": "44569355472",
+          "path": "/yuuko-library/books/read-my-desire/25845aab74384721617c6b25bf079aa8b9f5ff143b6e558932066ba0c17f0e7e/读我的欲望：拉康与历史主义者的对抗 - 琼·柯普洁.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-08T11:38:41.616Z",

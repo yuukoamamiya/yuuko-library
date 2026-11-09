@@ -29,15 +29,20 @@
   "downloads": {
     "r2Key": "books/between-kant-and-hegel/8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/between-kant-and-hegel/8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/13A-5KLn9YwUtdIHZLJsCiw",
-      "code": "5i8f",
-      "fileSha256": "8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9",
-      "fsId": "170466958070778",
-      "shareId": "256933402",
-      "path": "/yuuko-library/books/between-kant-and-hegel/8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9/在康德与黑格尔之间：德国观念论讲座 - 迪特·亨利希.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-07T01:00:28.968Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/13A-5KLn9YwUtdIHZLJsCiw",
+        "code": "5i8f",
+        "fileSha256": "8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9",
+        "verifiedAt": "2026-11-07T01:00:28.968Z",
+        "meta": {
+          "fsId": "170466958070778",
+          "shareId": "256933402",
+          "path": "/yuuko-library/books/between-kant-and-hegel/8602ad00b8cb61911443442bcada09a5645884843763fb3b8624528c652be6e9/在康德与黑格尔之间：德国观念论讲座 - 迪特·亨利希.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-07T00:59:14.659Z",

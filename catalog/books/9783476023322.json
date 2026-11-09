@@ -26,15 +26,20 @@
   "downloads": {
     "r2Key": "books/book-3a9a90de8b74/4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-3a9a90de8b74/4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1kNjA9jm-OXBDaxfDeJ3_XA",
-      "code": "hwoy",
-      "fileSha256": "4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68",
-      "fsId": "143140426742219",
-      "shareId": "40391467251",
-      "path": "/yuuko-library/books/book-3a9a90de8b74/4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68/马克思手册：生平、著作与影响 - Michael Quante & David P. Schweikard.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:56:37.945Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1kNjA9jm-OXBDaxfDeJ3_XA",
+        "code": "hwoy",
+        "fileSha256": "4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68",
+        "verifiedAt": "2026-11-06T10:56:37.945Z",
+        "meta": {
+          "fsId": "143140426742219",
+          "shareId": "40391467251",
+          "path": "/yuuko-library/books/book-3a9a90de8b74/4de0900d8181be775d5819eda36e6060716a4ee76c775a4b1349eb695bcc2a68/马克思手册：生平、著作与影响 - Michael Quante & David P. Schweikard.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

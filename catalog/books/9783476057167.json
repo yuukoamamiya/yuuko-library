@@ -27,15 +27,20 @@
   "downloads": {
     "r2Key": "books/book-1830d9387077/cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-1830d9387077/cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1gHMNQaYAe7_YZ2Q0H_NndQ",
-      "code": "6ras",
-      "fileSha256": "cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122",
-      "fsId": "636749489089222",
-      "shareId": "28933687485",
-      "path": "/yuuko-library/books/book-1830d9387077/cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122/福柯手册 - Clemens Kammler & Rolf Parr & Ulrich Johannes Schneider.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:41:07.677Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1gHMNQaYAe7_YZ2Q0H_NndQ",
+        "code": "6ras",
+        "fileSha256": "cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122",
+        "verifiedAt": "2026-11-06T10:41:07.677Z",
+        "meta": {
+          "fsId": "636749489089222",
+          "shareId": "28933687485",
+          "path": "/yuuko-library/books/book-1830d9387077/cb2dc7e0d2de4d72696497a3ac964aec26529d16960e6484625e11edc566b122/福柯手册 - Clemens Kammler & Rolf Parr & Ulrich Johannes Schneider.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

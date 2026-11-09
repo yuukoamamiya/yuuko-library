@@ -188,8 +188,17 @@ export async function readRelease(root: string, id: string): Promise<Release> {
   if (!Array.isArray(release.books) || release.books.some(book => !release.catalog.some(item => canonical(book) === canonical(item)))) throw new Error('变更书目与全站快照不一致');
   return release;
 }
-export function assertDeployable(release: Release) {
-  if (!release.provenance.commit || release.provenance.dirty) throw new Error('部署要求来自有效 Git 提交的 clean 工作区；当前发布标记为 dirty 或无提交号，请清理/提交后重新 prepare');
+function dirtyPaths(root: string): string[] {
+  try {
+    const status = execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    return status.split(/\r?\n/u).filter(Boolean).slice(0, 10).map(line => line.slice(3));
+  } catch { return []; }
+}
+export function assertDeployable(release: Release, root = process.cwd()) {
+  if (!release.provenance.commit || release.provenance.dirty) {
+    const paths = release.provenance.dirty ? dirtyPaths(root) : [];
+    throw new Error(`部署要求来自有效 Git 提交的 clean 工作区；当前发布标记为 dirty 或无提交号，请清理/提交后重新 prepare${paths.length ? `。当前改动（前 ${paths.length} 项）：${paths.join('、')}` : ''}`);
+  }
 }
 export async function assertCatalogSyncable(root: string, release: Release) {
   const current = await readCatalog(root);

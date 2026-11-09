@@ -1,0 +1,73 @@
+---
+import type { DownloadMirror } from '../lib/book';
+import { mirrorLabel } from '../lib/mirrors';
+interface Props { mirrors: DownloadMirror[]; preview?: boolean }
+const { mirrors, preview = false } = Astro.props;
+---
+{!preview && <>
+<div class="mirror-download">
+  <button class="download-button" type="button" data-mirror-dialog-open aria-haspopup="dialog" hidden>网盘下载 <span aria-hidden="true">↓</span></button>
+  <dialog class="mirror-dialog" aria-labelledby="mirror-heading" data-mirror-dialog>
+    <div class="mirror-dialog-content">
+      <button class="mirror-close" type="button" data-mirror-close aria-label="关闭">×</button>
+      <h2 id="mirror-heading">网盘下载</h2>
+      {mirrors.map((mirror) => {
+        const label = mirrorLabel(mirror.provider);
+        return <section class="mirror-entry" data-provider={mirror.provider} aria-labelledby={`mirror-${mirror.provider}-heading`}>
+          <h3 id={`mirror-${mirror.provider}-heading`}>{label}</h3>
+          {mirror.archive && <p class="mirror-archive-summary">RAR 压缩包 · {mirror.archive.filename}</p>}
+          <p>提取码</p>
+          <div class="mirror-field"><input readonly value={mirror.code} aria-label="提取码" data-mirror-code /><button type="button" data-mirror-copy="code">复制提取码</button></div>
+          {mirror.archive && <><p>解压密码</p><div class="mirror-field"><input readonly value={mirror.archive.password} aria-label="解压密码" data-mirror-password /><button type="button" data-mirror-copy="password">复制解压密码</button></div></>}
+          <p>分享链接</p>
+          <div class="mirror-field"><input readonly value={mirror.url} aria-label="分享链接" data-mirror-url /><button type="button" data-mirror-copy="url">复制链接</button></div>
+          <a class="mirror-external" href={mirror.url} target="_blank" rel="noopener noreferrer" data-mirror-open>打开{label}</a>
+        </section>;
+      })}
+      <p class="mirror-status" aria-live="polite" data-mirror-status></p>
+    </div>
+  </dialog>
+  <noscript><details class="mirror-fallback"><summary>网盘下载</summary>{mirrors.map((mirror) => <section class="mirror-entry" data-provider={mirror.provider}>
+    <h3>{mirrorLabel(mirror.provider)}</h3>
+    {mirror.archive && <><p>RAR 压缩包：<code>{mirror.archive.filename}</code></p><p>解压密码：<code>{mirror.archive.password}</code></p></>}
+    <p>提取码：<code>{mirror.code}</code></p>
+    <p>分享链接：<a href={mirror.url} target="_blank" rel="noopener noreferrer">{mirror.url}</a></p>
+  </section>)}</details></noscript>
+</div>
+</>}
+<style>
+  .mirror-download{margin-top:10px}.mirror-dialog{width:min(440px,calc(100vw - 32px));max-width:calc(100vw - 32px);padding:0;border:1px solid #d7dacc;background:#f7f6ef;color:var(--ink);box-shadow:0 15px 55px #20272244}.mirror-dialog::backdrop{background:#1f2922a8}.mirror-dialog-content{position:relative;padding:28px;min-width:0}.mirror-dialog h2{font:500 22px var(--serif);margin:0 32px 24px 0}.mirror-entry+.mirror-entry{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}.mirror-entry h3{font:500 16px var(--serif);margin:0 0 4px}.mirror-dialog-content .mirror-entry>p:not(.mirror-status){font-size:11px;color:var(--muted);margin:16px 0 7px}.mirror-archive-summary{overflow-wrap:anywhere}.mirror-close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:25px;color:var(--muted);cursor:pointer}.mirror-field{display:flex;gap:8px;min-width:0}.mirror-field input{min-width:0;flex:1;width:0;padding:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:12px var(--sans);user-select:text}.mirror-field button,.mirror-external{flex-shrink:0;padding:9px 12px;border:0;background:var(--green);color:#fff;font:inherit;font-size:11px;cursor:pointer}.mirror-status{min-height:1.5em;margin:12px 0 5px;font-size:11px;color:var(--muted)}.mirror-external{display:inline-block;margin-top:10px;text-decoration:none}.mirror-fallback{margin-top:10px;font-size:12px;overflow-wrap:anywhere}.mirror-fallback p{overflow-wrap:anywhere}.mirror-fallback a{color:var(--green)}
+  @media(max-width:380px){.mirror-dialog-content{padding:22px 16px}.mirror-field{flex-wrap:wrap}.mirror-field input{flex-basis:100%;width:100%}}
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>('.mirror-download').forEach((root) => {
+    const dialog = root.querySelector<HTMLDialogElement>('[data-mirror-dialog]');
+    const opener = root.querySelector<HTMLButtonElement>('[data-mirror-dialog-open]');
+    const closer = root.querySelector<HTMLButtonElement>('[data-mirror-close]');
+    const status = root.querySelector<HTMLElement>('[data-mirror-status]');
+    if (!dialog || !opener || !closer || !status) return;
+    opener.addEventListener('click', () => dialog.showModal());
+    closer.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => opener.focus());
+    root.querySelectorAll<HTMLButtonElement>('[data-mirror-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const entry = button.closest('.mirror-entry');
+        const kind = button.dataset.mirrorCopy;
+        const field = entry?.querySelector<HTMLInputElement>(kind === 'code' ? '[data-mirror-code]'
+          : kind === 'password' ? '[data-mirror-password]' : '[data-mirror-url]');
+        if (!field) return;
+        try {
+          if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
+          await navigator.clipboard.writeText(field.value);
+          status.textContent = kind === 'code' ? '提取码已复制。'
+            : kind === 'password' ? '解压密码已复制。' : '分享链接已复制。';
+        } catch {
+          field.focus(); field.select();
+          status.textContent = '无法自动复制，文本已选中，请手动复制。';
+        }
+      });
+    });
+    opener.hidden = false;
+  });
+</script>

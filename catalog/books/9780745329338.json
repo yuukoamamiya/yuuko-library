@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-f697a8b16505/82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-f697a8b16505/82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1bZ1M8miWNHzeNj4rpaJ7kg",
-      "code": "7h2r",
-      "fileSha256": "82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7",
-      "fsId": "542107893855630",
-      "shareId": "15387343358",
-      "path": "/yuuko-library/books/book-f697a8b16505/82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7/资本主义与辩证法：马克思主义政治经济学的宇野-关根进路 - John R. Bell.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:09:50.769Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1bZ1M8miWNHzeNj4rpaJ7kg",
+        "code": "7h2r",
+        "fileSha256": "82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7",
+        "verifiedAt": "2026-11-06T11:09:50.769Z",
+        "meta": {
+          "fsId": "542107893855630",
+          "shareId": "15387343358",
+          "path": "/yuuko-library/books/book-f697a8b16505/82f191b5dabd4aca1e2dc42b8216dab7944a74be46355728c8c19bb98df748b7/资本主义与辩证法：马克思主义政治经济学的宇野-关根进路 - John R. Bell.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/endnotes-4/effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/endnotes-4/effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1o9WF4FEhStElbncd6wJLkw",
-      "code": "a9oo",
-      "fileSha256": "effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8",
-      "fsId": "248025916286501",
-      "shareId": "5590720283",
-      "path": "/yuuko-library/books/endnotes-4/effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8/尾注4：分离中的统一 - Endnotes.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:05:27.906Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1o9WF4FEhStElbncd6wJLkw",
+        "code": "a9oo",
+        "fileSha256": "effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8",
+        "verifiedAt": "2026-11-06T11:05:27.906Z",
+        "meta": {
+          "fsId": "248025916286501",
+          "shareId": "5590720283",
+          "path": "/yuuko-library/books/endnotes-4/effb143222a75e821374f5a4427b854279d815d98a670da6fe67659ea911a7a8/尾注4：分离中的统一 - Endnotes.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

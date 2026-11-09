@@ -22,7 +22,7 @@ const metadata = '<dc:title>测试书籍 &amp; 理论</dc:title><dc:creator>作�
 export async function makeEpub(filename: string, options: { metadata?: string; manifest?: string; meta?: string; extra?: Record<string, Buffer>; container?: string } = {}) {
   await writeFile(filename, await fixture({
     'META-INF/container.xml': options.container ?? container,
-    'OEBPS/book.opf': `<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata>${options.metadata ?? metadata}${options.meta ?? ''}</metadata><manifest>${options.manifest ?? ''}</manifest></package>`,
+    'OEBPS/book.opf': `<package xmlns="http://www.idpf.org/2007/opf" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata>${options.metadata ?? metadata}${options.meta ?? ''}</metadata><manifest>${options.manifest ?? ''}</manifest></package>`,
     ...options.extra,
   }));
 }
@@ -34,6 +34,15 @@ test('EPUB 提取保留作者顺序，分类仅去重，简介转为安全的分
     assert.equal(book.title, '测试书籍 & 理论'); assert.deepEqual(book.authors, ['作者甲', '作者乙']);
     assert.deepEqual(book.subjects, ['哲学']); assert.match(book.description, /段落一\s+段落二/u);
     assert.doesNotMatch(book.description, /script|alert|<p>/u); assert.equal(book.cover, null);
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});
+test('提取 OPF 中的 ISBN-13 和 ISBN-10 标识', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'book-isbn-'));
+  try {
+    const file = path.join(dir, 'isbn.epub');
+    await makeEpub(file, { metadata: '<dc:identifier opf:scheme="ISBN">978-3-16-152185-0</dc:identifier><dc:identifier>urn:isbn:9787300340173</dc:identifier>' + metadata });
+    const book = await extractEpub(file);
+    assert.deepEqual([...book.isbns].sort(), ['9783161521850', '9787300340173']);
   } finally { await rm(dir, { recursive: true, force: true }); }
 });
 test('兼容 EPUB 2 cover meta 和 EPUB 3 cover-image 属性及 URI 编码路径', async () => {

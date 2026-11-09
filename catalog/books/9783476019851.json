@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-99cd425787f2/3a54fdb57e84c3b553ab51f16f6ecf4c1a6d8e1a8debc631bedf19b647f2c918.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-99cd425787f2/3a54fdb57e84c3b553ab51f16f6ecf4c1a6d8e1a8debc631bedf19b647f2c918.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1RdZOmlLXd7Qea2v-rQmhzg",
-      "code": "mckz",
-      "fileSha256": "3a54fdb57e84c3b553ab51f16f6ecf4c1a6d8e1a8debc631bedf19b647f2c918",
-      "fsId": "519103404499394",
-      "shareId": "51187081730",
-      "path": "/yuuko-library/books/book-99cd425787f2/3a54fdb57e84c3b553ab51f16f6ecf4c1a6d8e1a8debc631bedf19b647f2c918/本雅明手册 - Burkhardt Lindner.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:36:02.789Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1RdZOmlLXd7Qea2v-rQmhzg",
+        "code": "mckz",
+        "fileSha256": "3a54fdb57e84c3b553ab51f16f6ecf4c1a6d8e1a8debc631bedf19b647f2c918",
+        "verifiedAt": "2026-11-06T10:36:02.789Z",
+        "meta": {
+          "fsId": "519103404499394",
+          "shareId": "51187081730",
+          "path": "/yuuko-library/books/book-99cd425787f2/3a54fdb57e84c3b553ab51f16f6ecf4c1a6d8e1a8debc631bedf19b647f2c918/本雅明手册 - Burkhardt Lindner.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

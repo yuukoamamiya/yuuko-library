@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-caa49fc704b7/95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-caa49fc704b7/95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1FBkO6q6sfL_DgzaX-Bh_Rw",
-      "code": "xf7d",
-      "fileSha256": "95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65",
-      "fsId": "988464464751925",
-      "shareId": "23106785442",
-      "path": "/yuuko-library/books/book-caa49fc704b7/95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65/价值与危机：日本马克思主义经济学论集 - Makoto Itoh.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:51:20.966Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1FBkO6q6sfL_DgzaX-Bh_Rw",
+        "code": "xf7d",
+        "fileSha256": "95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65",
+        "verifiedAt": "2026-11-06T10:51:20.966Z",
+        "meta": {
+          "fsId": "988464464751925",
+          "shareId": "23106785442",
+          "path": "/yuuko-library/books/book-caa49fc704b7/95f083f302a894855b2dd10290a66e50cb0e8aa9f4caa2243db1aa7dd0bc6f65/价值与危机：日本马克思主义经济学论集 - Makoto Itoh.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

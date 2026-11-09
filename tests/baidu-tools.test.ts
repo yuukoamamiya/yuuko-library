@@ -3,12 +3,13 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import os from 'node:os'; import path from 'node:path';
 import type { Book } from '../src/lib/books.ts';
+import { readBaidu } from '../src/lib/baidu.ts';
 import { digest, recoverUnknownShare, runPublish, type Runner } from '../tools/baidu/transfer.ts';
 
 const bytes = Buffer.from('sample epub payload'); const sha = digest(bytes);
 function book(id = 'sample'): Book { return { schemaVersion: 1, id, title: '书', authors: ['作者'], description: '', subjects: [], categories: ['history'], cover: null,
   edition: { kind: 'transcription', model: null }, file: { sha256: sha, bytes: bytes.length, filename: '书.epub' },
-  downloads: { r2Key: `books/${id}/${sha}.epub`, r2Url: 'https://download.example/file.epub', baidu: null }, publishedAt: '2020-01-01', updatedAt: '2024-01-01' }; }
+  downloads: { r2Key: `books/${id}/${sha}.epub`, r2Url: 'https://download.example/file.epub', mirrors: {} }, publishedAt: '2020-01-01', updatedAt: '2024-01-01' }; }
 async function setup(id = 'sample') {
   const root = await mkdtemp(path.join(os.tmpdir(), 'baidu-tools-')); const b = book(id);
   await mkdir(path.join(root, 'catalog/books'), { recursive: true });
@@ -55,9 +56,11 @@ test('valid upload, complete roundtrip and share update catalog without changing
     assert.equal(uploadedBasename, '书.epub');
     const actual = JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book;
     assert.equal(actual.downloads.r2Url, t.b.downloads.r2Url); assert.equal(actual.updatedAt, t.b.updatedAt);
-    assert.deepEqual(actual.downloads.baidu, { url: 'https://pan.baidu.com/s/Abcde_12', code: 'a1b2', fileSha256: sha,
+    assert.deepEqual(readBaidu(actual), { url: 'https://pan.baidu.com/s/Abcde_12', code: 'a1b2', fileSha256: sha,
       fsId: '123456', shareId: '987654', path: `/yuuko-library/books/sample/${sha}/书.epub`, expiresAt: null,
-      verifiedAt: actual.downloads.baidu?.verifiedAt });
+      verifiedAt: readBaidu(actual)?.verifiedAt });
+    assert.equal(actual.downloads.mirrors.baidu.provider, 'baidu');
+    assert.deepEqual(actual.downloads.mirrors.baidu.meta, { fsId: '123456', shareId: '987654', path: `/yuuko-library/books/sample/${sha}/书.epub`, expiresAt: null });
   } finally { await t.cleanup(); }
 });
 test('publishing a new EPUB SHA creates a new share and keeps the older version history', async () => {
@@ -66,7 +69,7 @@ test('publishing a new EPUB SHA creates a new share and keeps the older version 
     await runPublish(t.root, [t.b], mock(), { password: 'a1b2' });
     const nextBytes = Buffer.from('replacement epub payload'); const nextSha = digest(nextBytes);
     const next: Book = { ...t.b, title: '更新标题', file: { sha256: nextSha, bytes: nextBytes.length, filename: '更新.epub' },
-      downloads: { ...t.b.downloads, r2Key: `books/sample/${nextSha}.epub`, baidu: null } };
+      downloads: { ...t.b.downloads, r2Key: `books/sample/${nextSha}.epub`, mirrors: {} } };
     await writeFile(path.join(t.root, 'catalog/books/sample.json'), JSON.stringify(next));
     const sourceDir = path.join(t.root, '.local/plans/p2/inputs'); await mkdir(sourceDir, { recursive: true });
     await writeFile(path.join(sourceDir, 'sample.epub'), nextBytes);
@@ -76,7 +79,7 @@ test('publishing a new EPUB SHA creates a new share and keeps the older version 
     assert.equal(journal.entries[`sample@${sha}`].state, 'complete');
     assert.equal(journal.entries[`sample@${nextSha}`].state, 'complete'); assert.equal(newSets, 1);
     assert.notEqual(journal.entries[`sample@${sha}`].baidu.path, journal.entries[`sample@${nextSha}`].baidu.path);
-    assert.equal((JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book).downloads.baidu?.fileSha256, nextSha);
+    assert.equal(readBaidu(JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book)?.fileSha256, nextSha);
   } finally { await t.cleanup(); }
 });
 test('existing target directory and file are verified then resumed without a second upload', async () => {
@@ -117,7 +120,7 @@ test('unknown share is explicitly adopted only after remote meta, full SHA and e
     const result = await recoverUnknownShare(t.root, t.b, runner, '987654', 'a1b2');
     assert.equal(result.status, 'recovered'); assert.equal(shareSets, 1);
     const current = JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book;
-    assert.equal(current.downloads.baidu?.shareId, '987654');
+    assert.equal(readBaidu(current)?.shareId, '987654');
     const journal = JSON.parse(await readFile(path.join(t.root, '.local/baidu/journal.json'), 'utf8'));
     assert.equal(journal.entries[`sample@${sha}`].state, 'complete');
   } finally { await t.cleanup(); }
@@ -127,11 +130,11 @@ test('an older uncertain version can be explicitly resolved without installing i
   try {
     await assert.rejects(runPublish(t.root, [t.b], mock({ shareExit: 1 }), { password: 'a1b2' }), /结果未确认/);
     const target = path.join(t.root, 'catalog/books/sample.json'); const newer = JSON.parse(await readFile(target, 'utf8')) as Book;
-    newer.file = { ...newer.file, sha256: 'b'.repeat(64) }; newer.downloads = { ...newer.downloads, r2Key: `books/sample/${'b'.repeat(64)}.epub`, baidu: null };
+    newer.file = { ...newer.file, sha256: 'b'.repeat(64) }; newer.downloads = { ...newer.downloads, r2Key: `books/sample/${'b'.repeat(64)}.epub`, mirrors: {} };
     await writeFile(target, JSON.stringify(newer));
     const result = await recoverUnknownShare(t.root, t.b, mock({ existing: true }), '987654', 'a1b2', { sourceSha256: sha });
     assert.equal(result.status, 'historical-share-resolved');
-    assert.equal((JSON.parse(await readFile(target, 'utf8')) as Book).downloads.baidu, null);
+    assert.equal(readBaidu(JSON.parse(await readFile(target, 'utf8')) as Book), null);
     const journal = JSON.parse(await readFile(path.join(t.root, '.local/baidu/journal.json'), 'utf8'));
     assert.equal(journal.entries[`sample@${sha}`].state, 'shared');
   } finally { await t.cleanup(); }
@@ -190,7 +193,7 @@ test('catalog changed while sharing is stopped before an atomic overwrite', asyn
     };
     await assert.rejects(runPublish(t.root, [t.b], runner, { password: 'a1b2' }), /catalog 在流程中变化/);
     const actual = JSON.parse(await readFile(path.join(t.root, 'catalog/books/sample.json'), 'utf8')) as Book;
-    assert.equal(actual.title, '外部同时修改'); assert.equal(actual.downloads.baidu, null);
+    assert.equal(actual.title, '外部同时修改'); assert.equal(readBaidu(actual), null);
   } finally { await t.cleanup(); }
 });
 test('existing checkpointed complete record is reused without a second share', async () => {
@@ -228,6 +231,6 @@ test('unavailable record with unchanged catalog is skipped and excluded from com
     const result = await runPublish(t.root, [t.b], async () => { calls++; throw new Error('unavailable must not call BaiduPCS-Go'); });
     assert.equal(calls, 0); assert.equal(result.selected, 1); assert.equal(result.completed, 0);
     assert.equal(result.unavailableCount, 1); assert.equal(result.unavailable[0].id, 'sample');
-    assert.equal(JSON.parse(await readFile(catalog, 'utf8')).downloads.baidu, null);
+    assert.deepEqual(JSON.parse(await readFile(catalog, 'utf8')).downloads.mirrors, {});
   } finally { await t.cleanup(); }
 });

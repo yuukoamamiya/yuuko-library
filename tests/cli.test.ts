@@ -41,6 +41,8 @@ test('批量准备真实快照，转录本无模型，校验通过，源文件�
     updatePlanDir = path.join(ROOT, '.local/plans', JSON.parse(updated.stdout).planId);
     const updatedPlan = JSON.parse(await readFile(path.join(updatePlanDir, 'plan.json'), 'utf8'));
     assert.deepEqual(updatedPlan.books[0].categories, existing.categories);
+    assert.deepEqual(updatedPlan.books[0].downloads.mirrors, {});
+    assert.ok(updatedPlan.changes[0].warnings.some((warning: string) => /网盘/u.test(warning)));
     assert.deepEqual(await readdir(path.join(ROOT, 'catalog/books')), beforeCatalog);
     const validation = run(['validate', '--plan', id]);
     assert.equal(validation.status, 0, validation.stderr + validation.stdout);
@@ -77,9 +79,9 @@ test('旧 schema1 分类快照仅可只读报告为 stale，不能被其他服�
     schemaVersion: 1, id: 'legacy-category-check', title: '旧分类快照', authors: ['作者'], description: '', subjects: [],
     cover: null, edition: { kind: 'transcription', model: null },
     file: { sha256: 'a'.repeat(64), bytes: 17, filename: 'legacy.epub' },
-    downloads: { r2Key: `books/legacy-category-check/${'a'.repeat(64)}.epub`, r2Url: null,
-      baidu: { url: 'https://pan.baidu.com/s/abcdefg', code: '1234', fileSha256: 'a'.repeat(64), fsId: '123',
-        shareId: 'share-1', path: '/legacy.epub', expiresAt: null, verifiedAt: '2026-01-01T00:00:00Z' } },
+    downloads: { r2Key: `books/legacy-category-check/${'a'.repeat(64)}.epub`, r2Url: null, mirrors: {
+      baidu: { provider: 'baidu', url: 'https://pan.baidu.com/s/abcdefg', code: '1234', fileSha256: 'a'.repeat(64),
+        verifiedAt: '2026-01-01T00:00:00Z', meta: { fsId: '123', shareId: '456', path: '/legacy.epub', expiresAt: null } } } },
     publishedAt: null, updatedAt: null,
   };
   const plan = {

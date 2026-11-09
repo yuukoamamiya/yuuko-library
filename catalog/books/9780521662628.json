@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-305642b0bee6/ad53d5b28395ee53b0c48512f5e6669130eb9186b15a12c740be32deb9660a16.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-305642b0bee6/ad53d5b28395ee53b0c48512f5e6669130eb9186b15a12c740be32deb9660a16.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1PXD_zj0aqEyOAriWEqdC8Q",
-      "code": "akv6",
-      "fileSha256": "ad53d5b28395ee53b0c48512f5e6669130eb9186b15a12c740be32deb9660a16",
-      "fsId": "1077232027157823",
-      "shareId": "45060040721",
-      "path": "/yuuko-library/books/book-305642b0bee6/ad53d5b28395ee53b0c48512f5e6669130eb9186b15a12c740be32deb9660a16/观念论的创新 - Rüdiger Bubner.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:41:20.179Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1PXD_zj0aqEyOAriWEqdC8Q",
+        "code": "akv6",
+        "fileSha256": "ad53d5b28395ee53b0c48512f5e6669130eb9186b15a12c740be32deb9660a16",
+        "verifiedAt": "2026-11-06T10:41:20.179Z",
+        "meta": {
+          "fsId": "1077232027157823",
+          "shareId": "45060040721",
+          "path": "/yuuko-library/books/book-305642b0bee6/ad53d5b28395ee53b0c48512f5e6669130eb9186b15a12c740be32deb9660a16/观念论的创新 - Rüdiger Bubner.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

@@ -6,7 +6,7 @@ import { buildRss, escapeXml } from '../src/lib/rss.ts';
 const makeBook = (id: string, title: string, publishedAt: string | null, extra: Partial<Book> = {}): Book => ({
   schemaVersion: 1, id, title, authors: ['作者 & 合著'], description: `简介 <${title}>`, subjects: [], categories: ['history'],
   cover: null, edition: { kind: 'transcription', model: null }, file: { sha256: 'a'.repeat(64), bytes: 1, filename: `${id}.epub` },
-  downloads: { r2Key: `books/${id}/a.epub`, r2Url: null, baidu: null }, publishedAt, updatedAt: '2026-01-01T00:00:00.000Z',
+  downloads: { r2Key: `books/${id}/a.epub`, r2Url: null, mirrors: {} }, publishedAt, updatedAt: '2026-01-01T00:00:00.000Z',
   ...extra,
 });
 

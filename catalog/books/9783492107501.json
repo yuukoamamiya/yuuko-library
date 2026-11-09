@@ -29,15 +29,20 @@
   "downloads": {
     "r2Key": "books/9783492107501/0c6e21a2d8da7d1a36051c0607a23255fe3e5a495c47e079f3db3bbbd9e8360f.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/9783492107501/0c6e21a2d8da7d1a36051c0607a23255fe3e5a495c47e079f3db3bbbd9e8360f.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1Wcw7O_SkFF8LBccidrt8TA",
-      "code": "szxw",
-      "fileSha256": "0c6e21a2d8da7d1a36051c0607a23255fe3e5a495c47e079f3db3bbbd9e8360f",
-      "fsId": "481614432184918",
-      "shareId": "16128249417",
-      "path": "/yuuko-library/books/9783492107501/0c6e21a2d8da7d1a36051c0607a23255fe3e5a495c47e079f3db3bbbd9e8360f/德国古典哲学：读本 - Anton Friedrich Koch.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-09T05:36:13.163Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1Wcw7O_SkFF8LBccidrt8TA",
+        "code": "szxw",
+        "fileSha256": "0c6e21a2d8da7d1a36051c0607a23255fe3e5a495c47e079f3db3bbbd9e8360f",
+        "verifiedAt": "2026-11-09T05:36:13.163Z",
+        "meta": {
+          "fsId": "481614432184918",
+          "shareId": "16128249417",
+          "path": "/yuuko-library/books/9783492107501/0c6e21a2d8da7d1a36051c0607a23255fe3e5a495c47e079f3db3bbbd9e8360f/德国古典哲学：读本 - Anton Friedrich Koch.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-09T05:32:55.880Z",

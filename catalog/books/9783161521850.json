@@ -29,15 +29,20 @@
   "downloads": {
     "r2Key": "books/9783161521850/6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/9783161521850/6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1vGvaCjT5AcxCg1eIMe9KDw",
-      "code": "lngx",
-      "fileSha256": "6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879",
-      "fsId": "271351540758984",
-      "shareId": "43050827659",
-      "path": "/yuuko-library/books/9783161521850/6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879/黑格尔的绝对哲学 - Burkhard Nonnenmacher.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-09T05:36:49.701Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1vGvaCjT5AcxCg1eIMe9KDw",
+        "code": "lngx",
+        "fileSha256": "6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879",
+        "verifiedAt": "2026-11-09T05:36:49.701Z",
+        "meta": {
+          "fsId": "271351540758984",
+          "shareId": "43050827659",
+          "path": "/yuuko-library/books/9783161521850/6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879/黑格尔的绝对哲学 - Burkhard Nonnenmacher.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-09T05:32:55.880Z",

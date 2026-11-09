@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-b58da23795d8/0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-b58da23795d8/0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1n9djukVZkpWC7HY4bbVCqQ",
-      "code": "3vpe",
-      "fileSha256": "0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c",
-      "fsId": "1043198591166442",
-      "shareId": "20873941536",
-      "path": "/yuuko-library/books/book-b58da23795d8/0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c/精神现象学》的语言与呈现 - Simon Waskow.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:34:55.024Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1n9djukVZkpWC7HY4bbVCqQ",
+        "code": "3vpe",
+        "fileSha256": "0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c",
+        "verifiedAt": "2026-11-06T10:34:55.024Z",
+        "meta": {
+          "fsId": "1043198591166442",
+          "shareId": "20873941536",
+          "path": "/yuuko-library/books/book-b58da23795d8/0c60447b3c6bd36d670a9c15af3b27fc1fdcf98ae3be8abe3459908c13388f4c/精神现象学》的语言与呈现 - Simon Waskow.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

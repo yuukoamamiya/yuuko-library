@@ -29,15 +29,20 @@
   "downloads": {
     "r2Key": "books/reality-and-reason/5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/reality-and-reason/5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/14jkABnDhdLGzlEbfISk4Eg",
-      "code": "nn53",
-      "fileSha256": "5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2",
-      "fsId": "325413105104168",
-      "shareId": "20384985549",
-      "path": "/yuuko-library/books/reality-and-reason/5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2/现实与理性：黑格尔与客观精神 - 让·弗朗索瓦·科维纲.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-08T11:42:04.611Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/14jkABnDhdLGzlEbfISk4Eg",
+        "code": "nn53",
+        "fileSha256": "5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2",
+        "verifiedAt": "2026-11-08T11:42:04.611Z",
+        "meta": {
+          "fsId": "325413105104168",
+          "shareId": "20384985549",
+          "path": "/yuuko-library/books/reality-and-reason/5af7136d0833221e82072e58667f464b3149e2f00e375a9780112dd1800598a2/现实与理性：黑格尔与客观精神 - 让·弗朗索瓦·科维纲.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-08T11:38:41.616Z",

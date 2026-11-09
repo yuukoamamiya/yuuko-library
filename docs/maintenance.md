@@ -4,7 +4,7 @@
 
 ## 环境与本地验收
 
-需要 Node.js 24+、npm 和 Git。Windows 日常命令使用 Git Bash；结构化数据处理优先 Python。百度流程不使用 WSL。
+需要 Node.js 24+、npm 和 Git。Windows 日常命令使用 Git Bash；结构化数据处理优先 Python。百度等 Windows 原生工具的镜像流程不使用 WSL。
 
 ```bash
 npm ci
@@ -18,11 +18,11 @@ npm run verify
 
 ## 维护代码边界
 
-`src/lib/book.ts` 定义纯书目类型与核心校验；`src/lib/catalog.server.ts` 是站点与工具共用的原始书目读取层，`tools/catalog.ts` 提供 CAS 写入和统一摘要。站点的 `src/lib/books.ts` 只为渲染克隆并降级隐藏无效百度记录；maintenance health 读原始记录并报告 `unconfirmed`。计划由 `tools/book/plan.ts` 与 `workflow.ts` 共享；CLI 解析参数后调用 book、R2、Pages 或 maintenance 服务。R2 workflow 接收 root；Pages 目标按 `site.config.json` 中显式的 `cloudflareAccountId`、项目和区域配置确定，不从 R2 endpoint 推导账号。
+`src/lib/book.ts` 定义纯书目类型与核心校验；`src/lib/catalog.server.ts` 是站点与工具共用的原始书目读取层，`tools/catalog.ts` 提供 CAS 写入和统一摘要。站点的 `src/lib/books.ts` 只为渲染克隆并降级隐藏无效网盘镜像记录；maintenance health 读原始记录并报告 `unconfirmed`。镜像 provider 注册表在 `src/lib/mirrors.ts`，百度实现位于 `src/lib/baidu.ts`。计划由 `tools/book/plan.ts` 与 `workflow.ts` 共享；CLI 解析参数后调用 book、R2、Pages 或 maintenance 服务。R2 workflow 接收 root；Pages 目标按 `site.config.json` 中显式的 `cloudflareAccountId`、项目和区域配置确定，不从 R2 endpoint 推导账号。
 
 ## 新增或更新图书
 
-每本图书使用 ISBN-13 作为 ID（13 位数字且校验位有效）；没有 ISBN 的作品先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的 slug（保持原文语种，转写为小写 ASCII），不得根据中文书名自拟描述性 ID。历史 ID 迁移只改变详情页地址；已上传的 R2/百度对象路径保持不变，避免重复上传和分享失效，旧页面地址不再保留兼容跳转。AI 译本需填维护者提供的模型名；中文出版物转录用 `transcription`，不填模型。新增图书须选择 1–2 个 `src/lib/categories.ts` 中定义的分类。原始 EPUB subjects 会作为标签保留。
+每本图书使用 ISBN-13 作为 ID（13 位数字且校验位有效）；没有 ISBN 的作品先在 `catalog/no-isbn.json` 登记原文标题，再使用原文标题的 slug（保持原文语种，转写为小写 ASCII），不得根据中文书名自拟描述性 ID。`prepare` 会读取 EPUB OPF 的 ISBN 标识：metadata 缺失时给出警告，与 `--id` 不一致时也会警告；出现警告应回到刮削/书目流程核对，不能凭书名猜 ID。历史 ID 迁移只改变详情页地址；已上传的 R2/网盘对象路径保持不变，避免重复上传和分享失效，旧页面地址不再保留兼容跳转。AI 译本需填维护者提供的模型名；中文出版物转录用 `transcription`，不填模型。新增图书须选择 1–2 个 `src/lib/categories.ts` 中定义的分类。原始 EPUB subjects 会作为标签保留。
 
 ```bash
 npm run book -- prepare --id 9787305231148 --epub 'D:/Books/example.epub' --model '模型名称' --category philosophy
@@ -39,7 +39,7 @@ npm run book -- prepare --id 9787532182862 --epub 'D:/Books/chinese.epub' --kind
 ]
 ```
 
-保存后运行 `npm run book -- prepare --manifest FILE`。更新条目省略 `categories` 时沿用正式书目中的现有分类；清单其他字段和规则见 `npm run book -- --help`。无 ISBN 的例外 ID 以 `catalog/no-isbn.json` 为准。百度分享由独立命令管理。
+保存后运行 `npm run book -- prepare --manifest FILE`。批量 manifest 放在 `.local/manifests/<date>-<batch>.json`，不要提交。更新条目省略 `categories` 时沿用正式书目中的现有分类；清单其他字段和规则见 `npm run book -- --help`。无 ISBN 的例外 ID 以 `catalog/no-isbn.json` 为准。网盘镜像由独立命令管理。
 
 `prepare` 生成冻结的本地审核计划，不修改正式书目，也不上传云端：
 
@@ -51,7 +51,7 @@ npm run book -- status --plan PLAN
 
 工作区源码、依赖、配置、正式书目或计划快照变化可能使 plan stale；重新 prepare，不绕过检查。原始 EPUB 在冻结后变化不会自动进入计划。
 
-常规上架流程从 EPUB metadata 准备页面，完成 R2 上传并验证公开文件的完整 SHA-256 后，再用上传报告准备 Pages 快照、部署并验证线上页面。百度分享不属于常规上架流程；只有用户另行要求时才执行百度发布。ID、版本类型、模型和分类按 EPUB metadata 与既有规则确定，资料不足时再向维护者确认，不猜测。
+常规上架流程从 EPUB metadata 准备页面，完成 R2 上传并验证公开文件的完整 SHA-256 后，再用上传报告准备 Pages 快照、部署并验证线上页面。常规流程只写 R2；网盘镜像不属于常规上架流程，只有用户另行要求时才发布。ID、版本类型、模型和分类按 EPUB metadata 与既有规则确定，资料不足时再向维护者确认，不猜测。
 
 首页默认按首次上架时间排序（最新上传）；切换到“最近更新”后按最近一次内容更新时间排序，更新旧书的元数据不会改变其首次上架位置。
 
@@ -78,9 +78,20 @@ npm run r2 -- verify --plan PLAN
 
 `check` 只读。上传前先做单本样本；上传/验证报告保存在 `.local/uploads/`。只有报告 `status=verified`、`verified=expected` 且 `failures` 为空，才能报告整批通过。上传会公开文件；逐本核对公开 GET 的完整 SHA-256、字节数、MIME 和文件名。一致对象可复用，冲突对象不覆盖。`verify` 只读复核，不补传文件。R2 上传不会同步正式书目或部署网站。
 
-## 百度备用下载
+## 下载镜像（可选扩展）
 
-百度工具使用 Windows 原生 BaiduPCS-Go，不使用 WSL。当前可执行文件路径为 `%LOCALAPPDATA%/YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe`；RAR 需安装 WinRAR，程序路径为 `%ProgramFiles%/WinRAR/Rar.exe`。凭据 JSON 位于 `%LOCALAPPDATA%/YuukoLibrary/credentials/baidu.json`；CLI 配置位于 `%LOCALAPPDATA%/YuukoLibrary/credentials/baidupcs-config`，通过 `BAIDUPCS_GO_CONFIG_DIR` 使用。不得输出或提交凭据。
+常规上架只写 R2，`downloads.mirrors` 保持为空。需要额外网盘分享时，先取得本次明确授权，再使用镜像入口。provider 必须在 `src/lib/mirrors.ts` 注册校验与展示名，在 `tools/maintenance/mirror-health.ts` 注册公开可用性检查，在 `tools/mirrors/registry.ts` 注册 CLI；核心上架流程不因新增 provider 而改动。每个镜像记录 `provider`、`url`、`code`、`fileSha256`（必须等于当前 EPUB SHA-256）、`verifiedAt`，可选 `archive` 和 provider 私有 `meta`。未知 provider 不会在站点渲染，写入正式书目时会被拒绝。
+
+```bash
+npm run mirror -- status --id ID --provider baidu
+npm run mirror -- prepare --id ID --provider baidu
+npm run mirror -- publish --id ID --provider baidu
+npm run mirror -- recover --id ID --provider baidu
+```
+
+`--provider` 默认为 `baidu`，其余参数原样转发给对应 provider 的 CLI；百度实现也可直接运行 `npm run baidu -- ...`。镜像发布发生在常规 R2/Pages 发布之后：provider 需要正式书目中已有匹配的当前 EPUB。镜像写入正式书目后，需要重新执行一次 `npm run pages -- prepare --site-only` 并 deploy/verify，让详情页和线上书目同步；同一批多个 provider 只需在全部发布完成后重建一次。
+
+以下为百度 provider 的操作细节。百度工具使用 Windows 原生 BaiduPCS-Go，不使用 WSL。当前可执行文件路径为 `%LOCALAPPDATA%/YuukoLibrary/tools/BaiduPCS-Go-v4.0.2/BaiduPCS-Go.exe`；RAR 需安装 WinRAR，程序路径为 `%ProgramFiles%/WinRAR/Rar.exe`。凭据 JSON 位于 `%LOCALAPPDATA%/YuukoLibrary/credentials/baidu.json`；CLI 配置位于 `%LOCALAPPDATA%/YuukoLibrary/credentials/baidupcs-config`，通过 `BAIDUPCS_GO_CONFIG_DIR` 使用。不得输出或提交凭据。
 
 ```bash
 npm run baidu -- status --id ID
@@ -151,7 +162,7 @@ npm run maintenance -- health --full-download
 npm run maintenance -- cleanup-preview
 ```
 
-`health` 只读检查正式书目对应的网页、索引、详情、封面与下载，并默认逐条调用百度 PCS 匿名提取码 challenge endpoint。该挑战不下载文件，不等于完整内容 SHA 验证。下载默认用 HEAD 检查响应头；只有 `--full-download` 才读取完整文件并核对大小与 SHA。`--book ID` 是样本检查，不能称全馆通过；`--skip-baidu` 跳过百度检查。
+`health` 只读检查正式书目对应的网页、索引、详情、封面与下载，并默认逐条调用已注册 provider 的匿名检查（百度为 PCS 提取码 challenge endpoint）。该挑战不下载文件，不等于完整内容 SHA 验证。下载默认用 HEAD 检查响应头；只有 `--full-download` 才读取完整文件并核对大小与 SHA。`--book ID` 是样本检查，不能称全馆通过；`--skip-provider PROVIDER` 跳过指定 provider，`--skip-baidu` 是 `--skip-provider baidu` 的别名。未知 provider 只计为未配置并给出警告。
 
 `cleanup-preview` 只读盘点 `.local` 快照，不移动或删除文件；近期快照、活跃/不确定状态、依赖闭包和最近两份成功发布受保护。当前存在未知旧快照证据，需先人工核对来源与依赖；在核实前不清理。若未来需要实际清理，须逐项列出精确目标并获得本次明确授权。旧 EPUB 由维护者手动保存在 Calibre；本工具不清理旧 EPUB 或远端 R2 对象。
 
@@ -161,4 +172,4 @@ npm run maintenance -- cleanup-preview
 
 ## 参考配置
 
-站点名、域名和前端文案约束见 [`DESIGN.md`](../DESIGN.md)；术语见 [`CONTEXT.md`](../CONTEXT.md)。类别 ID 以 `src/lib/categories.ts` 为准。完整 CLI 选项请分别运行 `book`、`r2`、`baidu`、`pages`、`maintenance` 的 `--help`。
+站点名、域名和前端文案约束见 [`DESIGN.md`](../DESIGN.md)；术语见 [`CONTEXT.md`](../CONTEXT.md)。类别 ID 以 `src/lib/categories.ts` 为准。完整 CLI 选项请分别运行 `book`、`r2`、`mirror`、`baidu`、`pages`、`maintenance` 的 `--help`。

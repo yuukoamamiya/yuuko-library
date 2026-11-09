@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-a62fdd10c370/f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-a62fdd10c370/f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1uoOJcvzyJxD0YkMLNOsSzw",
-      "code": "x3nz",
-      "fileSha256": "f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125",
-      "fsId": "637259495963927",
-      "shareId": "52455149386",
-      "path": "/yuuko-library/books/book-a62fdd10c370/f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125/保卫马克思 - Louis Althusser.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:35:11.120Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1uoOJcvzyJxD0YkMLNOsSzw",
+        "code": "x3nz",
+        "fileSha256": "f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125",
+        "verifiedAt": "2026-11-06T10:35:11.120Z",
+        "meta": {
+          "fsId": "637259495963927",
+          "shareId": "52455149386",
+          "path": "/yuuko-library/books/book-a62fdd10c370/f1b31607da11e8a09d6184e69dbcc99d1633d6f8e68bc26f64bee491e625e125/保卫马克思 - Louis Althusser.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

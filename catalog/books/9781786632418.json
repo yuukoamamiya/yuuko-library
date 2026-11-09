@@ -25,20 +25,25 @@
   "downloads": {
     "r2Key": "books/book-3acd82072f85/81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-3acd82072f85/81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1yEYnsPgiama_yEVX4QfhCA",
-      "code": "4o9z",
-      "fileSha256": "81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176",
-      "fsId": "1014886564607325",
-      "shareId": "14132849062",
-      "path": "/yuuko-library/archives/book-3acd82072f85/81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176/e83854585d5a908048ef99fde3e12646b776c68bae503f95164c49567b184083/普兰查斯著作01.rar",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:00:47.052028Z",
-      "archive": {
-        "filename": "普兰查斯著作01.rar",
-        "sha256": "e83854585d5a908048ef99fde3e12646b776c68bae503f95164c49567b184083",
-        "bytes": 290414,
-        "password": "114514"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1yEYnsPgiama_yEVX4QfhCA",
+        "code": "4o9z",
+        "fileSha256": "81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176",
+        "verifiedAt": "2026-11-06T11:00:47.052028Z",
+        "archive": {
+          "filename": "普兰查斯著作01.rar",
+          "sha256": "e83854585d5a908048ef99fde3e12646b776c68bae503f95164c49567b184083",
+          "bytes": 290414,
+          "password": "114514"
+        },
+        "meta": {
+          "fsId": "1014886564607325",
+          "shareId": "14132849062",
+          "path": "/yuuko-library/archives/book-3acd82072f85/81bf79b737c377979d414ced4a24e81f3b9f038a8d130bbeb4e7060728a7b176/e83854585d5a908048ef99fde3e12646b776c68bae503f95164c49567b184083/普兰查斯著作01.rar",
+          "expiresAt": null
+        }
       }
     }
   },

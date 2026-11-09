@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-cbdd0776a9e3/391e09924b3fbbe35bd1c80c77e9ac3da65646aacdb7145aa53f21c347f887d3.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-cbdd0776a9e3/391e09924b3fbbe35bd1c80c77e9ac3da65646aacdb7145aa53f21c347f887d3.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1b7i0BGZIqwAw6fbFue1pPw",
-      "code": "bodb",
-      "fileSha256": "391e09924b3fbbe35bd1c80c77e9ac3da65646aacdb7145aa53f21c347f887d3",
-      "fsId": "628360150417796",
-      "shareId": "58378724690",
-      "path": "/yuuko-library/books/book-cbdd0776a9e3/391e09924b3fbbe35bd1c80c77e9ac3da65646aacdb7145aa53f21c347f887d3/如何阅读马克思的《资本论》 - Michael Heinrich.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:02:45.644Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1b7i0BGZIqwAw6fbFue1pPw",
+        "code": "bodb",
+        "fileSha256": "391e09924b3fbbe35bd1c80c77e9ac3da65646aacdb7145aa53f21c347f887d3",
+        "verifiedAt": "2026-11-06T11:02:45.644Z",
+        "meta": {
+          "fsId": "628360150417796",
+          "shareId": "58378724690",
+          "path": "/yuuko-library/books/book-cbdd0776a9e3/391e09924b3fbbe35bd1c80c77e9ac3da65646aacdb7145aa53f21c347f887d3/如何阅读马克思的《资本论》 - Michael Heinrich.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

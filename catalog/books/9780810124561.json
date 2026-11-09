@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-e9dc1acd64bc/96da7adfc91bae62e4135e5d50cf67aa45b67c0aa149fbdb04f588551052ebb6.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-e9dc1acd64bc/96da7adfc91bae62e4135e5d50cf67aa45b67c0aa149fbdb04f588551052ebb6.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1wWvH9Vdw0z-VS0zj8kJGfg",
-      "code": "d19k",
-      "fileSha256": "96da7adfc91bae62e4135e5d50cf67aa45b67c0aa149fbdb04f588551052ebb6",
-      "fsId": "953113841103015",
-      "shareId": "46434632601",
-      "path": "/yuuko-library/books/book-e9dc1acd64bc/96da7adfc91bae62e4135e5d50cf67aa45b67c0aa149fbdb04f588551052ebb6/齐泽克的本体论 - Adrian Johnston.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:58:47.526Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1wWvH9Vdw0z-VS0zj8kJGfg",
+        "code": "d19k",
+        "fileSha256": "96da7adfc91bae62e4135e5d50cf67aa45b67c0aa149fbdb04f588551052ebb6",
+        "verifiedAt": "2026-11-06T10:58:47.526Z",
+        "meta": {
+          "fsId": "953113841103015",
+          "shareId": "46434632601",
+          "path": "/yuuko-library/books/book-e9dc1acd64bc/96da7adfc91bae62e4135e5d50cf67aa45b67c0aa149fbdb04f588551052ebb6/齐泽克的本体论 - Adrian Johnston.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

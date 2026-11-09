@@ -30,15 +30,20 @@
   "downloads": {
     "r2Key": "books/critique-of-political-economy/1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/critique-of-political-economy/1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1_YojWvxbkkH0Zt7S_y3H_g",
-      "code": "ejpc",
-      "fileSha256": "1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623",
-      "fsId": "958364971482324",
-      "shareId": "34358252147",
-      "path": "/yuuko-library/books/critique-of-political-economy/1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623/政治经济学批判：马克思《资本论》导论 - 米夏埃尔·海因里希.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-08T11:40:51.953Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1_YojWvxbkkH0Zt7S_y3H_g",
+        "code": "ejpc",
+        "fileSha256": "1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623",
+        "verifiedAt": "2026-11-08T11:40:51.953Z",
+        "meta": {
+          "fsId": "958364971482324",
+          "shareId": "34358252147",
+          "path": "/yuuko-library/books/critique-of-political-economy/1cc553540e787fa6d6424b42f54e877571b07ffeb54ffdc3c1c2f481696a3623/政治经济学批判：马克思《资本论》导论 - 米夏埃尔·海因里希.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-08T11:38:41.616Z",

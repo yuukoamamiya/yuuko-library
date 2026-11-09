@@ -2,7 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, open, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { validateBookCore, type Book } from '../src/lib/book.ts';
-import { validateBaiduDownload } from '../src/lib/baidu.ts';
+import { validateMirror } from '../src/lib/mirrors.ts';
 import { replaceFileAtomically } from './atomic.ts';
 import { assertCatalogTarget, readCatalogRecord, readCatalogRecords } from '../src/lib/catalog.server.ts';
 
@@ -24,7 +24,7 @@ export async function readCatalog(root: string): Promise<Book[]> {
 export async function writeCatalogBook(root: string, book: Book, expectedHash: string | null): Promise<string> {
   const snapshot = structuredClone(book);
   validateBookCore(snapshot);
-  if (snapshot.downloads.baidu !== null) validateBaiduDownload(snapshot.downloads.baidu, snapshot.file.sha256);
+  for (const mirror of Object.values(snapshot.downloads.mirrors)) validateMirror(mirror, snapshot.file.sha256);
   const target = await assertCatalogTarget(root, snapshot.id);
   const lockPath = path.join(root, '.local/catalog', `${snapshot.id}.lock`);
   await mkdir(path.join(root, '.local'), { recursive: true });

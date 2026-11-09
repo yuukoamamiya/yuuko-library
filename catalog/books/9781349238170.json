@@ -26,15 +26,20 @@
   "downloads": {
     "r2Key": "books/book-b4545d7d8eac/0158fcd31283206fd2e1ede5463d59c7a6ea06d8ba61b76e13637a65a7cde87d.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-b4545d7d8eac/0158fcd31283206fd2e1ede5463d59c7a6ea06d8ba61b76e13637a65a7cde87d.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/17LFKylP2G8BW2NL91MNjEA",
-      "code": "m6o1",
-      "fileSha256": "0158fcd31283206fd2e1ede5463d59c7a6ea06d8ba61b76e13637a65a7cde87d",
-      "fsId": "647608331934915",
-      "shareId": "67523782345",
-      "path": "/yuuko-library/books/book-b4545d7d8eac/0158fcd31283206fd2e1ede5463d59c7a6ea06d8ba61b76e13637a65a7cde87d/政治经济学的日本方法：宇野学派的变奏 - Robert Albritton & Thomas T. Sekine.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:07:43.468Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/17LFKylP2G8BW2NL91MNjEA",
+        "code": "m6o1",
+        "fileSha256": "0158fcd31283206fd2e1ede5463d59c7a6ea06d8ba61b76e13637a65a7cde87d",
+        "verifiedAt": "2026-11-06T11:07:43.468Z",
+        "meta": {
+          "fsId": "647608331934915",
+          "shareId": "67523782345",
+          "path": "/yuuko-library/books/book-b4545d7d8eac/0158fcd31283206fd2e1ede5463d59c7a6ea06d8ba61b76e13637a65a7cde87d/政治经济学的日本方法：宇野学派的变奏 - Robert Albritton & Thomas T. Sekine.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

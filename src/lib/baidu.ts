@@ -1,4 +1,11 @@
-import type { BaiduDownload } from './book';
+import type { Book, DownloadMirror, MirrorArchive } from './book';
+import type { MirrorProvider } from './mirrors';
+
+export interface BaiduDownload {
+  url: string; code: string; fileSha256: string; fsId: string; shareId: string; path: string;
+  expiresAt: null; verifiedAt: string;
+  archive?: MirrorArchive;
+}
 
 const sha256Pattern = /^[a-f\d]{64}$/iu;
 const numericIdPattern = /^\d+$/u;
@@ -35,3 +42,45 @@ export function validateBaiduDownload(value: unknown, expectedSha256: string): a
       || archive.password.length > 256 || /[\u0000-\u001f\u007f]/u.test(archive.password)) throw new Error('RAR 解压密码无效');
   }
 }
+
+export function validateBaiduMirror(mirror: DownloadMirror, expectedSha256: string): void {
+  if (!mirror || mirror.provider !== 'baidu') throw new Error('百度网盘镜像 provider 必须为 baidu');
+  const meta = mirror.meta;
+  if (!meta || typeof meta !== 'object' || Array.isArray(meta)) throw new Error('百度网盘镜像缺少 meta');
+  if (typeof meta.fsId !== 'string' || typeof meta.shareId !== 'string' || typeof meta.path !== 'string') {
+    throw new Error('百度网盘镜像 meta 缺少 fsId、shareId 或 path');
+  }
+  if (meta.expiresAt !== null) throw new Error('百度分享必须为永久分享');
+  validateBaiduDownload({
+    url: mirror.url, code: mirror.code, fileSha256: mirror.fileSha256, fsId: meta.fsId, shareId: meta.shareId,
+    path: meta.path, expiresAt: null, verifiedAt: mirror.verifiedAt,
+    ...(mirror.archive ? { archive: mirror.archive } : {}),
+  }, expectedSha256);
+}
+
+export function readBaidu(book: Book): BaiduDownload | null {
+  const mirror = book.downloads.mirrors.baidu;
+  if (!mirror) return null;
+  const meta = mirror.meta ?? {};
+  return {
+    url: mirror.url,
+    code: mirror.code,
+    fileSha256: mirror.fileSha256,
+    fsId: meta.fsId as string,
+    shareId: meta.shareId as string,
+    path: meta.path as string,
+    expiresAt: null,
+    verifiedAt: mirror.verifiedAt,
+    ...(mirror.archive ? { archive: { ...mirror.archive } } : {}),
+  };
+}
+
+export function writeBaidu(book: Book, value: BaiduDownload): void {
+  book.downloads.mirrors.baidu = {
+    provider: 'baidu', url: value.url, code: value.code, fileSha256: value.fileSha256, verifiedAt: value.verifiedAt,
+    ...(value.archive ? { archive: value.archive } : {}),
+    meta: { fsId: value.fsId, shareId: value.shareId, path: value.path, expiresAt: null },
+  };
+}
+
+export const baiduProvider: MirrorProvider = { id: 'baidu', label: '百度网盘', validate: validateBaiduMirror };

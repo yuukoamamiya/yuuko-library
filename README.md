@@ -9,7 +9,7 @@
 - Astro 静态站点与 TypeScript 维护工具
 - Git 保存源码、正式书目与封面；EPUB 不进入 Git
 - Cloudflare Pages 托管网页，Cloudflare R2 提供主要下载
-- 百度网盘作为独立备用下载；评论使用公开 GitHub Issues
+- 网盘镜像作为可选扩展下载，百度是已注册 provider 之一；评论使用公开 GitHub Issues
 
 站点与服务地址以 [`site.config.json`](site.config.json) 和线上 `release.json` 为准。
 
@@ -26,4 +26,4 @@ npm run dev
 
 ## 维护
 
-上架、R2、百度备用下载、Pages 部署、线上体检和恢复步骤见唯一的[日常维护指南](docs/maintenance.md)。
+上架、R2、网盘镜像、Pages 部署、线上体检和恢复步骤见唯一的[日常维护指南](docs/maintenance.md)。

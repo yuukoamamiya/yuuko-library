@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/less-than-nothing/d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/less-than-nothing/d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1Q2Wsei71tbH-Vn3Goqr8Uw",
-      "code": "26yb",
-      "fileSha256": "d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307",
-      "fsId": "45826950282528",
-      "shareId": "56674884507",
-      "path": "/yuuko-library/books/less-than-nothing/d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307/少于无：黑格尔与辩证唯物主义的阴影 - Slavoj Zizek.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T11:03:46.354Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1Q2Wsei71tbH-Vn3Goqr8Uw",
+        "code": "26yb",
+        "fileSha256": "d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307",
+        "verifiedAt": "2026-11-06T11:03:46.354Z",
+        "meta": {
+          "fsId": "45826950282528",
+          "shareId": "56674884507",
+          "path": "/yuuko-library/books/less-than-nothing/d9bfcd93053135a59ffbf1b3cb9b173111a72d631e2ac613aadad6279c42b307/少于无：黑格尔与辩证唯物主义的阴影 - Slavoj Zizek.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",

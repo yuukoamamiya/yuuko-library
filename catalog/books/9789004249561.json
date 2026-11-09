@@ -25,15 +25,20 @@
   "downloads": {
     "r2Key": "books/book-34bc008ffeda/af574515b21d6a35d9f75f81647326793eb02f43d18e8d8d68992a52a3839085.epub",
     "r2Url": "https://book.amamiyayuuko.com/books/book-34bc008ffeda/af574515b21d6a35d9f75f81647326793eb02f43d18e8d8d68992a52a3839085.epub",
-    "baidu": {
-      "url": "https://pan.baidu.com/s/1N4B1HNLtYoLIVITPHjQ3VQ",
-      "code": "3yez",
-      "fileSha256": "af574515b21d6a35d9f75f81647326793eb02f43d18e8d8d68992a52a3839085",
-      "fsId": "717079236348550",
-      "shareId": "23365421287",
-      "path": "/yuuko-library/books/book-34bc008ffeda/af574515b21d6a35d9f75f81647326793eb02f43d18e8d8d68992a52a3839085/恐慌论 - Kozo Uno.epub",
-      "expiresAt": null,
-      "verifiedAt": "2026-11-06T10:55:07.258Z"
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1N4B1HNLtYoLIVITPHjQ3VQ",
+        "code": "3yez",
+        "fileSha256": "af574515b21d6a35d9f75f81647326793eb02f43d18e8d8d68992a52a3839085",
+        "verifiedAt": "2026-11-06T10:55:07.258Z",
+        "meta": {
+          "fsId": "717079236348550",
+          "shareId": "23365421287",
+          "path": "/yuuko-library/books/book-34bc008ffeda/af574515b21d6a35d9f75f81647326793eb02f43d18e8d8d68992a52a3839085/恐慌论 - Kozo Uno.epub",
+          "expiresAt": null
+        }
+      }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
