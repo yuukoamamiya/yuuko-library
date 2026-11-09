@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "9783161521850",
+  "title": "黑格尔的绝对哲学",
+  "authors": [
+    "Burkhard Nonnenmacher"
+  ],
+  "description": "本书是研究黑格尔绝对者概念的专著，聚焦《逻辑科学》与晚期成熟体系。作者指出，黑格尔要求把绝对者的任何表述都理解为自我表述，因而绝对者既不能与有限者抽象对立，也不能被化约为有限者；他从存在逻辑、本质逻辑直至概念逻辑，说明绝对者如何由盲目的必然性展开为自由的自规定，并在“绝对理念”与体系整体中最终获得完成。",
+  "subjects": [
+    "黑格尔",
+    "德国观念论",
+    "逻辑学",
+    "绝对者",
+    "形而上学"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783161521850/86726a0c2660063632c7ea4623b9c21eb1ccdffb99c4828e168eedc2fa1f60ee.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879",
+    "bytes": 788683,
+    "filename": "黑格尔的绝对哲学 - Burkhard Nonnenmacher.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783161521850/6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783161521850/6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1vGvaCjT5AcxCg1eIMe9KDw",
+      "code": "lngx",
+      "fileSha256": "6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879",
+      "fsId": "271351540758984",
+      "shareId": "43050827659",
+      "path": "/yuuko-library/books/9783161521850/6b392045540100cfb093f1ece279dee5b0f5b9d11d188d8c8a0473a5ebb1e879/黑格尔的绝对哲学 - Burkhard Nonnenmacher.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-09T05:36:49.701Z"
+    }
+  },
+  "publishedAt": "2026-11-09T05:32:55.880Z",
+  "updatedAt": "2026-11-09T05:32:55.880Z"
+}

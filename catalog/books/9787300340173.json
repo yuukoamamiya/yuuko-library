@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "9787300340173",
+  "title": "主体性与自由：从康德到黑格尔的观念论",
+  "authors": [
+    "克劳斯·杜辛"
+  ],
+  "description": "本书收录德国古典哲学学者克劳斯·杜辛的十篇论文，部分为首次发表或首次以德文刊行。作者围绕“主体性”在1800年前后的含义，考察康德与费希特关于时间、想象力和自我意识的学说及自我意识循环难题，进而阐发黑格尔对康德的批判、谢林与黑格尔的绝对同一性理论，以及康德和黑格尔的伦理与自由学说，并讨论谢林、荷尔德林与黑格尔观念论美学的不同范式。",
+  "subjects": [
+    "德国古典哲学",
+    "主体性",
+    "自由",
+    "康德",
+    "黑格尔"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9787300340173/eeb1483b6ef020b3fa013f2632315fce6ff80d4246fc830612d69610845d0eac.jpg",
+  "edition": {
+    "kind": "transcription",
+    "model": null
+  },
+  "file": {
+    "sha256": "4f457880898566a5290786519f4f80f7769c2a59197e8cd1a5d93f40bde9e248",
+    "bytes": 378866,
+    "filename": "主体性与自由：从康德到黑格尔的观念论 - 克劳斯·杜辛.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9787300340173/4f457880898566a5290786519f4f80f7769c2a59197e8cd1a5d93f40bde9e248.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9787300340173/4f457880898566a5290786519f4f80f7769c2a59197e8cd1a5d93f40bde9e248.epub",
+    "baidu": {
+      "url": "https://pan.baidu.com/s/1Nms-OrKtZVko6o8okqxuxg",
+      "code": "eh16",
+      "fileSha256": "4f457880898566a5290786519f4f80f7769c2a59197e8cd1a5d93f40bde9e248",
+      "fsId": "5135728954826",
+      "shareId": "24727732391",
+      "path": "/yuuko-library/books/9787300340173/4f457880898566a5290786519f4f80f7769c2a59197e8cd1a5d93f40bde9e248/主体性与自由：从康德到黑格尔的观念论 - 克劳斯·杜辛.epub",
+      "expiresAt": null,
+      "verifiedAt": "2026-11-09T05:35:16.832Z"
+    }
+  },
+  "publishedAt": "2026-11-09T05:32:55.880Z",
+  "updatedAt": "2026-11-09T05:32:55.880Z"
+}
