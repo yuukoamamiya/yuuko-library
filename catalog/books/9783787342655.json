@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9783787342655",
+  "title": "逻辑的事情：黑格尔哲学中的概念与实在性",
+  "authors": [
+    "Andreas Arndt"
+  ],
+  "description": "本书是安德烈亚斯·阿恩特主编的黑格尔研究文集。针对马克思早年批评黑格尔只关心“逻辑的事情”而不管“事情的逻辑”，各篇论文指出：黑格尔在《逻辑科学》中恰恰论证了逻辑规定在现实中只能以破碎的方式出现，现实并不能由逻辑直接推出。全书从逻辑学与实在哲学两侧考察概念与实在性之间的构成性差异，并延伸到自然哲学、主观精神与客观精神、客观精神与绝对精神的关系。",
+  "subjects": [
+    "黑格尔",
+    "逻辑学",
+    "德国观念论",
+    "实在哲学",
+    "辩证法"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783787342655/b1d9339efbd885792e1d5e5cfb1ae2332d97a8a09912f2f997415a26d435b374.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "3b8f437d5cc180de46f14444e2482e5b4c98c55ad3818949269753e59c53e4da",
+    "bytes": 331231,
+    "filename": "逻辑的事情：黑格尔哲学中的概念与实在性 - Andreas Arndt.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783787342655/3b8f437d5cc180de46f14444e2482e5b4c98c55ad3818949269753e59c53e4da.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783787342655/3b8f437d5cc180de46f14444e2482e5b4c98c55ad3818949269753e59c53e4da.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1HYgpc5QPzofHnH910AQ_lw",
+        "code": "qxf6",
+        "fileSha256": "3b8f437d5cc180de46f14444e2482e5b4c98c55ad3818949269753e59c53e4da",
+        "verifiedAt": "2026-11-11T11:34:21.215Z",
+        "meta": {
+          "fsId": "186294581526761",
+          "shareId": "46731265132",
+          "path": "/yuuko-library/books/9783787342655/3b8f437d5cc180de46f14444e2482e5b4c98c55ad3818949269753e59c53e4da/逻辑的事情：黑格尔哲学中的概念与实在性 - Andreas Arndt.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-11T11:30:10.765Z",
+  "updatedAt": "2026-11-11T11:30:10.765Z"
+}

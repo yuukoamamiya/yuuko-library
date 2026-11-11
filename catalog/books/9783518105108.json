@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9783518105108",
+  "title": "语境中的黑格尔",
+  "authors": [
+    "Dieter Henrich"
+  ],
+  "description": "本书是迪特·亨利希的黑格尔研究重要经典文集。作者不以哲学史全景为满足，而是通过精确的个案研究分析历史处境、逐步重构其核心论证，以从整体上把握黑格尔的思想，并把英美分析哲学的概念工具引入黑格尔解释。全书从荷尔德林与马克思、图宾根时期到体系的形成，考察黑格尔的文本及其语境，各篇写作时间不同，视角彼此互补。",
+  "subjects": [
+    "黑格尔",
+    "德国观念论",
+    "荷尔德林",
+    "马克思",
+    "逻辑学"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783518105108/e6659c089e1f1c15f4d84bb4480c4a0097e24fc9c0d208bfd70a5e81ba7edd48.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "63a6fc2a4f9408b67144b72cf6388d1180005abbe65be55ae73475c20ad5b055",
+    "bytes": 399631,
+    "filename": "语境中的黑格尔 - Dieter Henrich.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783518105108/63a6fc2a4f9408b67144b72cf6388d1180005abbe65be55ae73475c20ad5b055.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783518105108/63a6fc2a4f9408b67144b72cf6388d1180005abbe65be55ae73475c20ad5b055.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/134NwkYZeV-yXglHGxZwVdw",
+        "code": "bd9j",
+        "fileSha256": "63a6fc2a4f9408b67144b72cf6388d1180005abbe65be55ae73475c20ad5b055",
+        "verifiedAt": "2026-11-11T11:33:54.018Z",
+        "meta": {
+          "fsId": "940559569311408",
+          "shareId": "39138329857",
+          "path": "/yuuko-library/books/9783518105108/63a6fc2a4f9408b67144b72cf6388d1180005abbe65be55ae73475c20ad5b055/语境中的黑格尔 - Dieter Henrich.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-11T11:30:10.765Z",
+  "updatedAt": "2026-11-11T11:30:10.765Z"
+}

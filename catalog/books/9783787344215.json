@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9783787344215",
+  "title": "绝对者：论统一性的随笔",
+  "authors": [
+    "Christian Krijnen"
+  ],
+  "description": "本书是克里斯蒂安·克赖嫩关于“绝对者”的哲学随笔。作者指出，绝对者自哲学开端起便是其基本概念；全书以思维作为客观性的原则为起点，系统阐释黑格尔哲学体系，依次讨论存在、本质与概念的自我展开，并在“自然与精神”一章中把我们所处的世界理解为绝对者的实现。全书分为128个短节，术语随论证自行展开，不预设专门知识。",
+  "subjects": [
+    "绝对者",
+    "统一性",
+    "德国观念论",
+    "形而上学",
+    "黑格尔"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783787344215/ca1eecf7553e0a7870b2b3c19e7d770b97086db8720f1b6422143df75a20ac71.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "f6c0bbbea362768329bdd68ccb123bb3194b478df350f30b470919f88532d7b7",
+    "bytes": 136044,
+    "filename": "绝对者：论统一性的随笔 - Christian Krijnen.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783787344215/f6c0bbbea362768329bdd68ccb123bb3194b478df350f30b470919f88532d7b7.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783787344215/f6c0bbbea362768329bdd68ccb123bb3194b478df350f30b470919f88532d7b7.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1hCMUvafdqfgQsjwwVqWGkw",
+        "code": "9par",
+        "fileSha256": "f6c0bbbea362768329bdd68ccb123bb3194b478df350f30b470919f88532d7b7",
+        "verifiedAt": "2026-11-11T11:33:03.738Z",
+        "meta": {
+          "fsId": "298729315143342",
+          "shareId": "22315585047",
+          "path": "/yuuko-library/books/9783787344215/f6c0bbbea362768329bdd68ccb123bb3194b478df350f30b470919f88532d7b7/绝对者：论统一性的随笔 - Christian Krijnen.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-11T11:30:10.765Z",
+  "updatedAt": "2026-11-11T11:30:10.765Z"
+}

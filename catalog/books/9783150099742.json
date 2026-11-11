@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9783150099742",
+  "title": "论辩证法的事情",
+  "authors": [
+    "Rüdiger Bubner"
+  ],
+  "description": "本书是吕迪格·布布纳的辩证法研究文集。作者直面“辩证法的事情究竟是什么”这一古老争议，反驳把辩证法视为词语魔术的怀疑，主张以黑格尔辩证逻辑为典范，重新追问辩证哲学的方法与事情。书中四篇论文分别讨论辩证逻辑的结构问题、黑格尔体系中的“事情本身”、黑格尔的概念逻辑，以及柏拉图与黑格尔的对话和辩证法，强调辩证法必须在论证中证明自身。",
+  "subjects": [
+    "辩证法",
+    "黑格尔",
+    "德国观念论",
+    "柏拉图",
+    "逻辑学"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783150099742/91e39b6a92635d959c80e128f022c834e355e4c399d6f6360f1e49c6d46ae853.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "dda2bd77a03b2a22118192c8d5d92d97ca3f6923835cab3a996c55078991da95",
+    "bytes": 161008,
+    "filename": "论辩证法的事情 - Rüdiger Bubner.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783150099742/dda2bd77a03b2a22118192c8d5d92d97ca3f6923835cab3a996c55078991da95.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783150099742/dda2bd77a03b2a22118192c8d5d92d97ca3f6923835cab3a996c55078991da95.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1FRDAOSKYyYBy6wLM9T_VRQ",
+        "code": "uaad",
+        "fileSha256": "dda2bd77a03b2a22118192c8d5d92d97ca3f6923835cab3a996c55078991da95",
+        "verifiedAt": "2026-11-11T11:33:28.521Z",
+        "meta": {
+          "fsId": "1117143243852247",
+          "shareId": "11864683207",
+          "path": "/yuuko-library/books/9783150099742/dda2bd77a03b2a22118192c8d5d92d97ca3f6923835cab3a996c55078991da95/论辩证法的事情 - Rüdiger Bubner.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-11T11:30:10.765Z",
+  "updatedAt": "2026-11-11T11:30:10.765Z"
+}
