@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "9787305287749",
+  "title": "马克思资本概念的逻辑结构",
+  "authors": [
+    "海尔穆特·莱希尔特"
+  ],
+  "description": "本书是“新马克思阅读”代表人物海尔穆特·莱希尔特的博士论文，于1970年首次在德国出版。全书分三章，第一章阐释了马克思早期著作中的唯物史观，探讨了马克思的理论范畴在多大程度上归功于黑格尔哲学，特别是在资本和资产阶级主体性的出现方面。第二章探讨了马克思资本概念的一般观点，认为马克思是在对古典理论尤其是古典政治经济学的批判研究中形成自己的政治经济学理论的，而其中重农主义、亚当·斯密与李嘉图的经济学理论则是马克思资本理论的重要批判来源。第三章基于《资本论》中对资本概念的详细阐释，细致分析了马克思资本概念的内容以及相关概念，如价值、商品及商品二重化、货币、社会必要劳动时间等。本书结构分明、论述严谨、内容精悍，是马克思政治经济学理论研究的重要文本，可作为阅读《资本论》的一部导论入门书，对马克思主义学者、研究者以及希望了解马克思思想理论的普通读者来说，都具有重要的参考价值。",
+  "subjects": [
+    "新马克思阅读",
+    "政治经济学批判",
+    "价值形式",
+    "资本论",
+    "马克思主义政治经济学"
+  ],
+  "categories": [
+    "political-economy",
+    "philosophy"
+  ],
+  "cover": "/covers/9787305287749/f163b4c5bccbb3be40ba095b23d9ddff818eb7c8e7c1602da813d41d3157ebbe.jpg",
+  "edition": {
+    "kind": "transcription",
+    "model": null
+  },
+  "file": {
+    "sha256": "0c5e99537c836cba20b1132ce9add73a6fb9d9622dc0620f617d39208b4f3e10",
+    "bytes": 2299111,
+    "filename": "马克思资本概念的逻辑结构 - 海尔穆特·莱希尔特.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9787305287749/0c5e99537c836cba20b1132ce9add73a6fb9d9622dc0620f617d39208b4f3e10.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9787305287749/0c5e99537c836cba20b1132ce9add73a6fb9d9622dc0620f617d39208b4f3e10.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1weeu9IIYvwRFHthnWRWh1A",
+        "code": "nekf",
+        "fileSha256": "0c5e99537c836cba20b1132ce9add73a6fb9d9622dc0620f617d39208b4f3e10",
+        "verifiedAt": "2026-11-12T10:19:15.342Z",
+        "meta": {
+          "fsId": "723268175811645",
+          "shareId": "67013984568",
+          "path": "/yuuko-library/books/9787305287749/0c5e99537c836cba20b1132ce9add73a6fb9d9622dc0620f617d39208b4f3e10/马克思资本概念的逻辑结构 - 海尔穆特·莱希尔特.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-12T10:14:55.321Z",
+  "updatedAt": "2026-11-12T10:14:55.321Z"
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9783161530111",
+  "title": "逻辑空间的演化：论黑格尔非标准形而上学论文集",
+  "authors": [
+    "Anton Friedrich Koch"
+  ],
+  "description": "本书是安东·弗里德里希·科赫的黑格尔研究论文集。作者把黑格尔的理论哲学解释为一种“非标准形而上学”：在其中完成的是形而上学，而不是哲学本身；并主张在黑格尔的绝对者演化论之后，仍须从有限性的立场重新从事哲学。全书围绕《精神现象学》《逻辑科学》与实在哲学展开，兼论亚里士多德、本体论论证、海德格尔以及分析哲学与诠释学的关系。",
+  "subjects": [
+    "黑格尔",
+    "德国观念论",
+    "形而上学",
+    "逻辑学",
+    "精神现象学"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783161530111/a1622b21d48ae17cd749788fbc7aaf5ea262fee10d812ab8f7024e1f4d989dad.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "c78422532793dd40b0a2c1e6f3772564453e17d0482566c26d195da4a2d40e2b",
+    "bytes": 856692,
+    "filename": "逻辑空间的演化：论黑格尔非标准形而上学论文集 - Anton Friedrich Koch.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783161530111/c78422532793dd40b0a2c1e6f3772564453e17d0482566c26d195da4a2d40e2b.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783161530111/c78422532793dd40b0a2c1e6f3772564453e17d0482566c26d195da4a2d40e2b.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/15pfsg6cQF2iIzFylFt_GDQ",
+        "code": "wogw",
+        "fileSha256": "c78422532793dd40b0a2c1e6f3772564453e17d0482566c26d195da4a2d40e2b",
+        "verifiedAt": "2026-11-12T10:18:23.027Z",
+        "meta": {
+          "fsId": "732787097780735",
+          "shareId": "29979735674",
+          "path": "/yuuko-library/books/9783161530111/c78422532793dd40b0a2c1e6f3772564453e17d0482566c26d195da4a2d40e2b/逻辑空间的演化：论黑格尔非标准形而上学论文集 - Anton Friedrich Koch.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-12T10:14:55.321Z",
+  "updatedAt": "2026-11-12T10:14:55.321Z"
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9787301301517",
+  "title": "时间、劳动与社会统治",
+  "authors": [
+    "莫伊舍·普殊同"
+  ],
+  "description": "本书是普殊同对马克思成熟期批判理论的系统再阐释。作者以《政治经济学批判大纲》和《资本论》为核心，质疑传统马克思主义把“劳动”视为超历史范畴的做法，主张马克思所批判的是资本主义特有的劳动及其所产生的非个人社会统治。通过抽象劳动、抽象时间、价值与资本等范畴，作者重建了资本主义动力、阶级与社会时间的分析，并回应霍克海默、波洛克与哈贝马斯等批判理论家。",
+  "subjects": [
+    "马克思主义政治经济学",
+    "政治经济学批判",
+    "资本主义研究",
+    "批判理论",
+    "法兰克福学派"
+  ],
+  "categories": [
+    "political-economy"
+  ],
+  "cover": "/covers/9787301301517/d9ac3f4c94332c09b22bc8176454468eed45b8b39beba20058d20bd38f25d661.jpg",
+  "edition": {
+    "kind": "transcription",
+    "model": null
+  },
+  "file": {
+    "sha256": "cd496feb5d585955242cc7bd07c35e010d1ab5439358e23b7df03e714f045cfe",
+    "bytes": 1156789,
+    "filename": "时间、劳动与社会统治 - 莫伊舍·普殊同.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9787301301517/cd496feb5d585955242cc7bd07c35e010d1ab5439358e23b7df03e714f045cfe.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9787301301517/cd496feb5d585955242cc7bd07c35e010d1ab5439358e23b7df03e714f045cfe.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1OjDKMqG60YKI2pdzokeTNw",
+        "code": "x95h",
+        "fileSha256": "cd496feb5d585955242cc7bd07c35e010d1ab5439358e23b7df03e714f045cfe",
+        "verifiedAt": "2026-11-12T10:17:47.313Z",
+        "meta": {
+          "fsId": "317595897967039",
+          "shareId": "59670101671",
+          "path": "/yuuko-library/books/9787301301517/cd496feb5d585955242cc7bd07c35e010d1ab5439358e23b7df03e714f045cfe/时间、劳动与社会统治 - 莫伊舍·普殊同.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-12T10:14:55.321Z",
+  "updatedAt": "2026-11-12T10:14:55.321Z"
+}
