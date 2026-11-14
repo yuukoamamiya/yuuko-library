@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9783787313365",
+  "title": "黑格尔的体系：主观性的观念论与主体间性问题",
+  "authors": [
+    "Vittorio Hösle"
+  ],
+  "description": "本书是维托里奥·赫斯勒对黑格尔体系的两卷本系统研究（学生版合为一册）。作者重构黑格尔的体系理念，分析其逻辑学与实在哲学的关系，主张二者之间并不存在贯穿始终的对应与原则奠基关系；并指出黑格尔把绝对理念规定为绝对主观性，与其实在哲学中凸显的主体间性主题之间存在张力。全书据此逐部评注自然哲学、主观精神、客观精神与绝对精神哲学。",
+  "subjects": [
+    "黑格尔",
+    "德国观念论",
+    "逻辑学",
+    "法哲学",
+    "主体间性"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783787313365/80dba3079480ee278db7860e31d65ca991d37d574ff5dcd305b76b3d9f53c7fb.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "cf3365d8e5fa7642e84ef26ba31ba91553f8276868ada00afeed22ad0deeab33",
+    "bytes": 1053127,
+    "filename": "黑格尔的体系：主观性的观念论与主体间性问题 - Vittorio Hösle.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783787313365/cf3365d8e5fa7642e84ef26ba31ba91553f8276868ada00afeed22ad0deeab33.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783787313365/cf3365d8e5fa7642e84ef26ba31ba91553f8276868ada00afeed22ad0deeab33.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1SqoYojZomukY0441rO47Tg",
+        "code": "tyiv",
+        "fileSha256": "cf3365d8e5fa7642e84ef26ba31ba91553f8276868ada00afeed22ad0deeab33",
+        "verifiedAt": "2026-11-14T09:47:27.101Z",
+        "meta": {
+          "fsId": "44963538487395",
+          "shareId": "22519789281",
+          "path": "/yuuko-library/books/9783787313365/cf3365d8e5fa7642e84ef26ba31ba91553f8276868ada00afeed22ad0deeab33/黑格尔的体系：主观性的观念论与主体间性问题 - Vittorio Hösle.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-14T09:43:44.822Z",
+  "updatedAt": "2026-11-14T09:43:44.822Z"
+}

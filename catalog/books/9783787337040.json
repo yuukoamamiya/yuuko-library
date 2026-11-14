@@ -12,38 +12,38 @@
     "精神哲学",
     "思辨逻辑"
   ],
+  "categories": [
+    "philosophy"
+  ],
   "cover": "/covers/9783787337040/f047a880b534581af7d60b0ea05c6a7456ec2112ebf0f0663882601aaefc7aa4.jpg",
   "edition": {
     "kind": "ai-translation",
     "model": "gemini 3.8 flash"
   },
   "file": {
-    "sha256": "a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa",
-    "bytes": 450995,
+    "sha256": "41a62bc6c57d0502bdae058a00ac3191d379cd26c78b98e9b66d20df7c72dfef",
+    "bytes": 453896,
     "filename": "黑格尔哲学 - Walter Jaeschke.epub"
   },
   "downloads": {
-    "r2Key": "books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa.epub",
-    "r2Url": "https://book.amamiyayuuko.com/books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa.epub",
+    "r2Key": "books/9783787337040/41a62bc6c57d0502bdae058a00ac3191d379cd26c78b98e9b66d20df7c72dfef.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783787337040/41a62bc6c57d0502bdae058a00ac3191d379cd26c78b98e9b66d20df7c72dfef.epub",
     "mirrors": {
       "baidu": {
         "provider": "baidu",
-        "url": "https://pan.baidu.com/s/1epI7Y3QBnq3RfFVi2O9Uww",
-        "code": "ccso",
-        "fileSha256": "a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa",
-        "verifiedAt": "2026-11-06T10:49:00.903Z",
+        "url": "https://pan.baidu.com/s/1t8jU6N62ptVxscVgjbFtgw",
+        "code": "j52h",
+        "fileSha256": "41a62bc6c57d0502bdae058a00ac3191d379cd26c78b98e9b66d20df7c72dfef",
+        "verifiedAt": "2026-11-14T09:46:42.911Z",
         "meta": {
-          "fsId": "1000558520604975",
-          "shareId": "27665101132",
-          "path": "/yuuko-library/books/book-490d9d71d3a5/a3ffb2078f37b72a01e86ae45b54642f396e35a3aeb617a14f8cf599341a4daa/黑格尔哲学 - Walter Jaeschke.epub",
+          "fsId": "164354397212592",
+          "shareId": "59246650018",
+          "path": "/yuuko-library/books/9783787337040/41a62bc6c57d0502bdae058a00ac3191d379cd26c78b98e9b66d20df7c72dfef/黑格尔哲学 - Walter Jaeschke.epub",
           "expiresAt": null
         }
       }
     }
   },
   "publishedAt": "2026-11-06T07:17:10.755Z",
-  "updatedAt": "2026-11-06T07:26:32.749Z",
-  "categories": [
-    "philosophy"
-  ]
+  "updatedAt": "2026-11-14T09:43:44.822Z"
 }

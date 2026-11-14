@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "9783787315017",
+  "title": "思维的闭合性问题：黑格尔1800–1804年间的“哲学体系”",
+  "authors": [
+    "Heinz Kimmerle"
+  ],
+  "description": "本书是海因茨·金默勒关于黑格尔早期耶拿体系的研究，属于《黑格尔研究》附刊第8卷。作者考察1800—1804年间黑格尔“哲学体系”的形成，追问哲学体系如何在自身内部闭合、又如何与历史生活的实践发生关联；全书依次分析“逻辑学与形而上学”的体系奠基、自然哲学、从知性哲学到精神哲学的发展，以及绝对哲学作为体系向自身内部的闭合，并附论黑格尔思想中历史与哲学的关系。",
+  "subjects": [
+    "黑格尔",
+    "德国观念论",
+    "形而上学",
+    "逻辑学",
+    "自然哲学"
+  ],
+  "categories": [
+    "philosophy"
+  ],
+  "cover": "/covers/9783787315017/3be2887dcec1bfb819042ab9c91cbcdfc2328ec84acf8621bb095a4e99f40c3f.jpg",
+  "edition": {
+    "kind": "ai-translation",
+    "model": "gemini 3.8 flash"
+  },
+  "file": {
+    "sha256": "feff801c0f5bf116de545e1f80c8e8e381e3d0d1c9a886b0da2cf584e72c11ec",
+    "bytes": 399707,
+    "filename": "思维的闭合性问题：黑格尔1800–1804年间的“哲学体系” - Heinz Kimmerle.epub"
+  },
+  "downloads": {
+    "r2Key": "books/9783787315017/feff801c0f5bf116de545e1f80c8e8e381e3d0d1c9a886b0da2cf584e72c11ec.epub",
+    "r2Url": "https://book.amamiyayuuko.com/books/9783787315017/feff801c0f5bf116de545e1f80c8e8e381e3d0d1c9a886b0da2cf584e72c11ec.epub",
+    "mirrors": {
+      "baidu": {
+        "provider": "baidu",
+        "url": "https://pan.baidu.com/s/1fICl3vVs0uWli7QLwj1gXQ",
+        "code": "t99p",
+        "fileSha256": "feff801c0f5bf116de545e1f80c8e8e381e3d0d1c9a886b0da2cf584e72c11ec",
+        "verifiedAt": "2026-11-14T09:46:15.152Z",
+        "meta": {
+          "fsId": "846861716071608",
+          "shareId": "45465531001",
+          "path": "/yuuko-library/books/9783787315017/feff801c0f5bf116de545e1f80c8e8e381e3d0d1c9a886b0da2cf584e72c11ec/思维的闭合性问题：黑格尔1800–1804年间的“哲学体系” - Heinz Kimmerle.epub",
+          "expiresAt": null
+        }
+      }
+    }
+  },
+  "publishedAt": "2026-11-14T09:43:44.822Z",
+  "updatedAt": "2026-11-14T09:43:44.822Z"
+}
